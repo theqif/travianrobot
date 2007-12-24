@@ -23,6 +23,8 @@ Travian - a package for the web-based game Travian.
   my $village = $travian->village();
   $village = $travian->village_overview();
 
+  $travian->send_troops($type, $x, $y, Travian::Troops->new(10));
+
   my $woodcutter = $travian->construction(1);
 
   $travian->logout();
@@ -32,6 +34,35 @@ Travian - a package for the web-based game Travian.
 = DESCRIPTION =
 
 This package defines routines for the web-based game Travian.
+
+
+----
+= CONSTANTS =
+
+
+== ATTACK_REINFORCEMENT ==
+
+Constant for send troops. Send reinforcements.
+
+
+== ATTACK_NORMAL ==
+
+Constant for send troops. Send a normal attack.
+
+
+== ATTACK_RAID ==
+
+Constant for send troops. Send a raid attack.
+
+
+== SCOUT_RESOURCES ==
+
+Constant for send troops. Scout for resources and troops.
+
+
+== SCOUT_DEFENCES ==
+
+Constant for send troops. Scout for defences and troops.
 
 
 ----
@@ -110,6 +141,20 @@ Log out of Travian.
 Retrieve the village overview and return the current village.
 
 
+== send_troops() ==
+
+  $travian->send_troops($attack_type, $x, $y, $troops, $scout_type);
+
+Send the given troops on an attack of type $attack_type to coordinates $x, $y. The attack type is 2 for reinforcements, 3 for normal and 4 for raid. The troops are of type Travian::Troops. The scout type is 1 for resources and 2 for defences. Only used when a spy type troop is sent. Defaults to resources.
+
+
+== post_send_troops_form() ==
+
+  $travian->post_send_troops_form($type, $x, $y, $troops);
+
+Posts the Travian send troops form. Used by $travian->send_troops().
+
+
 == construction() ==
 
   $travian->construction($gid);
@@ -133,6 +178,13 @@ Parse the login form html and return an array ref of the form input values.
   &parse_error_msg($page_html);
 
 Parse and return the error message in a given html page.
+
+
+== parse_send_troops_confirm_form() ==
+
+  &parse_send_troops_confirm_form($send_troops_confirm_form, $scout_type);
+
+Parse the send troops confirm form html and return an array ref of the form input values.
 
 
 ----
