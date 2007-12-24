@@ -24,6 +24,8 @@
 		<li><a href="#gid__"><code>gid()</code></a></li>
 		<li><a href="#name__"><code>name()</code></a></li>
 		<li><a href="#costs__"><code>costs()</code></a></li>
+		<li><a href="#max_lvl__"><code>max_lvl()</code></a></li>
+		<li><a href="#total_cost__"><code>total_cost()</code></a></li>
 		<li><a href="#parse_construction__"><code>parse_construction()</code></a></li>
 	</ul>
 
@@ -62,7 +64,7 @@
   print $construction-&gt;name();</pre>
 <pre>
   print $construction-&gt;costs($level)-&gt;wood();
-  foreach my $cost ($construction-&gt;costs())
+  foreach my $cost (@{$construction-&gt;costs()})
   {
     print $cost-&gt;wood();
   }</pre>
@@ -103,6 +105,21 @@
 <p>Returns the construction costs for the given level.
 Return value is of type Travian::Construction::Cost.
 If no argument is given returns an array ref for all levels of construction.</p>
+<p>
+</p>
+<h3><a name="max_lvl__"><code>max_lvl()</code></a></h3>
+<pre>
+  $construction-&gt;max_lvl();</pre>
+<p>Returns the maximum construction level listed for this construction.</p>
+<p>
+</p>
+<h3><a name="total_cost__"><code>total_cost()</code></a></h3>
+<pre>
+  $construction-&gt;total_cost();
+  $construction-&gt;total_cost(25);
+  $construction-&gt;total_cost(1, 25);</pre>
+<p>Returns the total construction costs for the given construction levels.
+The above examples are all interchangeable.</p>
 <p>
 </p>
 <h3><a name="parse_construction__"><code>parse_construction()</code></a></h3>
