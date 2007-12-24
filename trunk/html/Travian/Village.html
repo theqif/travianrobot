@@ -1,0 +1,130 @@
+<?xml version="1.0" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>Travian::Village - a package that defines a Travian village.</title>
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<link rev="made" href="mailto:root@localhost" />
+</head>
+
+<body style="background-color: white">
+
+<p><a name="__index__"></a></p>
+<!-- INDEX BEGIN -->
+
+<ul>
+
+	<li><a href="#name">NAME</a></li>
+	<li><a href="#synopsis">SYNOPSIS</a></li>
+	<li><a href="#description">DESCRIPTION</a></li>
+	<li><a href="#methods">METHODS</a></li>
+	<ul>
+
+		<li><a href="#new__"><code>new()</code></a></li>
+		<li><a href="#current_resources__"><code>current_resources()</code></a></li>
+		<li><a href="#max_resources__"><code>max_resources()</code></a></li>
+		<li><a href="#production_resources__"><code>production_resources()</code></a></li>
+		<li><a href="#parse_village_overview__"><code>parse_village_overview()</code></a></li>
+	</ul>
+
+	<li><a href="#author">AUTHOR</a></li>
+	<li><a href="#see_also">SEE ALSO</a></li>
+	<li><a href="#copyright_and_license">COPYRIGHT AND LICENSE</a></li>
+</ul>
+<!-- INDEX END -->
+
+<hr />
+<p>
+</p>
+<h2><a name="name">NAME</a></h2>
+<p>Travian::Village - a package that defines a Travian village.</p>
+<p>
+</p>
+<hr />
+<h2><a name="synopsis">SYNOPSIS</a></h2>
+<pre>
+  use Travian::Village;
+  my $village = Travian::Village-&gt;new('My Village');
+  $village-&gt;village_name();
+  $village-&gt;village_id();</pre>
+<pre>
+  $village-&gt;current_resources();
+  $village-&gt;max_resources();
+  $village-&gt;production_resources();</pre>
+<p>
+</p>
+<hr />
+<h2><a name="description">DESCRIPTION</a></h2>
+<p>This package is for a single village in Travian.</p>
+<p>
+</p>
+<hr />
+<h2><a name="methods">METHODS</a></h2>
+<p>
+</p>
+<h3><a name="new__"><code>new()</code></a></h3>
+<pre>
+  use Travian::Village;</pre>
+<pre>
+  my $village = Travian::Village-&gt;new('My Village');</pre>
+<p>
+</p>
+<h3><a name="current_resources__"><code>current_resources()</code></a></h3>
+<pre>
+  $village-&gt;current_resources();
+  $village-&gt;current_wood();
+  $village-&gt;current_clay();
+  $village-&gt;current_iron();
+  $village-&gt;current_wheat();
+  $village-&gt;current_wheat_consumption();</pre>
+<p>Returns the current resources.</p>
+<p>
+</p>
+<h3><a name="max_resources__"><code>max_resources()</code></a></h3>
+<pre>
+  $village-&gt;max_resources();
+  $village-&gt;max_wood();
+  $village-&gt;max_clay();
+  $village-&gt;max_iron();
+  $village-&gt;max_wheat();
+  $village-&gt;max_wheat_consumption();</pre>
+<p>Returns the maximum values of resources.</p>
+<p>
+</p>
+<h3><a name="production_resources__"><code>production_resources()</code></a></h3>
+<pre>
+  $village-&gt;production_resources();
+  $village-&gt;production_wood();
+  $village-&gt;production_clay();
+  $village-&gt;production_iron();
+  $village-&gt;production_wheat();</pre>
+<p>Returns the production rate of resources.</p>
+<p>
+</p>
+<h3><a name="parse_village_overview__"><code>parse_village_overview()</code></a></h3>
+<pre>
+  $village-&gt;parse_village_overview($village_overview_html);</pre>
+<p>Parse the village overview html and populate this village.</p>
+<p>
+</p>
+<hr />
+<h2><a name="author">AUTHOR</a></h2>
+<p>Adrian D. Elgar, &lt;<a href="mailto:ade@wasters.com">ade@wasters.com</a>&gt;
+Martin Robertson, &lt;<a href="mailto:marley@wasters.com">marley@wasters.com</a>&gt;</p>
+<p>
+</p>
+<hr />
+<h2><a name="see_also">SEE ALSO</a></h2>
+<p>Travian::Resources</p>
+<p>
+</p>
+<hr />
+<h2><a name="copyright_and_license">COPYRIGHT AND LICENSE</a></h2>
+<p>Copyright (C) 2007 by Adrian Elgar, Martin Robertson</p>
+<p>This library is free software; you can redistribute it and/or modify
+it under the same terms as Perl itself, either Perl version 5.8.8 or,
+at your option, any later version of Perl 5 you may have available.</p>
+
+</body>
+
+</html>
