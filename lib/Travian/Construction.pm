@@ -57,7 +57,7 @@ Travian::Construction - a package that defines a Travian construction.
   print $construction->name();
 
   print $construction->costs($level)->wood();
-  foreach my $cost ($construction->costs())
+  foreach my $cost (@{$construction->costs()})
   {
     print $cost->wood();
   }
@@ -268,14 +268,14 @@ sub AUTOLOAD
 		croak "Can't access `$name' field in class $type";
 	}
 
-	#if (@_)
-	#{
-	#	return $self->{$name} = shift;
-	#}
-	#else
-	#{
+	if (@_)
+	{
+		return $self->{$name} = shift;
+	}
+	else
+	{
 		return $self->{$name};
-	#}
+	}
 }
 
 sub DESTROY { }
