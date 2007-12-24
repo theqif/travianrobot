@@ -1,0 +1,166 @@
+<?xml version="1.0" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>Travian::Construction - a package that defines a Travian construction.</title>
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<link rev="made" href="mailto:root@localhost" />
+</head>
+
+<body style="background-color: white">
+
+<p><a name="__index__"></a></p>
+<!-- INDEX BEGIN -->
+
+<ul>
+
+	<li><a href="#name">NAME</a></li>
+	<li><a href="#synopsis">SYNOPSIS</a></li>
+	<li><a href="#description">DESCRIPTION</a></li>
+	<li><a href="#methods">METHODS</a></li>
+	<ul>
+
+		<li><a href="#new__"><code>new()</code></a></li>
+		<li><a href="#gid__"><code>gid()</code></a></li>
+		<li><a href="#name__"><code>name()</code></a></li>
+		<li><a href="#costs__"><code>costs()</code></a></li>
+		<li><a href="#parse_construction__"><code>parse_construction()</code></a></li>
+	</ul>
+
+	<li><a href="#parse_functions">PARSE FUNCTIONS</a></li>
+	<ul>
+
+		<li><a href="#parse_construction_costs__"><code>parse_construction_costs()</code></a></li>
+	</ul>
+
+	<li><a href="#functions">FUNCTIONS</a></li>
+	<ul>
+
+		<li><a href="#gid2name__"><code>gid2name()</code></a></li>
+		<li><a href="#name2gid__"><code>name2gid()</code></a></li>
+	</ul>
+
+	<li><a href="#author">AUTHOR</a></li>
+	<li><a href="#see_also">SEE ALSO</a></li>
+	<li><a href="#copyright_and_license">COPYRIGHT AND LICENSE</a></li>
+</ul>
+<!-- INDEX END -->
+
+<hr />
+<p>
+</p>
+<h2><a name="name">NAME</a></h2>
+<p>Travian::Construction - a package that defines a Travian construction.</p>
+<p>
+</p>
+<hr />
+<h2><a name="synopsis">SYNOPSIS</a></h2>
+<pre>
+  use Travian::Construction;
+  my $construction = Travian::Construction-&gt;new(35);
+  print $construction-&gt;gid();
+  print $construction-&gt;name();</pre>
+<pre>
+  print $construction-&gt;costs($level)-&gt;wood();
+  foreach my $cost ($construction-&gt;costs())
+  {
+    print $cost-&gt;wood();
+  }</pre>
+<p>
+</p>
+<hr />
+<h2><a name="description">DESCRIPTION</a></h2>
+<p>This package is for a single construction in Travian.</p>
+<p>
+</p>
+<hr />
+<h2><a name="methods">METHODS</a></h2>
+<p>
+</p>
+<h3><a name="new__"><code>new()</code></a></h3>
+<pre>
+  use Travian::Construction;</pre>
+<pre>
+  my $construction = Travian::Construction-&gt;new($gid);</pre>
+<p>
+</p>
+<h3><a name="gid__"><code>gid()</code></a></h3>
+<pre>
+  $construction-&gt;gid();</pre>
+<p>Returns the gid of this construction.</p>
+<p>
+</p>
+<h3><a name="name__"><code>name()</code></a></h3>
+<pre>
+  $construction-&gt;name();</pre>
+<p>Returns the name of this construction.</p>
+<p>
+</p>
+<h3><a name="costs__"><code>costs()</code></a></h3>
+<pre>
+  $construction-&gt;costs();
+  $construction-&gt;costs($level);</pre>
+<p>Returns the construction costs for the given level.
+Return value is of type Travian::Construction::Cost.
+If no argument is given returns an array ref for all levels of construction.</p>
+<p>
+</p>
+<h3><a name="parse_construction__"><code>parse_construction()</code></a></h3>
+<pre>
+  $construction-&gt;parse_construction($construction_html);
+  
+Parses the given construction html and populates this construction.
+Returns this construction.</pre>
+<p>
+</p>
+<hr />
+<h2><a name="parse_functions">PARSE FUNCTIONS</a></h2>
+<p>
+</p>
+<h3><a name="parse_construction_costs__"><code>parse_construction_costs()</code></a></h3>
+<pre>
+  &amp;parse_construction_costs($construction_costs_html);
+  
+Parses the given construction costs html and returns an array ref of costs.
+Used by $construction-&gt;parse_construction().</pre>
+<p>
+</p>
+<hr />
+<h2><a name="functions">FUNCTIONS</a></h2>
+<p>
+</p>
+<h3><a name="gid2name__"><code>gid2name()</code></a></h3>
+<pre>
+  &amp;gid2name($gid);
+  
+Returns the construction's name for the given gid.</pre>
+<p>
+</p>
+<h3><a name="name2gid__"><code>name2gid()</code></a></h3>
+<pre>
+  &amp;name2gid($name);
+  
+Returns the construction's gid for the given name.</pre>
+<p>
+</p>
+<hr />
+<h2><a name="author">AUTHOR</a></h2>
+<p>Adrian D. Elgar, &lt;<a href="mailto:ade@wasters.com">ade@wasters.com</a>&gt;
+Martin Robertson, &lt;<a href="mailto:marley@wasters.com">marley@wasters.com</a>&gt;</p>
+<p>
+</p>
+<hr />
+<h2><a name="see_also">SEE ALSO</a></h2>
+<p>Travian::Construction::Cost</p>
+<p>
+</p>
+<hr />
+<h2><a name="copyright_and_license">COPYRIGHT AND LICENSE</a></h2>
+<p>Copyright (C) 2007 by Adrian Elgar, Martin Robertson</p>
+<p>This library is free software; you can redistribute it and/or modify
+it under the same terms as Perl itself, either Perl version 5.8.8 or,
+at your option, any later version of Perl 5 you may have available.</p>
+
+</body>
+
+</html>

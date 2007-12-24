@@ -1,0 +1,199 @@
+<?xml version="1.0" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>Travian - a package for the web-based game Travian.</title>
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<link rev="made" href="mailto:root@localhost" />
+</head>
+
+<body style="background-color: white">
+
+<p><a name="__index__"></a></p>
+<!-- INDEX BEGIN -->
+
+<ul>
+
+	<li><a href="#name">NAME</a></li>
+	<li><a href="#synopsis">SYNOPSIS</a></li>
+	<li><a href="#description">DESCRIPTION</a></li>
+	<li><a href="#methods">METHODS</a></li>
+	<ul>
+
+		<li><a href="#new__"><code>new()</code></a></li>
+		<li><a href="#server__"><code>server()</code></a></li>
+		<li><a href="#base_url__"><code>base_url()</code></a></li>
+		<li><a href="#error_msg__"><code>error_msg()</code></a></li>
+		<li><a href="#village__"><code>village()</code></a></li>
+		<li><a href="#login__"><code>login()</code></a></li>
+		<li><a href="#get_login_form__"><code>get_login_form()</code></a></li>
+		<li><a href="#post_login_form__"><code>post_login_form()</code></a></li>
+		<li><a href="#logout__"><code>logout()</code></a></li>
+		<li><a href="#village_overview__"><code>village_overview()</code></a></li>
+		<li><a href="#construction__"><code>construction()</code></a></li>
+	</ul>
+
+	<li><a href="#parse_functions">PARSE FUNCTIONS</a></li>
+	<ul>
+
+		<li><a href="#parse_login_form__"><code>parse_login_form()</code></a></li>
+		<li><a href="#parse_error_msg__"><code>parse_error_msg()</code></a></li>
+	</ul>
+
+	<li><a href="#author">AUTHOR</a></li>
+	<li><a href="#see_also">SEE ALSO</a></li>
+	<li><a href="#copyright_and_license">COPYRIGHT AND LICENSE</a></li>
+</ul>
+<!-- INDEX END -->
+
+<hr />
+<p>
+</p>
+<h2><a name="name">NAME</a></h2>
+<p>Travian - a package for the web-based game Travian.</p>
+<p>
+</p>
+<hr />
+<h2><a name="synopsis">SYNOPSIS</a></h2>
+<pre>
+  use Travian;
+  my $travian = Travian-&gt;new(4, {agent =&gt; 'Mozilla/5.0'});</pre>
+<pre>
+  if (!$travian-&gt;login($user, $pass))
+  {
+    print $travian-&gt;error_msg();
+  }</pre>
+<pre>
+  print $travian-&gt;server();
+  print $travian-&gt;base_url();</pre>
+<pre>
+  my $village = $travian-&gt;village();
+  $village = $travian-&gt;village_overview();</pre>
+<pre>
+  my $woodcutter = $travian-&gt;construction(1);</pre>
+<pre>
+  $travian-&gt;logout();</pre>
+<p>
+</p>
+<hr />
+<h2><a name="description">DESCRIPTION</a></h2>
+<p>This package defines routines for the web-based game Travian.</p>
+<p>
+</p>
+<hr />
+<h2><a name="methods">METHODS</a></h2>
+<p>
+</p>
+<h3><a name="new__"><code>new()</code></a></h3>
+<pre>
+  use Travian;</pre>
+<pre>
+  my $travian = Travian-&gt;new($server_no, $ua_args);</pre>
+<p>Create a new instance of the Travian object.
+If $server_no is not given a default of 3 is used.
+The Travian package is sub-classed from LWP::UserAgent and so optional $ua_args
+can be passed as second argument. See LWP::UserAgent for details.</p>
+<p>
+</p>
+<h3><a name="server__"><code>server()</code></a></h3>
+<pre>
+  $travian-&gt;server();</pre>
+<p>Returns the current Travian server number.</p>
+<p>
+</p>
+<h3><a name="base_url__"><code>base_url()</code></a></h3>
+<pre>
+  $travian-&gt;base_url();</pre>
+<p>Returns the base url of the current Travian server.</p>
+<p>
+</p>
+<h3><a name="error_msg__"><code>error_msg()</code></a></h3>
+<pre>
+  $travian-&gt;error_msg();</pre>
+<p>Returns the error message if any.</p>
+<p>
+</p>
+<h3><a name="village__"><code>village()</code></a></h3>
+<pre>
+  $travian-&gt;village();</pre>
+<p>Returns the Travian village.</p>
+<p>
+</p>
+<h3><a name="login__"><code>login()</code></a></h3>
+<pre>
+  $travian-&gt;login($user, $pass);</pre>
+<p>Log into Travian with given user and pass.
+Returns 1 on success.
+Use $travian-&gt;<code>error_msg()</code> to retrieve error message on failure.</p>
+<p>
+</p>
+<h3><a name="get_login_form__"><code>get_login_form()</code></a></h3>
+<pre>
+  $travian-&gt;get_login_form();</pre>
+<p>Retrieves the Travian login form.
+Used by $travian-&gt;login().</p>
+<p>
+</p>
+<h3><a name="post_login_form__"><code>post_login_form()</code></a></h3>
+<pre>
+  $travian-&gt;post_login_form($login_args);</pre>
+<p>Posts the Travian login form.
+Used by $travian-&gt;login().</p>
+<p>
+</p>
+<h3><a name="logout__"><code>logout()</code></a></h3>
+<pre>
+  $travian-&gt;logout();</pre>
+<p>Log out of Travian.</p>
+<p>
+</p>
+<h3><a name="village_overview__"><code>village_overview()</code></a></h3>
+<pre>
+  $travian-&gt;village_overview();</pre>
+<p>Retrieve the village overview and return the current village.</p>
+<p>
+</p>
+<h3><a name="construction__"><code>construction()</code></a></h3>
+<pre>
+  $travian-&gt;construction($gid);</pre>
+<p>Return the construction costs and times for the given gid.
+Returns a Travian::Construction object.</p>
+<p>
+</p>
+<hr />
+<h2><a name="parse_functions">PARSE FUNCTIONS</a></h2>
+<p>
+</p>
+<h3><a name="parse_login_form__"><code>parse_login_form()</code></a></h3>
+<pre>
+  &amp;parse_login_form($login_form, $user, $pass);</pre>
+<p>Parse the login form html and return an array ref of the form input values.</p>
+<p>
+</p>
+<h3><a name="parse_error_msg__"><code>parse_error_msg()</code></a></h3>
+<pre>
+  &amp;parse_error_msg($page_html);</pre>
+<p>Parse and return the error message in a given html page.</p>
+<p>
+</p>
+<hr />
+<h2><a name="author">AUTHOR</a></h2>
+<p>Adrian D. Elgar, &lt;<a href="mailto:ade@wasters.com">ade@wasters.com</a>&gt;
+Martin Robertson, &lt;<a href="mailto:marley@wasters.com">marley@wasters.com</a>&gt;</p>
+<p>
+</p>
+<hr />
+<h2><a name="see_also">SEE ALSO</a></h2>
+<p>LWP::UserAgent, Travian::Village, Travian::Resources, Travian::Construction</p>
+<p>
+</p>
+<hr />
+<h2><a name="copyright_and_license">COPYRIGHT AND LICENSE</a></h2>
+<p>Copyright (C) 2007 by Adrian Elgar, Martin Robertson</p>
+<p>This library is free software; you can redistribute it and/or modify
+it under the same terms as Perl itself, either Perl version 5.8.8 or,
+at your option, any later version of Perl 5 you may have available.</p>
+
+</body>
+
+</html>
