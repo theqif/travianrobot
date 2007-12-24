@@ -43,6 +43,8 @@ Travian - a package for the web-based game Travian.
   my $village = $travian->village();
   $village = $travian->village_overview();
 
+  $travian->send_troops($type, $x, $y, Travian::Troops->new(10));
+
   my $woodcutter = $travian->construction(1);
 
   $travian->logout();
@@ -50,6 +52,37 @@ Travian - a package for the web-based game Travian.
 =head1 DESCRIPTION
 
 This package defines routines for the web-based game Travian.
+
+=head1 CONSTANTS
+
+=head2 ATTACK_REINFORCEMENT
+
+Constant for send troops. Send reinforcements.
+
+=head2 ATTACK_NORMAL
+
+Constant for send troops. Send a normal attack.
+
+=head2 ATTACK_RAID
+
+Constant for send troops. Send a raid attack.
+
+=head2 SCOUT_RESOURCES
+
+Constant for send troops. Scout for resources and troops.
+
+=head2 SCOUT_DEFENCES
+
+Constant for send troops. Scout for defences and troops.
+
+=cut
+
+use constant ATTACK_REINFORCEMENT => 2;
+use constant ATTACK_NORMAL => 3;
+use constant ATTACK_RAID => 4;
+
+use constant SCOUT_RESOURCES => 1;
+use constant SCOUT_DEFENCES = 2;
 
 =head1 METHODS
 
@@ -279,6 +312,70 @@ sub village_overview
 	return;
 }
 
+=head2 send_troops()
+
+  $travian->send_troops($attack_type, $x, $y, $troops, $scout_type);
+
+Send the given troops on an attack of type $attack_type to coordinates $x, $y.
+The attack type is 2 for reinforcements, 3 for normal and 4 for raid.
+The troops are of type Travian::Troops.
+The scout type is 1 for resources and 2 for defences. Only used when a spy type
+troop is sent. Defaults to resources.
+
+=cut
+
+sub send_troops
+{
+	my $self = shift;
+	my ($type, $x, $y, $troops, $scout_type) = @_;
+
+	$type = 2 unless $type > 1;
+	$type = 4 unless $type < 5;
+
+	$scout_type = 1 unless $scout_type == 2;
+
+	if ($troops && ref($troops) =~ /Travian::Troops/)
+	{
+		my $send_troops_confirm_args = &parse_send_troops_confirm_form($self->post_send_troops_form($type, $x, $y, $troops), $scout_type);
+		if ($send_troops_confirm_args)
+		{
+			return $self->post($self->base_url() . '/a2b.php', $send_troops_confirm_args);
+		}
+	}
+
+	return;
+}
+
+=head2 post_send_troops_form()
+
+  $travian->post_send_troops_form($type, $x, $y, $troops);
+
+Posts the Travian send troops form.
+Used by $travian->send_troops().
+
+=cut
+
+sub post_send_troops_form
+{
+	my $self = shift;
+	my ($type, $x, $y, $troops) = @_;
+
+	my $send_troops_args = [b => 1, c => $type, dname => '', x => $x, y => $y, s1 => 'ok'];
+	push @{$send_troops_args}, @{$troops->send_troops_args()};
+
+	my $send_troops_res = $self->post($self->base_url() . '/a2b.php', $send_troops_args);
+
+	if ($send_troops_res->is_success)
+	{
+		$send_troops_res->content() =~ m#<form.+?>(.+?)</form>#msg;
+		my $send_troops_confirm = $1;
+
+		return $send_troops_confirm;
+	}
+
+	return;
+}
+
 =head2 construction()
 
   $travian->construction($gid);
@@ -356,6 +453,70 @@ sub parse_error_msg
 	my $error_msg = $1;
 
 	return $error_msg;
+}
+
+=head2 parse_send_troops_confirm_form()
+
+  &parse_send_troops_confirm_form($send_troops_confirm_form, $scout_type);
+
+Parse the send troops confirm form html and return an array ref of the form input values.
+
+=cut
+
+sub parse_send_troops_confirm_form
+{
+	my $send_troops_confirm_form = shift;
+	my $scout_type = shift;
+
+	if ($send_troops_confirm_form)
+	{
+		$send_troops_confirm_form =~ m#name="id" value="(.+?)"#msg;
+		my $id = $1;
+		$send_troops_confirm_form =~ m#name="a" value="(.+?)"#msg;
+		my $a = $1;
+		$send_troops_confirm_form =~ m#name="c" value="(.+?)"#msg;
+		my $c = $1;
+		$send_troops_confirm_form =~ m#name="kid" value="(.+?)"#msg;
+		my $kid = $1;
+		$send_troops_confirm_form =~ m#name="t1" value="(.+?)"#msg;
+		my $t1 = $1;
+		$send_troops_confirm_form =~ m#name="t2" value="(.+?)"#msg;
+		my $t2 = $1;
+		$send_troops_confirm_form =~ m#name="t3" value="(.+?)"#msg;
+		my $t3 = $1;
+		$send_troops_confirm_form =~ m#name="t4" value="(.+?)"#msg;
+		my $t4 = $1;
+		$send_troops_confirm_form =~ m#name="t5" value="(.+?)"#msg;
+		my $t5 = $1;
+		$send_troops_confirm_form =~ m#name="t6" value="(.+?)"#msg;
+		my $t6 = $1;
+		$send_troops_confirm_form =~ m#name="t7" value="(.+?)"#msg;
+		my $t7 = $1;
+		$send_troops_confirm_form =~ m#name="t8" value="(.+?)"#msg;
+		my $t8 = $1;
+		$send_troops_confirm_form =~ m#name="t9" value="(.+?)"#msg;
+		my $t9 = $1;
+		$send_troops_confirm_form =~ m#name="t10" value="(.+?)"#msg;
+		my $t10 = $1;
+		$send_troops_confirm_form =~ m#name="t11" value="(.+?)"#msg;
+		my $t11 = $1;
+
+		my $send_troops_confirm_args = 
+		[
+			id => $id, a => $a, c => $c, kid => $kid, s1 => 'ok',
+			t1 => $t1, t2 => $t2, t3 => $t3, t4 => $t4, t5 => $t5,
+			t6 => $t6, t7 => $t7, t8 => $t8, t9 => $t9, t10 => $t10, t11 => $t11,
+		];
+
+		if ($send_troops_confirm_form =~ /input type="Radio" name="spy"/)
+		{
+			push @{$send_troops_confirm_args}, spy => $scout_type;
+		}
+
+		return $send_troops_confirm_args;
+	}
+
+	return;
 }
 
 =head1 AUTHOR

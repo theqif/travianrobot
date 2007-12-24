@@ -17,6 +17,16 @@
 	<li><a href="#name">NAME</a></li>
 	<li><a href="#synopsis">SYNOPSIS</a></li>
 	<li><a href="#description">DESCRIPTION</a></li>
+	<li><a href="#constants">CONSTANTS</a></li>
+	<ul>
+
+		<li><a href="#attack_reinforcement">ATTACK_REINFORCEMENT</a></li>
+		<li><a href="#attack_normal">ATTACK_NORMAL</a></li>
+		<li><a href="#attack_raid">ATTACK_RAID</a></li>
+		<li><a href="#scout_resources">SCOUT_RESOURCES</a></li>
+		<li><a href="#scout_defences">SCOUT_DEFENCES</a></li>
+	</ul>
+
 	<li><a href="#methods">METHODS</a></li>
 	<ul>
 
@@ -30,6 +40,8 @@
 		<li><a href="#post_login_form__"><code>post_login_form()</code></a></li>
 		<li><a href="#logout__"><code>logout()</code></a></li>
 		<li><a href="#village_overview__"><code>village_overview()</code></a></li>
+		<li><a href="#send_troops__"><code>send_troops()</code></a></li>
+		<li><a href="#post_send_troops_form__"><code>post_send_troops_form()</code></a></li>
 		<li><a href="#construction__"><code>construction()</code></a></li>
 	</ul>
 
@@ -38,6 +50,7 @@
 
 		<li><a href="#parse_login_form__"><code>parse_login_form()</code></a></li>
 		<li><a href="#parse_error_msg__"><code>parse_error_msg()</code></a></li>
+		<li><a href="#parse_send_troops_confirm_form__"><code>parse_send_troops_confirm_form()</code></a></li>
 	</ul>
 
 	<li><a href="#author">AUTHOR</a></li>
@@ -70,6 +83,8 @@
   my $village = $travian-&gt;village();
   $village = $travian-&gt;village_overview();</pre>
 <pre>
+  $travian-&gt;send_troops($type, $x, $y, Travian::Troops-&gt;new(10));</pre>
+<pre>
   my $woodcutter = $travian-&gt;construction(1);</pre>
 <pre>
   $travian-&gt;logout();</pre>
@@ -78,6 +93,30 @@
 <hr />
 <h2><a name="description">DESCRIPTION</a></h2>
 <p>This package defines routines for the web-based game Travian.</p>
+<p>
+</p>
+<hr />
+<h2><a name="constants">CONSTANTS</a></h2>
+<p>
+</p>
+<h3><a name="attack_reinforcement">ATTACK_REINFORCEMENT</a></h3>
+<p>Constant for send troops. Send reinforcements.</p>
+<p>
+</p>
+<h3><a name="attack_normal">ATTACK_NORMAL</a></h3>
+<p>Constant for send troops. Send a normal attack.</p>
+<p>
+</p>
+<h3><a name="attack_raid">ATTACK_RAID</a></h3>
+<p>Constant for send troops. Send a raid attack.</p>
+<p>
+</p>
+<h3><a name="scout_resources">SCOUT_RESOURCES</a></h3>
+<p>Constant for send troops. Scout for resources and troops.</p>
+<p>
+</p>
+<h3><a name="scout_defences">SCOUT_DEFENCES</a></h3>
+<p>Constant for send troops. Scout for defences and troops.</p>
 <p>
 </p>
 <hr />
@@ -153,6 +192,23 @@ Used by $travian-&gt;login().</p>
 <p>Retrieve the village overview and return the current village.</p>
 <p>
 </p>
+<h3><a name="send_troops__"><code>send_troops()</code></a></h3>
+<pre>
+  $travian-&gt;send_troops($attack_type, $x, $y, $troops, $scout_type);</pre>
+<p>Send the given troops on an attack of type $attack_type to coordinates $x, $y.
+The attack type is 2 for reinforcements, 3 for normal and 4 for raid.
+The troops are of type Travian::Troops.
+The scout type is 1 for resources and 2 for defences. Only used when a spy type
+troop is sent. Defaults to resources.</p>
+<p>
+</p>
+<h3><a name="post_send_troops_form__"><code>post_send_troops_form()</code></a></h3>
+<pre>
+  $travian-&gt;post_send_troops_form($type, $x, $y, $troops);</pre>
+<p>Posts the Travian send troops form.
+Used by $travian-&gt;send_troops().</p>
+<p>
+</p>
 <h3><a name="construction__"><code>construction()</code></a></h3>
 <pre>
   $travian-&gt;construction($gid);</pre>
@@ -174,6 +230,12 @@ Returns a Travian::Construction object.</p>
 <pre>
   &amp;parse_error_msg($page_html);</pre>
 <p>Parse and return the error message in a given html page.</p>
+<p>
+</p>
+<h3><a name="parse_send_troops_confirm_form__"><code>parse_send_troops_confirm_form()</code></a></h3>
+<pre>
+  &amp;parse_send_troops_confirm_form($send_troops_confirm_form, $scout_type);</pre>
+<p>Parse the send troops confirm form html and return an array ref of the form input values.</p>
 <p>
 </p>
 <hr />
