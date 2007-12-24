@@ -5,22 +5,11 @@ use strict;
 use warnings;
 
 use Carp;
+use Travian::Troops;
+
+our @ISA = qw(Travian::Troops);
 
 our $VERSION = '0.01';
-our $AUTOLOAD;
-
-my %troops_gauls_fields = (
-	phalanx => 0,
-	swordsman => 0,
-	pathfinder => 0,
-	theutates_thunder => 0,
-	druidrider => 0,
-	haeduan => 0,
-	battering_ram => 0,
-	trebuchet => 0,
-	chieftian => 0,
-	settler => 0,
-);
 
 =head1 NAME
 
@@ -58,55 +47,21 @@ This package is for the Gallic troops in Travian.
 sub new
 {
 	my $class = shift;
-	my $self = {
-		_permitted => \%troops_gauls_fields,
-		%troops_gauls_fields,
-	};
-
-	bless $self, $class;
-
-	if (@_)
-	{
-		$self->phalanx(shift);
-		$self->swordsman(shift);
-		$self->pathfinder(shift);
-		$self->theutates_thunder(shift);
-		$self->druidrider(shift);
-		$self->haeduan(shift);
-		$self->battering_ram(shift);
-		$self->trebuchet(shift);
-		$self->chieftian(shift);
-		$self->settler(shift);
-	}
+	my $self = $class->SUPER::new(@_);
 
 	return $self;
 }
 
-sub AUTOLOAD
-{
-	my $self = shift;
-	my $type = ref($self)
-		or croak "$self is not an object";
-
-	my $name = $AUTOLOAD;
-	$name =~ s/.*://;   # strip fully-qualified portion
-
-	unless (exists $self->{_permitted}->{$name}) 
-	{
-		croak "Can't access `$name' field in class $type";
-	}
-
-	if (@_)
-	{
-		return $self->{$name} = shift;
-	}
-	else
-	{
-		return $self->{$name};
-	}
-}
-
-sub DESTROY { }
+sub phalanx { my $self = shift; if (@_) { return ${$self->{'_troops'}}[0] = shift; } else { return $self->{'_troops'}->[0]; } }
+sub swordsman { my $self = shift; if (@_) { return ${$self->{'_troops'}}[1] = shift; } else { return $self->{'_troops'}->[1]; } }
+sub pathfinder { my $self = shift; if (@_) { return ${$self->{'_troops'}}[2] = shift; } else { return $self->{'_troops'}->[2]; } }
+sub theutates_thunder { my $self = shift; if (@_) { return ${$self->{'_troops'}}[3] = shift; } else { return $self->{'_troops'}->[3]; } }
+sub druidrider { my $self = shift; if (@_) { return ${$self->{'_troops'}}[4] = shift; } else { return $self->{'_troops'}->[4]; } }
+sub haeduan { my $self = shift; if (@_) { return ${$self->{'_troops'}}[5] = shift; } else { return $self->{'_troops'}->[5]; } }
+sub battering_ram { my $self = shift; if (@_) { return ${$self->{'_troops'}}[6] = shift; } else { return $self->{'_troops'}->[6]; } }
+sub trebuchet { my $self = shift; if (@_) { return ${$self->{'_troops'}}[7] = shift; } else { return $self->{'_troops'}->[7]; } }
+sub chieftian { my $self = shift; if (@_) { return ${$self->{'_troops'}}[8] = shift; } else { return $self->{'_troops'}->[8]; } }
+sub settler { my $self = shift; if (@_) { return ${$self->{'_troops'}}[9] = shift; } else { return $self->{'_troops'}->[9]; } }
 
 =head1 AUTHOR
 
