@@ -1,0 +1,98 @@
+#summary Travian::Village - a package that defines a Travian village.
+
+----
+= NAME =
+
+Travian::Village - a package that defines a Travian village.
+
+
+----
+= SYNOPSIS =
+
+  use Travian::Village;
+  my $village = Travian::Village->new('My Village');
+  $village->village_name();
+  $village->village_id();
+
+  $village->current_resources();
+  $village->max_resources();
+  $village->production_resources();
+
+
+----
+= DESCRIPTION =
+
+This package is for a single village in Travian.
+
+
+----
+= METHODS =
+
+
+== new() ==
+
+  use Travian::Village;
+
+  my $village = Travian::Village->new('My Village');
+
+
+== current_resources() ==
+
+  $village->current_resources();
+  $village->current_wood();
+  $village->current_clay();
+  $village->current_iron();
+  $village->current_wheat();
+  $village->current_wheat_consumption();
+
+Returns the current resources.
+
+
+== max_resources() ==
+
+  $village->max_resources();
+  $village->max_wood();
+  $village->max_clay();
+  $village->max_iron();
+  $village->max_wheat();
+  $village->max_wheat_consumption();
+
+Returns the maximum values of resources.
+
+
+== production_resources() ==
+
+  $village->production_resources();
+  $village->production_wood();
+  $village->production_clay();
+  $village->production_iron();
+  $village->production_wheat();
+
+Returns the production rate of resources.
+
+
+== parse_village_overview() ==
+
+  $village->parse_village_overview($village_overview_html);
+
+Parse the village overview html and populate this village.
+
+
+----
+= AUTHOR =
+
+Adrian D. Elgar, <ade@wasters.com> Martin Robertson, <marley@wasters.com>
+
+
+----
+= SEE ALSO =
+
+Travian::Resources
+
+
+----
+= COPYRIGHT AND LICENSE =
+
+Copyright (C) 2007 by Adrian Elgar, Martin Robertson
+
+This library is free software; you can redistribute it and/or modify it under the same terms as Perl itself, either Perl version 5.8.8 or, at your option, any later version of Perl 5 you may have available.
