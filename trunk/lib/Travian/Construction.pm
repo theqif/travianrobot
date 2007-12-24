@@ -136,7 +136,7 @@ sub costs
 	{
 		my $level = shift;
 
-		if ($level > 0 && $level < 25)
+		if ($level > 0 && $level <= $self->max_lvl())
 		{
 			return $self->{'costs'}->[$level - 1];
 		}
@@ -145,6 +145,74 @@ sub costs
 	}
 
 	return $self->{'costs'};
+}
+
+=head2 max_lvl()
+
+  $construction->max_lvl();
+
+Returns the maximum construction level listed for this construction.
+
+=cut
+
+sub max_lvl
+{
+	my $self = shift;
+
+	return $#{$self->{'costs'}} + 1;
+}
+
+=head2 total_cost()
+
+  $construction->total_cost();
+  $construction->total_cost(25);
+  $construction->total_cost(1, 25);
+
+Returns the total construction costs for the given construction levels.
+The above examples are all interchangeable.
+
+=cut
+
+sub total_cost
+{
+	my $self = shift;
+	my $min_lvl = shift;
+	my $max_lvl = shift;
+
+	if ($min_lvl)
+	{
+		$min_lvl = 1 unless $min_lvl > 0;
+		$min_lvl = $self->max_lvl() unless $min_lvl <= $self->max_lvl();
+
+		if ($max_lvl)
+		{
+			$max_lvl = 1 unless $max_lvl > 0;
+			$max_lvl = $self->max_lvl() unless $max_lvl <= $self->max_lvl();
+
+			if ($min_lvl > $max_lvl)
+			{
+				return $self->total_cost($max_lvl, $min_lvl);
+			}
+
+			my $total_cost = Travian::Construction::Cost->new();
+			for (my $lvl = $min_lvl; $lvl <= $max_lvl; $lvl++)
+			{
+				my $cost = $self->costs($lvl);
+				$total_cost->wood($total_cost->wood() + $cost->wood());
+				$total_cost->clay($total_cost->clay() + $cost->clay());
+				$total_cost->iron($total_cost->iron() + $cost->iron());
+				$total_cost->wheat($total_cost->wheat() + $cost->wheat());
+				$total_cost->wheat_consumption($total_cost->wheat_consumption() + $cost->wheat_consumption());
+				$total_cost->culture_points($total_cost->culture_points() + $cost->culture_points());
+			}
+
+			return $total_cost;
+		}
+
+		return $self->total_cost(1, $min_lvl);
+	}
+
+	return $self->total_cost(1, $self->max_lvl());
 }
 
 =head2 parse_construction()

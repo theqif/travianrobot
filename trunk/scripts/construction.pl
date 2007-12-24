@@ -33,4 +33,17 @@ foreach my $cost (@{$woodcutter->costs()})
 	$lvl++;
 }
 
+print '-------------';
+print "\n";
+
+my $total_cost = $woodcutter->total_cost();
+print "Total Cost\t";
+print "Wood: " . $total_cost->wood() . "\t";
+print "Clay: " . $total_cost->clay() . "\t";
+print "Iron: " . $total_cost->iron() . "\t";
+print "Wheat: " . $total_cost->wheat() . "\t";
+print "Wheat (Consumption): " . $total_cost->wheat_consumption() . "\t";
+print "CP: " . $total_cost->culture_points() . "\t";
+print "\n";
+
 
