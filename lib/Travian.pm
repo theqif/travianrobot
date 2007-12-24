@@ -43,7 +43,7 @@ Travian - a package for the web-based game Travian.
   my $village = $travian->village();
   $village = $travian->village_overview();
 
-  $travian->send_troops($type, $x, $y, Travian::Troops->new(10));
+  $travian->send_troops($type, $x, $y, Travian::Troops::Gauls->new(10), $scout_type);
 
   my $woodcutter = $travian->construction(1);
 
