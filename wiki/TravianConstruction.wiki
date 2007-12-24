@@ -15,7 +15,7 @@ Travian::Construction - a package that defines a Travian construction.
   print $construction->name();
 
   print $construction->costs($level)->wood();
-  foreach my $cost ($construction->costs())
+  foreach my $cost (@{$construction->costs()})
   {
     print $cost->wood();
   }
@@ -58,6 +58,22 @@ Returns the name of this construction.
   $construction->costs($level);
 
 Returns the construction costs for the given level. Return value is of type Travian::Construction::Cost. If no argument is given returns an array ref for all levels of construction.
+
+
+== max_lvl() ==
+
+  $construction->max_lvl();
+
+Returns the maximum construction level listed for this construction.
+
+
+== total_cost() ==
+
+  $construction->total_cost();
+  $construction->total_cost(25);
+  $construction->total_cost(1, 25);
+
+Returns the total construction costs for the given construction levels. The above examples are all interchangeable.
 
 
 == parse_construction() ==
