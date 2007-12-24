@@ -82,7 +82,7 @@ use constant ATTACK_NORMAL => 3;
 use constant ATTACK_RAID => 4;
 
 use constant SCOUT_RESOURCES => 1;
-use constant SCOUT_DEFENCES = 2;
+use constant SCOUT_DEFENCES => 2;
 
 =head1 METHODS
 
@@ -332,7 +332,7 @@ sub send_troops
 	$type = 2 unless $type > 1;
 	$type = 4 unless $type < 5;
 
-	$scout_type = 1 unless $scout_type == 2;
+	$scout_type = 1 unless $scout_type && $scout_type == 2;
 
 	if ($troops && ref($troops) =~ /Travian::Troops/)
 	{
