@@ -29,6 +29,7 @@ Travian::Troops::Gauls - a package that defines Travian Gallic troops.
   $gauls->trebuchet(80);
   $gauls->chieftian(90);
   $gauls->settler(100);
+  $gauls->hero(1);
 
 =head1 DESCRIPTION
 
@@ -40,7 +41,7 @@ This package is for the Gallic troops in Travian.
 
   use Travian::Troops::Gauls;
 
-  my $gauls = Travian::Troops::Gauls->new(10, 20, 30, 40, 50, 60, 70, 80, 90, 100);
+  my $gauls = Travian::Troops::Gauls->new(10, 20, 30, 40, 50, 60, 70, 80, 90, 100, 1);
 
 =cut
 
@@ -62,6 +63,7 @@ sub battering_ram { my $self = shift; if (@_) { return ${$self->{'_troops'}}[6] 
 sub trebuchet { my $self = shift; if (@_) { return ${$self->{'_troops'}}[7] = shift; } else { return $self->{'_troops'}->[7]; } }
 sub chieftian { my $self = shift; if (@_) { return ${$self->{'_troops'}}[8] = shift; } else { return $self->{'_troops'}->[8]; } }
 sub settler { my $self = shift; if (@_) { return ${$self->{'_troops'}}[9] = shift; } else { return $self->{'_troops'}->[9]; } }
+sub hero { my $self = shift; if (@_) { return ${$self->{'_troops'}}[10] = shift; } else { return $self->{'_troops'}->[10]; } }
 
 =head1 AUTHOR
 

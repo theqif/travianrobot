@@ -29,6 +29,7 @@ Travian::Troops::Romans - a package that defines Travian Roman troops.
   $romans->fire_catapult(80);
   $romans->senator(90);
   $romans->settler(100);
+  $romans->hero(1);
 
 =head1 DESCRIPTION
 
@@ -40,7 +41,7 @@ This package is for the Roman troops in Travian.
 
   use Travian::Troops::Romans;
 
-  my $romans = Travian::Troops::Romans->new(10, 20, 30, 40, 50, 60, 70, 80, 90, 100);
+  my $romans = Travian::Troops::Romans->new(10, 20, 30, 40, 50, 60, 70, 80, 90, 100, 1);
 
 =cut
 
@@ -62,6 +63,7 @@ sub battering_ram { my $self = shift; if (@_) { return ${$self->{'_troops'}}[6] 
 sub fire_catapult { my $self = shift; if (@_) { return ${$self->{'_troops'}}[7] = shift; } else { return $self->{'_troops'}->[7]; } }
 sub senator { my $self = shift; if (@_) { return ${$self->{'_troops'}}[8] = shift; } else { return $self->{'_troops'}->[8]; } }
 sub settler { my $self = shift; if (@_) { return ${$self->{'_troops'}}[9] = shift; } else { return $self->{'_troops'}->[9]; } }
+sub hero { my $self = shift; if (@_) { return ${$self->{'_troops'}}[10] = shift; } else { return $self->{'_troops'}->[10]; } }
 
 =head1 AUTHOR
 
