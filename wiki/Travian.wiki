@@ -11,7 +11,7 @@ Travian - a package for the web-based game Travian.
 
 {{{
   use Travian;
-  my $travian = Travian->new(4, {agent => 'Mozilla/5.0'});
+  my $travian = Travian->new(4, agent => 'Mozilla/5.0');
 
   if (!$travian->login($user, $pass))
   {
