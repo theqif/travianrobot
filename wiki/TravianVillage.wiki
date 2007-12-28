@@ -9,6 +9,7 @@ Travian::Village - a package that defines a Travian village.
 ----
 = SYNOPSIS =
 
+{{{
   use Travian::Village;
   my $village = Travian::Village->new('My Village');
   $village->village_name();
@@ -17,7 +18,7 @@ Travian::Village - a package that defines a Travian village.
   $village->current_resources();
   $village->max_resources();
   $village->production_resources();
-
+}}}
 
 ----
 = DESCRIPTION =
@@ -31,49 +32,58 @@ This package is for a single village in Travian.
 
 == new() ==
 
+{{{
   use Travian::Village;
 
   my $village = Travian::Village->new('My Village');
-
+}}}
 
 == current_resources() ==
 
+{{{
   $village->current_resources();
   $village->current_wood();
   $village->current_clay();
   $village->current_iron();
   $village->current_wheat();
   $village->current_wheat_consumption();
+}}}
 
 Returns the current resources.
 
 
 == max_resources() ==
 
+{{{
   $village->max_resources();
   $village->max_wood();
   $village->max_clay();
   $village->max_iron();
   $village->max_wheat();
   $village->max_wheat_consumption();
+}}}
 
 Returns the maximum values of resources.
 
 
 == production_resources() ==
 
+{{{
   $village->production_resources();
   $village->production_wood();
   $village->production_clay();
   $village->production_iron();
   $village->production_wheat();
+}}}
 
 Returns the production rate of resources.
 
 
 == parse_village_overview() ==
 
+{{{
   $village->parse_village_overview($village_overview_html);
+}}}
 
 Parse the village overview html and populate this village.
 
