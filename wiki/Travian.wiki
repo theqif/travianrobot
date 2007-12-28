@@ -1,190 +1,247 @@
 #summary Travian - a package for the web-based game Travian.
 
-==NAME==
+
+----
+= NAME =
+
 Travian - a package for the web-based game Travian.
 
-==SYNOPSIS==
-<code>
+
+----
+= SYNOPSIS =
+
   use Travian;
   my $travian = Travian->new(4, agent => 'Mozilla/5.0');
- 
+
   if (!$travian->login($user, $pass))
   {
     print $travian->error_msg();
   }
- 
+
   print $travian->server();
   print $travian->base_url();
- 
+
   my $village = $travian->village($village_id);
   $village = $travian->next_village();
   $village = $travian->village_overview();
   $travian->no_of_villages();
- 
+
   $travian->send_troops($type, $x, $y, Travian::Troops::Gauls->new(10), $scout_type);
- 
+
   my $woodcutter = $travian->construction(1);
- 
+
   $travian->logout();
-</code>
-==DESCRIPTION==
+
+
+----
+= DESCRIPTION =
+
 This package defines routines for the web-based game Travian.
 
-==CONSTANTS==
-===ATTACK_REINFORCEMENT===
+
+----
+= CONSTANTS =
+
+
+== ATTACK_REINFORCEMENT ==
+
 Constant for send troops. Send reinforcements.
 
-===ATTACK_NORMAL===
+
+== ATTACK_NORMAL ==
+
 Constant for send troops. Send a normal attack.
 
-===ATTACK_RAID===
+
+== ATTACK_RAID ==
+
 Constant for send troops. Send a raid attack.
 
-===SCOUT_RESOURCES===
+
+== SCOUT_RESOURCES ==
+
 Constant for send troops. Scout for resources and troops.
 
-===SCOUT_DEFENCES===
+
+== SCOUT_DEFENCES ==
+
 Constant for send troops. Scout for defences and troops.
 
-==METHODS==
-===new()===
-<code>
-  use Travian;
- 
-  my $travian = Travian->new($server_no, $ua_args);
-</code>
-Create a new instance of the Travian object. If $server_no is not given a default of 3 is used. The Travian package is sub-classed from LWP::UserAgent and so optional $ua_args can be passed as second argument. See LWP::UserAgent for details.
 
-===server()===
-<code>
+----
+= METHODS =
+
+
+== new() ==
+
+  use Travian;
+
+  my $travian = Travian->new($server_no, $ua_args);
+
+Create a new instance of the Travian object. If $server_no is not given a default of 3 is used. The Travian package is sub-classed from LWP::!UserAgent and so optional $ua_args can be passed as second argument. See LWP::!UserAgent for details.
+
+
+== server() ==
+
   $travian->server();
-</code>
+
 Returns the current Travian server number.
 
-===base_url()===
-<code>
+
+== base_url() ==
+
   $travian->base_url();
-</code>
+
 Returns the base url of the current Travian server.
 
-===error_msg()===
-<code>
+
+== error_msg() ==
+
   $travian->error_msg();
-</code>
+
 Returns the error message if any.
 
-===login()===
-<code>
+
+== login() ==
+
   $travian->login($user, $pass);
-</code>
+
 Log into Travian with given user and pass. Returns 1 on success. Use $travian->error_msg() to retrieve error message on failure.
 
-===get_login_form()===
-<code>
+
+== get_login_form() ==
+
   $travian->get_login_form();
-</code>
+
 Retrieves the Travian login form. Used by $travian->login().
 
-===post_login_form()===
-<code>
+
+== post_login_form() ==
+
   $travian->post_login_form($login_args);
-</code>
+
 Posts the Travian login form. Used by $travian->login().
 
-===logout()===
-<code>
+
+== logout() ==
+
   $travian->logout();
-</code>
+
 Log out of Travian.
 
-===village()===
-<code>
+
+== village() ==
+
   $travian->village();
   $travian->village($village_id);
-</code>
+
 Returns the Travian village.
 
-===next_village()===
-<code>
+
+== next_village() ==
+
   $travian->next_village();
   
-</code>
+
 Returns the next Travian village.
 
-===no_of_villages()===
-<code>
+
+== no_of_villages() ==
+
   $travian->no_of_villages();
-</code>
+
 Returns the number of villages.
 
-===village_id2index()===
-<code>
+
+== village_id2index() ==
+
   $travian->village_id2index($village_id);
-</code>
+
 Given a village id returns the index in the village array. Used by $travian->village().
 
-===parse_villages()===
-<code>
+
+== parse_villages() ==
+
   $travian->parse_villages($village_overview_html);
-</code>
+
 Parses the villages from the given village overview html and returns the current village. Used by $travian->login().
 
-===village_overview()===
-<code>
+
+== village_overview() ==
+
   $travian->village_overview();
-</code>
+
 Retrieve the village overview and return the current village.
 
-===send_troops()===
-<code>
+
+== send_troops() ==
+
   $travian->send_troops($attack_type, $x, $y, $troops, $scout_type);
-</code>
+
 Send the given troops on an attack of type $attack_type to coordinates $x, $y. The attack type is 2 for reinforcements, 3 for normal and 4 for raid. The troops are of type Travian::Troops. The scout type is 1 for resources and 2 for defences. Only used when a spy type troop is sent. Defaults to resources.
 
-===post_send_troops_form()===
-<code>
+
+== post_send_troops_form() ==
+
   $travian->post_send_troops_form($type, $x, $y, $troops);
-</code>
+
 Posts the Travian send troops form. Used by $travian->send_troops().
 
-===construction()===
-<code>
+
+== construction() ==
+
   $travian->construction($gid);
-</code>
+
 Return the construction costs and times for the given gid. Returns a Travian::Construction object.
 
-==PARSE FUNCTIONS==
-===parse_login_form()===
-<code>
+
+----
+= PARSE FUNCTIONS =
+
+
+== parse_login_form() ==
+
   &parse_login_form($login_form, $user, $pass);
-</code>
+
 Parse the login form html and return an array ref of the form input values.
 
-===parse_login_error_msg()===
-<code>
+
+== parse_login_error_msg() ==
+
   &parse_login_error_msg($login_html);
-</code>
+
 Parse and return the error message in the login html page.
 
-===parse_send_troops_confirm_form()===
-<code>
+
+== parse_send_troops_confirm_form() ==
+{{{
   &parse_send_troops_confirm_form($send_troops_confirm_form, $scout_type);
-</code>
+}}}
 Parse the send troops confirm form html and return an array ref of the form input values.
 
-===parse_send_troops_error_msg()===
-<code>
+
+== parse_send_troops_error_msg() ==
+{{{
   &parse_send_troops_error_msg($send_troops_html);
-</code>
+}}}
 Parse and return the error message in the send troops html page.
 
-==AUTHOR==
+
+----
+= AUTHOR =
+
 Adrian D. Elgar, <ade@wasters.com> Martin Robertson, <marley@wasters.com>
 
-==SEE ALSO==
-LWP::UserAgent, Travian::Village, Travian::Resources, Travian::Construction
 
-==COPYRIGHT AND LICENSE==
+----
+= SEE ALSO =
+
+LWP::!UserAgent, Travian::Village, Travian::Resources, Travian::Construction
+
+
+----
+= COPYRIGHT AND LICENSE =
+
 Copyright (C) 2007 by Adrian Elgar, Martin Robertson
 
 This library is free software; you can redistribute it and/or modify it under the same terms as Perl itself, either Perl version 5.8.8 or, at your option, any later version of Perl 5 you may have available.
