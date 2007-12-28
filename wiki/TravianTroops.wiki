@@ -9,11 +9,12 @@ Travian::Troops - a package that defines Travian troops.
 ----
 = SYNOPSIS =
 
+{{{
   use Travian::Troops;
   my $troops = Travian::Troops->new(10, 20, 30, 40, 50, 60, 70, 80, 90, 100, 1);
   
   $troops->send_troops_args();
-
+}}}
 
 ----
 = DESCRIPTION =
@@ -27,14 +28,17 @@ This package is for the troops in Travian.
 
 == new() ==
 
+{{{
   use Travian::Troops;
 
   my $troops = Travian::Troops->new(10, 20, 30, 40, 50, 60, 70, 80, 90, 100, 1);
-
+}}}
 
 == send_troops_args() ==
 
+{{{
   $troops->send_troops_args();
+}}}
 
 Returns an array ref of the troops for passing to send troops forms.
 
