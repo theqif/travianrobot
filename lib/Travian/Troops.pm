@@ -1,6 +1,5 @@
 package Travian::Troops;
 
-use 5.008008;
 use strict;
 use warnings;
 

@@ -1,6 +1,5 @@
 package Travian::Troops::Gauls;
 
-use 5.008008;
 use strict;
 use warnings;
 
