@@ -1,6 +1,5 @@
 package Travian::Construction;
 
-use 5.008008;
 use strict;
 use warnings;
 

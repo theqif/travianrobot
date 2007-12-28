@@ -1,6 +1,5 @@
 package Travian;
 
-use 5.008008;
 use strict;
 use warnings;
 
@@ -30,7 +29,7 @@ Travian - a package for the web-based game Travian.
 =head1 SYNOPSIS
 
   use Travian;
-  my $travian = Travian->new(4, {agent => 'Mozilla/5.0'});
+  my $travian = Travian->new(4, agent => 'Mozilla/5.0');
 
   if (!$travian->login($user, $pass))
   {
@@ -60,11 +59,11 @@ This package defines routines for the web-based game Travian.
 Constant for send troops. Send reinforcements.
 
 =head2 ATTACK_NORMAL
-
+lottery results uk
 Constant for send troops. Send a normal attack.
 
 =head2 ATTACK_RAID
-
+lottery results uk
 Constant for send troops. Send a raid attack.
 
 =head2 SCOUT_RESOURCES
