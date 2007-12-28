@@ -15,7 +15,7 @@ Travian::Troops - a package that defines Travian troops.
 =head1 SYNOPSIS
 
   use Travian::Troops;
-  my $troops = Travian::Troops->new(10, 20, 30, 40, 50, 60, 70, 80, 90, 100);
+  my $troops = Travian::Troops->new(10, 20, 30, 40, 50, 60, 70, 80, 90, 100, 1);
   
   $troops->send_troops_args();
 
@@ -29,7 +29,7 @@ This package is for the troops in Travian.
 
   use Travian::Troops;
 
-  my $troops = Travian::Troops->new(10, 20, 30, 40, 50, 60, 70, 80, 90, 100);
+  my $troops = Travian::Troops->new(10, 20, 30, 40, 50, 60, 70, 80, 90, 100, 1);
 
 =cut
 
@@ -40,7 +40,7 @@ sub new
 
 	bless $self, $class;
 
-	$self->{'_troops'} = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+	$self->{'_troops'} = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
 
 	if (@_)
 	{
@@ -54,6 +54,7 @@ sub new
 		$self->{'_troops'}->[7] = shift;
 		$self->{'_troops'}->[8] = shift;
 		$self->{'_troops'}->[9] = shift;
+		$self->{'_troops'}->[10] = shift;
 	}
 
 	return $self;
