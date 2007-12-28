@@ -9,6 +9,7 @@ Travian::Resources - a package that defines Travian resources.
 ----
 = SYNOPSIS =
 
+{{{
   use Travian::Resources;
   my $resources = Travian::Resources->new();
   $resources->wood(100);
@@ -16,7 +17,7 @@ Travian::Resources - a package that defines Travian resources.
   $resources->iron(300);
   $resources->wheat(400);
   $resources->wheat_consumption(50);
-
+}}}
 
 ----
 = DESCRIPTION =
@@ -30,10 +31,11 @@ This package is for the resources in Travian.
 
 == new() ==
 
+{{{
   use Travian::Resources;
 
   my $resources = Travian::Resources->new(100, 200, 300, 400, 50);
-
+}}}
 
 ----
 = AUTHOR =
