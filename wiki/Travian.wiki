@@ -9,6 +9,7 @@ Travian - a package for the web-based game Travian.
 ----
 = SYNOPSIS =
 
+{{{
   use Travian;
   my $travian = Travian->new(4, {agent => 'Mozilla/5.0'});
 
@@ -28,7 +29,7 @@ Travian - a package for the web-based game Travian.
   my $woodcutter = $travian->construction(1);
 
   $travian->logout();
-
+}}}
 
 ----
 = DESCRIPTION =
