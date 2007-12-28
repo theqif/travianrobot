@@ -9,6 +9,7 @@ Travian::Construction::Cost - a package that defines Travian construction costs.
 ----
 = SYNOPSIS =
 
+{{{
   use Travian::Construction::Cost;
   my $cost = Travian::Construction::Cost->new();
   $cost->wood(100);
@@ -19,7 +20,7 @@ Travian::Construction::Cost - a package that defines Travian construction costs.
   $cost->culture_points(6);
 
   print $cost->resources()->wood();
-
+}}}
 
 ----
 = DESCRIPTION =
@@ -33,10 +34,11 @@ This package is for a single level of construction costs in Travian.
 
 == new() ==
 
+{{{
   use Travian::Construction::Cost;
 
   my $cost = Travian::Construction::Cost->new(100, 200, 300, 400, 50, 6);
-
+}}}
 
 ----
 = AUTHOR =
