@@ -39,8 +39,10 @@ Travian - a package for the web-based game Travian.
   print $travian->server();
   print $travian->base_url();
 
-  my $village = $travian->village();
+  my $village = $travian->village($village_id);
+  $village = $travian->next_village();
   $village = $travian->village_overview();
+  $travian->no_of_villages();
 
   $travian->send_troops($type, $x, $y, Travian::Troops::Gauls->new(10), $scout_type);
 
@@ -59,11 +61,11 @@ This package defines routines for the web-based game Travian.
 Constant for send troops. Send reinforcements.
 
 =head2 ATTACK_NORMAL
-lottery results uk
+
 Constant for send troops. Send a normal attack.
 
 =head2 ATTACK_RAID
-lottery results uk
+
 Constant for send troops. Send a raid attack.
 
 =head2 SCOUT_RESOURCES
@@ -119,6 +121,8 @@ sub _init
 	$self->cookie_jar({ }) if (!defined($self->cookie_jar()));
 
 	$self->{'village'} = Travian::Village->new();
+	$self->{'villages'} = [];
+	$self->{'village_index'} = 0;
 
 	$self->{'current_resources'} = Travian::Resources->new();
 	$self->{'max_resources'} = Travian::Resources->new();
@@ -166,19 +170,6 @@ sub error_msg
 	return $_[0]->{'error_msg'};
 }
 
-=head2 village()
-
-  $travian->village();
-
-Returns the Travian village.
-
-=cut
-
-sub village
-{
-	return $_[0]->{'village'};
-}
-
 =head2 login()
 
   $travian->login($user, $pass);
@@ -205,10 +196,10 @@ sub login
 			my $login_form_res_html = $self->post_login_form($login_args);
 			if ($login_form_res_html)
 			{
-				$self->{'error_msg'} = &parse_error_msg($login_form_res_html);
+				$self->{'error_msg'} = &parse_login_error_msg($login_form_res_html);
 				if (!$self->{'error_msg'})
 				{
-					return $self->village()->parse_village_overview($login_form_res_html);
+					return $self->parse_villages($login_form_res_html);
 				}
 			}
 			else { $self->{'error_msg'} = 'Cannot post login form.'; }
@@ -289,6 +280,182 @@ sub logout
 	return $logout_res->is_success;
 }
 
+=head2 village()
+
+  $travian->village();
+  $travian->village($village_id);
+
+Returns the Travian village.
+
+=cut
+
+sub village
+{
+	my $self = shift;
+
+	$self->{'error_msg'} = '';
+
+	if (@_)
+	{
+		my $village_id = shift;
+		if ($village_id =~ /\d+/)
+		{
+			my $village_index = $self->village_id2index($village_id);
+			if ($village_index < 0)
+			{
+				$self->{'error_msg'} = 'Invalid village id.';
+				return;
+			}
+
+			$self->{'village_index'} = $village_index;
+			
+			return $self->village_overview($village_id);
+		}
+	}
+
+	if ($self->no_of_villages() && $self->{'village_index'} < $self->no_of_villages())
+	{
+		return $self->{'villages'}->[$self->{'village_index'}];
+	}
+
+	$self->{'error_msg'} = 'No villages found.';
+
+	return;
+}
+
+=head2 next_village()
+
+  $travian->next_village();
+  
+Returns the next Travian village.
+
+=cut
+
+sub next_village
+{
+	my $self = shift;
+
+	$self->{'error_msg'} = '';
+
+	if ($self->no_of_villages())
+	{
+		$self->{'village_index'}++;
+		$self->{'village_index'} = 0 unless $self->{'village_index'} < $self->no_of_villages();
+
+		if ($self->village()->village_id())
+		{
+			return $self->village_overview($self->village()->village_id());
+		}
+
+		return $self->village();
+	}
+
+	$self->{'error_msg'} = 'No villages found.';
+
+	return;
+}
+
+=head2 no_of_villages()
+
+  $travian->no_of_villages();
+
+Returns the number of villages.
+
+=cut
+
+sub no_of_villages
+{
+	return $#{$_[0]->{'villages'}} + 1;
+}
+
+=head2 village_id2index()
+
+  $travian->village_id2index($village_id);
+
+Given a village id returns the index in the village array.
+Used by $travian->village().
+
+=cut
+
+sub village_id2index
+{
+	my $self = shift;
+	my $id = shift;
+	my $index = 0;
+
+	foreach my $village (@{$self->{'villages'}})
+	{
+		if ($village->village_id() == $id)
+		{
+			return $index;
+		}
+
+		$index++;
+	}
+
+	return -1;
+}
+
+=head2 parse_villages()
+
+  $travian->parse_villages($village_overview_html);
+
+Parses the villages from the given village overview html and
+returns the current village.
+Used by $travian->login().
+
+=cut
+
+sub parse_villages
+{
+	my $self = shift;
+	my $village_overview_html = shift;
+
+	$self->{'error_msg'} = '';
+
+	if ($village_overview_html && $village_overview_html =~ /logout.php/msg)
+	{	
+		my $villages = [ $village_overview_html =~ m#(<a href="\?newdid=.+?</tr>)#mgs ];
+		
+		if ($#{@{$villages}} > 0)		
+		{
+			# multiple villages
+			my $village_index = 0;
+
+			foreach my $village (@{$villages})
+			{
+				my ($village_id, $village_name, $x, $y);
+				
+				if ($village =~ m#newdid=(\d+?)"#msg) {	$village_id = $1; }
+				if ($village =~ m#(class="active\_vl")#msg) { $self->{'village_index'} = $village_index; }
+				if ($village =~ m#>(.+?)</a>#msg) { $village_name = $1;	}
+				if ($village =~ m#right dlist1">\((\d+?)<#msg) { $x = $1; }
+				if ($village =~ m#left dlist3">(\d+?)\)<#msg) {	$y = $1; }
+
+				my $village_obj = Travian::Village->new($village_name, $village_id);
+				$village_obj->x($x);
+				$village_obj->y($y);
+				
+				push(@{$self->{'villages'}}, $village_obj);
+
+				$village_index++;
+			}
+		}
+		else
+		{
+			# single village
+			push(@{$self->{'villages'}}, Travian::Village->new());
+			$self->{'village_index'} = 0;
+		}
+		
+		return $self->{'villages'}->[$self->{'village_index'}]->parse_village_overview($village_overview_html);
+	}
+
+	$self->{'error_msg'} = 'Cannot parse villages.';
+
+	return;
+}
+
 =head2 village_overview()
 
   $travian->village_overview();
@@ -300,13 +467,40 @@ Retrieve the village overview and return the current village.
 sub village_overview
 {
 	my $self = shift;
+	my $village_overview_url = $self->base_url() . '/dorf1.php';
 
-	my $village_overview_res = $self->get($self->base_url() . '/dorf1.php');
+	$self->{'error_msg'} = '';
 
-	if ($village_overview_res->is_success)
+	if ($self->village())
 	{
-		return $self->village()->parse_village_overview($village_overview_res->content);
+		if (@_)
+		{
+			my $village_id = shift;
+			if ($village_id =~ /\d+/ && $village_id == $self->village()->village_id())
+			{
+				$village_overview_url .= '?newdid=' . $village_id; 
+			}
+			else
+			{
+				$self->{'error_msg'} = 'Invalid village id.';
+
+				return;
+			}
+		}
+
+		my $village_overview_res = $self->get($village_overview_url);
+
+		if ($village_overview_res->is_success)
+		{
+			return $self->village()->parse_village_overview($village_overview_res->content);
+		}
+
+		$self->{'error_msg'} = 'Cannot retrieve village overview.';
+
+		return;		
 	}
+
+	$self->{'error_msg'} = 'No village found.';
 
 	return;
 }
@@ -328,6 +522,8 @@ sub send_troops
 	my $self = shift;
 	my ($type, $x, $y, $troops, $scout_type) = @_;
 
+	$self->{'error_msg'} = '';
+
 	$type = 2 unless $type > 1;
 	$type = 4 unless $type < 5;
 
@@ -335,12 +531,24 @@ sub send_troops
 
 	if ($troops && ref($troops) =~ /Travian::Troops/)
 	{
-		my $send_troops_confirm_args = &parse_send_troops_confirm_form($self->post_send_troops_form($type, $x, $y, $troops), $scout_type);
-		if ($send_troops_confirm_args)
+		my $send_troops_confirm_form = $self->post_send_troops_form($type, $x, $y, $troops);
+		if ($send_troops_confirm_form)
 		{
-			return $self->post($self->base_url() . '/a2b.php', $send_troops_confirm_args);
+			my $send_troops_confirm_args = &parse_send_troops_confirm_form($send_troops_confirm_form, $scout_type);
+			if ($send_troops_confirm_args)
+			{
+				return $self->post($self->base_url() . '/a2b.php', $send_troops_confirm_args);
+			}
+
+			$self->{'error_msg'} = &parse_send_troops_error_msg($send_troops_confirm_form);
+			return;
 		}
+
+		$self->{'error_msg'} = 'Cannot post send troops form.';
+		return;
 	}
+
+	$self->{'error_msg'} = 'Invalid troops.';
 
 	return;
 }
@@ -366,10 +574,7 @@ sub post_send_troops_form
 
 	if ($send_troops_res->is_success)
 	{
-		$send_troops_res->content() =~ m#<form.+?>(.+?)</form>#msg;
-		my $send_troops_confirm = $1;
-
-		return $send_troops_confirm;
+		return $send_troops_res->content();
 	}
 
 	return;
@@ -436,15 +641,15 @@ sub parse_login_form
 	return;
 }
 
-=head2 parse_error_msg()
+=head2 parse_login_error_msg()
 
-  &parse_error_msg($page_html);
+  &parse_login_error_msg($login_html);
 
-Parse and return the error message in a given html page.
+Parse and return the error message in the login html page.
 
 =cut
 
-sub parse_error_msg
+sub parse_login_error_msg
 {
 	my $html = shift;
 
@@ -467,7 +672,7 @@ sub parse_send_troops_confirm_form
 	my $send_troops_confirm_form = shift;
 	my $scout_type = shift;
 
-	if ($send_troops_confirm_form)
+	if ($send_troops_confirm_form && $send_troops_confirm_form =~ m#\>Destination\:\<\/td\>#msg)
 	{
 		$send_troops_confirm_form =~ m#name="id" value="(.+?)"#msg;
 		my $id = $1;
@@ -516,6 +721,26 @@ sub parse_send_troops_confirm_form
 	}
 
 	return;
+}
+
+=head2 parse_send_troops_error_msg()
+
+  &parse_send_troops_error_msg($send_troops_html);
+
+Parse and return the error message in the send troops html page.
+
+=cut
+
+sub parse_send_troops_error_msg
+{
+	my $html = shift;
+
+	$html =~ m#<div class="f10 e b">(.+?)</div>#mg;
+	my $error_msg = $1;
+	$error_msg =~ s#<span>##;
+	$error_msg =~ s#</span>##;
+
+	return $error_msg;
 }
 
 =head1 AUTHOR
