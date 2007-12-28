@@ -14,6 +14,8 @@ Travian::Village - a package that defines a Travian village.
   my $village = Travian::Village->new('My Village');
   $village->village_name();
   $village->village_id();
+  $village->x();
+  $village->y();
 
   $village->current_resources();
   $village->max_resources();
