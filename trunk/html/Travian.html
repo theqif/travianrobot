@@ -34,11 +34,15 @@
 		<li><a href="#server__"><code>server()</code></a></li>
 		<li><a href="#base_url__"><code>base_url()</code></a></li>
 		<li><a href="#error_msg__"><code>error_msg()</code></a></li>
-		<li><a href="#village__"><code>village()</code></a></li>
 		<li><a href="#login__"><code>login()</code></a></li>
 		<li><a href="#get_login_form__"><code>get_login_form()</code></a></li>
 		<li><a href="#post_login_form__"><code>post_login_form()</code></a></li>
 		<li><a href="#logout__"><code>logout()</code></a></li>
+		<li><a href="#village__"><code>village()</code></a></li>
+		<li><a href="#next_village__"><code>next_village()</code></a></li>
+		<li><a href="#no_of_villages__"><code>no_of_villages()</code></a></li>
+		<li><a href="#village_id2index__"><code>village_id2index()</code></a></li>
+		<li><a href="#parse_villages__"><code>parse_villages()</code></a></li>
 		<li><a href="#village_overview__"><code>village_overview()</code></a></li>
 		<li><a href="#send_troops__"><code>send_troops()</code></a></li>
 		<li><a href="#post_send_troops_form__"><code>post_send_troops_form()</code></a></li>
@@ -49,8 +53,9 @@
 	<ul>
 
 		<li><a href="#parse_login_form__"><code>parse_login_form()</code></a></li>
-		<li><a href="#parse_error_msg__"><code>parse_error_msg()</code></a></li>
+		<li><a href="#parse_login_error_msg__"><code>parse_login_error_msg()</code></a></li>
 		<li><a href="#parse_send_troops_confirm_form__"><code>parse_send_troops_confirm_form()</code></a></li>
+		<li><a href="#parse_send_troops_error_msg__"><code>parse_send_troops_error_msg()</code></a></li>
 	</ul>
 
 	<li><a href="#author">AUTHOR</a></li>
@@ -80,8 +85,10 @@
   print $travian-&gt;server();
   print $travian-&gt;base_url();</pre>
 <pre>
-  my $village = $travian-&gt;village();
-  $village = $travian-&gt;village_overview();</pre>
+  my $village = $travian-&gt;village($village_id);
+  $village = $travian-&gt;next_village();
+  $village = $travian-&gt;village_overview();
+  $travian-&gt;no_of_villages();</pre>
 <pre>
   $travian-&gt;send_troops($type, $x, $y, Travian::Troops::Gauls-&gt;new(10), $scout_type);</pre>
 <pre>
@@ -152,12 +159,6 @@ can be passed as second argument. See LWP::UserAgent for details.</p>
 <p>Returns the error message if any.</p>
 <p>
 </p>
-<h3><a name="village__"><code>village()</code></a></h3>
-<pre>
-  $travian-&gt;village();</pre>
-<p>Returns the Travian village.</p>
-<p>
-</p>
 <h3><a name="login__"><code>login()</code></a></h3>
 <pre>
   $travian-&gt;login($user, $pass);</pre>
@@ -184,6 +185,41 @@ Used by $travian-&gt;login().</p>
 <pre>
   $travian-&gt;logout();</pre>
 <p>Log out of Travian.</p>
+<p>
+</p>
+<h3><a name="village__"><code>village()</code></a></h3>
+<pre>
+  $travian-&gt;village();
+  $travian-&gt;village($village_id);</pre>
+<p>Returns the Travian village.</p>
+<p>
+</p>
+<h3><a name="next_village__"><code>next_village()</code></a></h3>
+<pre>
+  $travian-&gt;next_village();
+  
+Returns the next Travian village.</pre>
+<p>
+</p>
+<h3><a name="no_of_villages__"><code>no_of_villages()</code></a></h3>
+<pre>
+  $travian-&gt;no_of_villages();</pre>
+<p>Returns the number of villages.</p>
+<p>
+</p>
+<h3><a name="village_id2index__"><code>village_id2index()</code></a></h3>
+<pre>
+  $travian-&gt;village_id2index($village_id);</pre>
+<p>Given a village id returns the index in the village array.
+Used by $travian-&gt;village().</p>
+<p>
+</p>
+<h3><a name="parse_villages__"><code>parse_villages()</code></a></h3>
+<pre>
+  $travian-&gt;parse_villages($village_overview_html);</pre>
+<p>Parses the villages from the given village overview html and
+returns the current village.
+Used by $travian-&gt;login().</p>
 <p>
 </p>
 <h3><a name="village_overview__"><code>village_overview()</code></a></h3>
@@ -226,16 +262,22 @@ Returns a Travian::Construction object.</p>
 <p>Parse the login form html and return an array ref of the form input values.</p>
 <p>
 </p>
-<h3><a name="parse_error_msg__"><code>parse_error_msg()</code></a></h3>
+<h3><a name="parse_login_error_msg__"><code>parse_login_error_msg()</code></a></h3>
 <pre>
-  &amp;parse_error_msg($page_html);</pre>
-<p>Parse and return the error message in a given html page.</p>
+  &amp;parse_login_error_msg($login_html);</pre>
+<p>Parse and return the error message in the login html page.</p>
 <p>
 </p>
 <h3><a name="parse_send_troops_confirm_form__"><code>parse_send_troops_confirm_form()</code></a></h3>
 <pre>
   &amp;parse_send_troops_confirm_form($send_troops_confirm_form, $scout_type);</pre>
 <p>Parse the send troops confirm form html and return an array ref of the form input values.</p>
+<p>
+</p>
+<h3><a name="parse_send_troops_error_msg__"><code>parse_send_troops_error_msg()</code></a></h3>
+<pre>
+  &amp;parse_send_troops_error_msg($send_troops_html);</pre>
+<p>Parse and return the error message in the send troops html page.</p>
 <p>
 </p>
 <hr />

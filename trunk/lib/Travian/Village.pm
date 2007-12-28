@@ -12,6 +12,8 @@ our $AUTOLOAD;
 my %village_fields = (
 	village_name => '',
 	village_id => 0,
+	x => 0,
+	y => 0,
 	current_resources => undef,
 	max_resources => undef,
 	production_resources => undef,
@@ -27,6 +29,8 @@ Travian::Village - a package that defines a Travian village.
   my $village = Travian::Village->new('My Village');
   $village->village_name();
   $village->village_id();
+  $village->x();
+  $village->y();
 
   $village->current_resources();
   $village->max_resources();
