@@ -80,7 +80,9 @@
   if (!$travian-&gt;login($user, $pass))
   {
     print $travian-&gt;error_msg();
-  }</pre>
+  }
+  $travian-&gt;logged_in();
+</pre>
 <pre>
   print $travian-&gt;server();
   print $travian-&gt;base_url();</pre>
