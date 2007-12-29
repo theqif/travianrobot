@@ -25,6 +25,40 @@ my $DEFAULT_TRAVIAN_SERVER = 3;
 my $TRAVIAN_BASE_URL = '.travian.co.uk/';
 my $TRAVIAN_CONSTRUCTION_URL = 'http://help.travian.co.uk/index.php?type=faq&gid=';
 
+my $re =
+{
+  logout       => "logout.php",
+  newdid       => "(<a href=\"\\?newdid=.+?<\/tr>)",
+  villageid    => "newdid=(\\d+?)\"",
+  villageindex => qq~(class="active\_vl")~,
+  villagename  => ">(.+?)</a>",
+  villagex     => "right dlist1\">\\((\\d+?)<",
+  villagey     => "left dlist3\">(\\d+?)\\)<",
+  login_login  => "hidden\" name=\"login\" value=\"(.+?)\"",
+  login_text   => "\"fm fm110\" type=\"text\" name=\"(.+?)\"",
+  login_pass   => "\"fm fm110\" type=\"password\" name=\"(.+?)\"",
+  login_rand   => "<p align=\"center\"><input type=\"hidden\" name=\"(.+?)\" value=\"(.*?)\">",
+  login_form   => "<form.+?>(.+?)</form>",
+  login_error  => "<span class=\"e f7\">(.+?)</span>",
+  st_error     => "<div class=\"f10 e b\">(.+?)</div>",
+  st_dest      => ">Destination:</td>",
+  st_id        => "name=\"id\" value=\"(.+?)\"",
+  st_a         => "name=\"a\" value=\"(.+?)\"",
+  st_c         => "name=\"c\" value=\"(.+?)\"",
+  st_kid       => "name=\"kid\" value=\"(.+?)\"",
+  st_t1        => "name=\"t1\" value=\"(.+?)\"",
+  st_t2        => "name=\"t2\" value=\"(.+?)\"",
+  st_t3        => "name=\"t3\" value=\"(.+?)\"",
+  st_t4        => "name=\"t4\" value=\"(.+?)\"",
+  st_t5        => "name=\"t5\" value=\"(.+?)\"",
+  st_t6        => "name=\"t6\" value=\"(.+?)\"",
+  st_t7        => "name=\"t7\" value=\"(.+?)\"",
+  st_t8        => "name=\"t8\" value=\"(.+?)\"",
+  st_t9        => "name=\"t9\" value=\"(.+?)\"",
+  st_t10       => "name=\"t10\" value=\"(.+?)\"",
+  st_t11       => "name=\"t11\" value=\"(.+?)\"",
+};
+
 =head1 NAME
 
 Travian - a package for the web-based game Travian.
@@ -234,7 +268,7 @@ sub logged_in
 
         if ($ov_p->is_success)
         {
-                return 1 if ($ov_p->content() =~ m#logout.php#msg);
+                return 1 if ($ov_p->content() =~ m#$re->{logout}#msg);
         }
 
         return 0;
@@ -257,7 +291,7 @@ sub get_login_form
 
 	if ($login_form_res->is_success)
 	{
-		$login_form_res->content() =~ m#<form.+?>(.+?)</form>#msg;
+		$login_form_res->content() =~ m#$re->{login_form}#msg;
 		my $login_form = $1;
 
 		return $login_form;
@@ -445,7 +479,7 @@ sub parse_villages
 
 	if ($village_overview_html && $village_overview_html =~ /logout.php/msg)
 	{	
-		my $villages = [ $village_overview_html =~ m#(<a href="\?newdid=.+?</tr>)#mgs ];
+		my $villages = [ $village_overview_html =~ m#$re->{newdid}#mgs ];
 		$self->{'villages'} = [];
 
 		if ($#{@{$villages}} > 0)		
@@ -456,12 +490,12 @@ sub parse_villages
 			foreach my $village (@{$villages})
 			{
 				my ($village_id, $village_name, $x, $y);
-				
-				if ($village =~ m#newdid=(\d+?)"#msg) {	$village_id = $1; }
-				if ($village =~ m#(class="active\_vl")#msg) { $self->{'village_index'} = $village_index; }
-				if ($village =~ m#>(.+?)</a>#msg) { $village_name = $1;	}
-				if ($village =~ m#right dlist1">\((\d+?)<#msg) { $x = $1; }
-				if ($village =~ m#left dlist3">(\d+?)\)<#msg) {	$y = $1; }
+
+				if ($village =~ m#$re->{villageid}#msg) {	$village_id = $1; }
+				if ($village =~ m#$re->{villageindex}#msg) { $self->{'village_index'} = $village_index; }
+				if ($village =~ m#$re->{villagename}#msg) { $village_name = $1;	}
+				if ($village =~ m#$re->{villagex}#msg) { $x = $1; }
+				if ($village =~ m#$re->{villagey}#msg) {	$y = $1; }
 
 				my $village_obj = Travian::Village->new($village_name, $village_id);
 				$village_obj->x($x);
@@ -657,17 +691,18 @@ sub parse_login_form
 
 	if ($login_form && $user && $pass)
 	{
-		$login_form =~ m#hidden" name="login" value="(.+?)"#msg;
+		$login_form =~ m#$re->{login_login}#msg;
 		my $login_id = $1;
-		$login_form =~ m#"fm fm110" type="text" name="(.+?)"#msg;
+		$login_form =~ m#$re->{login_text}#msg;
 		my $user_fn = $1;
-		$login_form =~ m#"fm fm110" type="password" name="(.+?)"#msg;
+		$login_form =~ m#$re->{login_pass}#msg;
 		my $pass_fn  = $1;
-		$login_form =~ m#<p align="center"><input type="hidden" name="(.+?)" value="(.*?)">#msg;
+		$login_form =~ m#$re->{login_rand}#msg;
 		my $rand_hid = $1;
 		my $rand_val = $2;
 
 		return [w => '400:800', login => $login_id, $user_fn => $user, $pass_fn => $pass, $rand_hid => $rand_val, s1 => 'login'];
+
 	}
 
 	return;
@@ -685,7 +720,7 @@ sub parse_login_error_msg
 {
 	my $html = shift;
 
-	$html =~ m#<span class="e f7">(.+?)</span>#mg;
+	$html =~ m#$re->{login_error}#mg;
 	my $error_msg = $1;
 
 	return $error_msg;
@@ -704,38 +739,25 @@ sub parse_send_troops_confirm_form
 	my $send_troops_confirm_form = shift;
 	my $scout_type = shift;
 
-	if ($send_troops_confirm_form && $send_troops_confirm_form =~ m#\>Destination\:\<\/td\>#msg)
+	if ($send_troops_confirm_form && $send_troops_confirm_form =~ m#$re->{st_dest}#msg)
 	{
-		$send_troops_confirm_form =~ m#name="id" value="(.+?)"#msg;
-		my $id = $1;
-		$send_troops_confirm_form =~ m#name="a" value="(.+?)"#msg;
-		my $a = $1;
-		$send_troops_confirm_form =~ m#name="c" value="(.+?)"#msg;
-		my $c = $1;
-		$send_troops_confirm_form =~ m#name="kid" value="(.+?)"#msg;
-		my $kid = $1;
-		$send_troops_confirm_form =~ m#name="t1" value="(.+?)"#msg;
-		my $t1 = $1;
-		$send_troops_confirm_form =~ m#name="t2" value="(.+?)"#msg;
-		my $t2 = $1;
-		$send_troops_confirm_form =~ m#name="t3" value="(.+?)"#msg;
-		my $t3 = $1;
-		$send_troops_confirm_form =~ m#name="t4" value="(.+?)"#msg;
-		my $t4 = $1;
-		$send_troops_confirm_form =~ m#name="t5" value="(.+?)"#msg;
-		my $t5 = $1;
-		$send_troops_confirm_form =~ m#name="t6" value="(.+?)"#msg;
-		my $t6 = $1;
-		$send_troops_confirm_form =~ m#name="t7" value="(.+?)"#msg;
-		my $t7 = $1;
-		$send_troops_confirm_form =~ m#name="t8" value="(.+?)"#msg;
-		my $t8 = $1;
-		$send_troops_confirm_form =~ m#name="t9" value="(.+?)"#msg;
-		my $t9 = $1;
-		$send_troops_confirm_form =~ m#name="t10" value="(.+?)"#msg;
-		my $t10 = $1;
-		$send_troops_confirm_form =~ m#name="t11" value="(.+?)"#msg;
-		my $t11 = $1;
+
+
+		$send_troops_confirm_form =~  m#$re->{st_id}#msg; my $id  = $1;
+		$send_troops_confirm_form =~   m#$re->{st_a}#msg; my $a   = $1;
+		$send_troops_confirm_form =~   m#$re->{st_c}#msg; my $c   = $1;
+		$send_troops_confirm_form =~ m#$re->{st_kid}#msg; my $kid = $1;
+		$send_troops_confirm_form =~  m#$re->{st_t1}#msg; my $t1  = $1;
+		$send_troops_confirm_form =~  m#$re->{st_t2}#msg; my $t2  = $1;
+		$send_troops_confirm_form =~  m#$re->{st_t3}#msg; my $t3  = $1;
+		$send_troops_confirm_form =~  m#$re->{st_t4}#msg; my $t4  = $1;
+		$send_troops_confirm_form =~  m#$re->{st_t5}#msg; my $t5  = $1;
+		$send_troops_confirm_form =~  m#$re->{st_t6}#msg; my $t6  = $1;
+		$send_troops_confirm_form =~  m#$re->{st_t7}#msg; my $t7  = $1;
+		$send_troops_confirm_form =~  m#$re->{st_t8}#msg; my $t8  = $1;
+		$send_troops_confirm_form =~  m#$re->{st_t9}#msg; my $t9  = $1;
+		$send_troops_confirm_form =~ m#$re->{st_t10}#msg; my $t10 = $1;
+		$send_troops_confirm_form =~ m#$re->{st_t11}#msg; my $t11 = $1;
 
 		my $send_troops_confirm_args = 
 		[
@@ -767,7 +789,7 @@ sub parse_send_troops_error_msg
 {
 	my $html = shift;
 
-	$html =~ m#<div class="f10 e b">(.+?)</div>#mg;
+	$html =~ m#$re->{st_error}#mg;
 	my $error_msg = $1;
 	$error_msg =~ s#<span>##;
 	$error_msg =~ s#</span>##;
