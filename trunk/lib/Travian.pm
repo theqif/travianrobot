@@ -189,6 +189,11 @@ sub login
 
 	$self->{'error_msg'} = '';
 
+	if ($self->logged_in())
+	{
+		return $self->village();
+	}
+
 	if ($user && $pass)
 	{
 		my $login_args = &parse_login_form($self->get_login_form(), $user, $pass);
