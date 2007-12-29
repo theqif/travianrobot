@@ -35,6 +35,7 @@
 		<li><a href="#base_url__"><code>base_url()</code></a></li>
 		<li><a href="#error_msg__"><code>error_msg()</code></a></li>
 		<li><a href="#login__"><code>login()</code></a></li>
+		<li><a href="#logged_in__"><code>logged_in()</code></a></li>
 		<li><a href="#get_login_form__"><code>get_login_form()</code></a></li>
 		<li><a href="#post_login_form__"><code>post_login_form()</code></a></li>
 		<li><a href="#logout__"><code>logout()</code></a></li>
@@ -56,6 +57,12 @@
 		<li><a href="#parse_login_error_msg__"><code>parse_login_error_msg()</code></a></li>
 		<li><a href="#parse_send_troops_confirm_form__"><code>parse_send_troops_confirm_form()</code></a></li>
 		<li><a href="#parse_send_troops_error_msg__"><code>parse_send_troops_error_msg()</code></a></li>
+	</ul>
+
+	<li><a href="#functions">FUNCTIONS</a></li>
+	<ul>
+
+		<li><a href="#calc_traveltime__"><code>calc_traveltime()</code></a></li>
 	</ul>
 
 	<li><a href="#author">AUTHOR</a></li>
@@ -81,8 +88,7 @@
   {
     print $travian-&gt;error_msg();
   }
-  $travian-&gt;logged_in();
-</pre>
+  $travian-&gt;logged_in();</pre>
 <pre>
   print $travian-&gt;server();
   print $travian-&gt;base_url();</pre>
@@ -167,6 +173,12 @@ can be passed as second argument. See LWP::UserAgent for details.</p>
 <p>Log into Travian with given user and pass.
 Returns 1 on success.
 Use $travian-&gt;<code>error_msg()</code> to retrieve error message on failure.</p>
+<p>
+</p>
+<h3><a name="logged_in__"><code>logged_in()</code></a></h3>
+<pre>
+  $travian-&gt;logged_in();
+  returns BOOLEAN</pre>
 <p>
 </p>
 <h3><a name="get_login_form__"><code>get_login_form()</code></a></h3>
@@ -280,6 +292,18 @@ Returns a Travian::Construction object.</p>
 <pre>
   &amp;parse_send_troops_error_msg($send_troops_html);</pre>
 <p>Parse and return the error message in the send troops html page.</p>
+<p>
+</p>
+<hr />
+<h2><a name="functions">FUNCTIONS</a></h2>
+<p>
+</p>
+<h3><a name="calc_traveltime__"><code>calc_traveltime()</code></a></h3>
+<pre>
+  &amp;calc_traveltime($attacker_x, $attacker_y, $defender_x, $defender_y, $velocity);
+  
+Returns the travel time in seconds to go from coords $attacker_x, $attacker_y to coords
+$defender_x, $defender_y at given velocity.</pre>
 <p>
 </p>
 <hr />

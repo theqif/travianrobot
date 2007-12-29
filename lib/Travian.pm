@@ -3,6 +3,8 @@ package Travian;
 use strict;
 use warnings;
 
+require Exporter;
+
 use Carp;
 use LWP::UserAgent;
 use HTTP::Request;
@@ -11,7 +13,8 @@ use Travian::Village;
 use Travian::Resources;
 use Travian::Construction qw(gid2name name2gid);
 
-our @ISA = qw(LWP::UserAgent);
+our @ISA = qw(LWP::UserAgent Exporter);
+our @EXPORT_OK = qw(&calc_traveltime);
 
 our $VERSION = '0.01';
 our $AUTOLOAD;
@@ -774,16 +777,16 @@ sub parse_send_troops_error_msg
 
 =head1 FUNCTIONS
 
-=head2 calculate_traveltime()
+=head2 calc_traveltime()
 
-  &calculate_traveltime($attacker_x, $attacker_y, $defender_x, $defender_y, $velocity);
+  &calc_traveltime($attacker_x, $attacker_y, $defender_x, $defender_y, $velocity);
   
 Returns the travel time in seconds to go from coords $attacker_x, $attacker_y to coords
 $defender_x, $defender_y at given velocity.
 
 =cut
 
-sub calculate_traveltime
+sub calc_traveltime
 {
 	my ($x1, $y1, $x2, $y2, $v) = @_;
 
