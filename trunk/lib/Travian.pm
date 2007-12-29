@@ -35,6 +35,7 @@ Travian - a package for the web-based game Travian.
   {
     print $travian->error_msg();
   }
+  $travian->logged_in();
 
   print $travian->server();
   print $travian->base_url();
