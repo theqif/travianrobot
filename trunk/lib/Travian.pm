@@ -443,12 +443,13 @@ sub parse_villages
 	if ($village_overview_html && $village_overview_html =~ /logout.php/msg)
 	{	
 		my $villages = [ $village_overview_html =~ m#(<a href="\?newdid=.+?</tr>)#mgs ];
-		
+		$self->{'villages'} = [];
+
 		if ($#{@{$villages}} > 0)		
 		{
 			# multiple villages
 			my $village_index = 0;
-
+			
 			foreach my $village (@{$villages})
 			{
 				my ($village_id, $village_name, $x, $y);
@@ -659,10 +660,11 @@ sub parse_login_form
 		my $user_fn = $1;
 		$login_form =~ m#"fm fm110" type="password" name="(.+?)"#msg;
 		my $pass_fn  = $1;
-		$login_form =~ m#<p align="center"><input type="hidden" name="(.+?)" value="">#msg;
+		$login_form =~ m#<p align="center"><input type="hidden" name="(.+?)" value="(.*?)">#msg;
 		my $rand_hid = $1;
+		my $rand_val = $2;
 
-		return [w => '400:800', login => $login_id, $user_fn => $user, $pass_fn => $pass, $rand_hid => '', s1 => 'login'];
+		return [w => '400:800', login => $login_id, $user_fn => $user, $pass_fn => $pass, $rand_hid => $rand_val, s1 => 'login'];
 	}
 
 	return;
