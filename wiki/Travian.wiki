@@ -17,6 +17,7 @@ Travian - a package for the web-based game Travian.
   {
     print $travian->error_msg();
   }
+  $travian->logged_in();
 
   print $travian->server();
   print $travian->base_url();
@@ -107,6 +108,13 @@ Returns the error message if any.
   $travian->login($user, $pass);
 }}}
 Log into Travian with given user and pass. Returns 1 on success. Use $travian->error_msg() to retrieve error message on failure.
+
+
+== logged_in() ==
+{{{
+  $travian->logged_in();
+}}}
+Returns BOOLEAN.
 
 
 == get_login_form() ==
@@ -225,6 +233,16 @@ Parse the send troops confirm form html and return an array ref of the form inpu
   &parse_send_troops_error_msg($send_troops_html);
 }}}
 Parse and return the error message in the send troops html page.
+
+
+----
+= FUNCTIONS =
+
+== calc_traveltime() ==
+{{{
+  &calc_traveltime($attacker_x, $attacker_y, $defender_x, $defender_y, $velocity);
+}}}
+Returns the travel time in seconds to go from coords $attacker_x, $attacker_y to coords $defender_x, $defender_y at given velocity.
 
 
 ----
