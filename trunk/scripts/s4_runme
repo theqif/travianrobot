@@ -1,0 +1,10 @@
+while ( 1 )
+  date
+
+  # red 1
+  #  perl raid.pl 4 theqif fish -6 5 6
+
+  perl raid.pl 4 theqif fish -4 2 2
+  sleep 1200
+
+end
