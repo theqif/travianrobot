@@ -210,6 +210,27 @@ sub login
 	return;
 }
 
+=head2 logged_in()
+
+  $travian->logged_in();
+  returns BOOLEAN 
+
+=cut
+
+sub logged_in
+{
+        my $self = shift;
+
+        my $ov_p= $self->get($self->base_url() . '/dorf1.php');
+
+        if ($ov_p->is_success)
+        {
+                return 1 if ($ov_p->content() =~ m#logout.php#msg);
+        }
+
+        return 0;
+}
+
 =head2 get_login_form()
 
   $travian->get_login_form();
@@ -743,25 +764,29 @@ sub parse_send_troops_error_msg
 	return $error_msg;
 }
 
-=head2 logged_in()
+=head1 FUNCTIONS
 
-  $travian->logged_in();
-  returns BOOLEAN 
+=head2 calculate_traveltime()
+
+  &calculate_traveltime($attacker_x, $attacker_y, $defender_x, $defender_y, $velocity);
+  
+Returns the travel time in seconds to go from coords $attacker_x, $attacker_y to coords
+$defender_x, $defender_y at given velocity.
 
 =cut
 
-sub logged_in
+sub calculate_traveltime
 {
-        my $self = shift;
+	my ($x1, $y1, $x2, $y2, $v) = @_;
 
-        my $ov_p= $self->get($self->base_url() . '/dorf1.php');
+	my $dx = $x1 - $x2;
+	$dx = $dx * -1 unless $dx > 0;
+	my $dy = $y1 - $y2;
+	$dy = $dy * -1 unless $dy > 0;
 
-        if ($ov_p->is_success)
-        {
-                return 1 if ($ov_p->content() =~ m#logout.php#msg);
-        }
-
-        return 0;
+	my $d = sqrt($dx*$dx + $dy*$dy);
+	
+	return ($d/$v)*3600;
 }
 
 =head1 AUTHOR
