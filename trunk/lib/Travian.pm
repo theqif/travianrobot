@@ -743,6 +743,27 @@ sub parse_send_troops_error_msg
 	return $error_msg;
 }
 
+=head2 logged_in()
+
+  $travian->logged_in();
+  returns BOOLEAN 
+
+=cut
+
+sub logged_in
+{
+        my $self = shift;
+
+        my $ov_p= $self->get($self->base_url() . '/dorf1.php');
+
+        if ($ov_p->is_success)
+        {
+                return 1 if ($ov_p->content() =~ m#logout.php#msg);
+        }
+
+        return 0;
+}
+
 =head1 AUTHOR
 
 Adrian D. Elgar, E<lt>ade@wasters.comE<gt>

@@ -7,6 +7,8 @@ use Travian;
 my $gid = shift;
 die "usage: $0 [gid]\n" unless $gid;
 
+my $USERAGENT = "Mozilla/5.0 (Macintosh; U; Intel Mac OS X; en-US; rv:1.8.1.11) Gecko/20071127 Firefox/2.0.0.11";
+
 my $travian = Travian->new();
 
 my $woodcutter = $travian->construction($gid);
