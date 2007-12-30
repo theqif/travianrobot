@@ -1,0 +1,58 @@
+
+my $w = 
+{
+  login =>
+  {
+    get =>
+    {
+      url    => '/login.php',
+      method => 'get',
+      check  => 'login_form',
+    },
+    set =>
+    {
+
+    },
+  },
+};
+
+sub eg_autoload_get
+{
+  my $self   = shift;
+  my $widget = shift;
+
+  my $hr = $w->{$widget}->{get};
+
+  my $res = $self->get($self->base_url() . $hr->{url});    
+
+  return { error => $res->error_code_something }
+    unless ($res->is_success);
+
+  return $res->content()
+    unless ($hr->{check});
+
+  $res->content() =~ m#$hr->{check}#msg;
+
+  return $1;
+}
+
+sub eg_autoload_set
+{
+  my $self = shift;
+  my $args = shift;
+
+  return unless ($args);
+
+  my $res = $self->post($self->base_url() . '/dorf1.php', $login_args);
+
+  return { error => $res->err }
+    unless ($res->is_success);
+
+  return $res->content()
+    unless ($hr->{check});
+
+  $res->content() =~ m#$hr->{check}#msg;
+
+  return $1;
+
+}
