@@ -73,7 +73,7 @@ sub send_troops_args
 
 	my $send_troops_args = [];
 
-	for (my $troop_index = 0; $troop_index < 10; $troop_index++)
+	for (my $troop_index = 0; $troop_index < 11; $troop_index++)
 	{
 		push @{$send_troops_args}, 't' . ($troop_index + 1) => $self->{'_troops'}->[$troop_index];
 	}
