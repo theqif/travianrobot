@@ -6,7 +6,7 @@ use warnings;
 require Exporter;
 
 our @ISA = qw(Exporter);
-our @EXPORT_OK = qw(&gid2name &name2gid);
+our @EXPORT_OK = qw(&gid2name &name2gid &time2secs);
 
 use Carp;
 use Travian::Construction::Cost;
@@ -91,6 +91,7 @@ sub new
 	}
 	
 	$self->{'costs'} = [];
+	$self->{'times'} = [];
 
 	return $self;
 }
@@ -144,6 +145,49 @@ sub costs
 	}
 
 	return $self->{'costs'};
+}
+
+=head2 times()
+
+  $construction->times();
+  $construction->times($level);
+  $construction->times($level, $mb_level);
+
+Returns the construction time for the given level and main building level.
+If no main building level is given returns an array ref of construction times for $level.
+If no argument is given returns an array ref for all levels of construction.
+
+=cut
+
+sub times
+{
+	my $self = shift;
+
+	if (@_)
+	{
+		my $level = shift;
+
+		if ($level > 0 && $level <= $#{$self->{'times'}} + 1)
+		{
+			if (@_)
+			{
+				my $mb_level = shift;
+				
+				if ($mb_level > 0 && $mb_level <= $#{$self->{'times'}->[$level - 1]} + 1)
+				{
+					return $self->{'times'}->[$level - 1]->[$mb_level - 1];
+				}
+
+				return;
+			}
+
+			return $self->{'times'}->[$level - 1];
+		}
+
+		return;
+	}
+
+	return $self->{'times'};
 }
 
 =head2 max_lvl()
@@ -238,6 +282,15 @@ sub parse_construction
 		{
 			$construction_table =~ s/\s//g;
 			$self->{'costs'} = &parse_construction_costs($construction_table) if ($construction_table =~ /CP/);
+			$self->{'times'} = &parse_construction_times($construction_table) if ($construction_table =~ /MB1</);
+			if ($construction_table =~ /MB11/)
+			{
+				my $construction_times = &parse_construction_times($construction_table);
+				for (my $index = 0; $index <= $#{$construction_times}; $index++)
+				{
+					push(@{$self->{'times'}->[$index]}, @{$construction_times->[$index]});
+				}
+			}
 		}
 
 		return $self;
@@ -274,8 +327,33 @@ sub parse_construction_costs
 	return $costs;
 }
 
+=head2 parse_construction_times()
+
+  &parse_construction_times($construction_times_html);
+  
+Parses the given construction times html and returns an array ref of times.
+Used by $construction->parse_construction().
+
+=cut
+
 sub parse_construction_times
 {
+	my $times_table_html = shift;
+	my $times = [];
+
+	my $times_rows = [ $times_table_html =~ m#<tr>(.+?)</tr>#msg ];
+	foreach my $times_row (@{$times_rows})
+	{
+		my $time = [ $times_row =~ m#<td>(.+?)</td>#mgs ];
+		next if (!$time->[0] || $time->[0] !~ /^\d+$/o);
+		
+		shift(@{$time});
+		@{$time} = map(&time2secs($_), @{$time});
+
+		push @{$times}, $time;
+	}
+
+	return $times;
 }
 
 =head1 FUNCTIONS
@@ -300,7 +378,6 @@ sub gid2name
 	return;
 }
 
-
 =head2 name2gid()
 
   &name2gid($name);
@@ -319,6 +396,29 @@ sub name2gid
 	}
 
 	return;
+}
+
+=head2 time2secs()
+
+  &time2secs($time);
+  
+Given a time in format h:m:s returns number of seconds.
+
+=cut
+
+sub time2secs
+{
+	my $time = shift;
+
+	#print $time;
+	#print "\n";
+
+	$time =~ /(\d+?):(\d+?):(\d+?)/;
+	my $hours = $1;
+	my $mins = $2;
+	my $secs = $3;
+
+	return (($hours * 60) + $mins) * 60 + $secs;
 }
 
 sub AUTOLOAD

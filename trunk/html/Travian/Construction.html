@@ -24,6 +24,7 @@
 		<li><a href="#gid__"><code>gid()</code></a></li>
 		<li><a href="#name__"><code>name()</code></a></li>
 		<li><a href="#costs__"><code>costs()</code></a></li>
+		<li><a href="#times__"><code>times()</code></a></li>
 		<li><a href="#max_lvl__"><code>max_lvl()</code></a></li>
 		<li><a href="#total_cost__"><code>total_cost()</code></a></li>
 		<li><a href="#parse_construction__"><code>parse_construction()</code></a></li>
@@ -33,6 +34,7 @@
 	<ul>
 
 		<li><a href="#parse_construction_costs__"><code>parse_construction_costs()</code></a></li>
+		<li><a href="#parse_construction_times__"><code>parse_construction_times()</code></a></li>
 	</ul>
 
 	<li><a href="#functions">FUNCTIONS</a></li>
@@ -40,6 +42,7 @@
 
 		<li><a href="#gid2name__"><code>gid2name()</code></a></li>
 		<li><a href="#name2gid__"><code>name2gid()</code></a></li>
+		<li><a href="#time2secs__"><code>time2secs()</code></a></li>
 	</ul>
 
 	<li><a href="#author">AUTHOR</a></li>
@@ -107,6 +110,16 @@ Return value is of type Travian::Construction::Cost.
 If no argument is given returns an array ref for all levels of construction.</p>
 <p>
 </p>
+<h3><a name="times__"><code>times()</code></a></h3>
+<pre>
+  $construction-&gt;times();
+  $construction-&gt;times($level);
+  $construction-&gt;times($level, $mb_level);</pre>
+<p>Returns the construction time for the given level and main building level.
+If no main building level is given returns an array ref of construction times for $level.
+If no argument is given returns an array ref for all levels of construction.</p>
+<p>
+</p>
 <h3><a name="max_lvl__"><code>max_lvl()</code></a></h3>
 <pre>
   $construction-&gt;max_lvl();</pre>
@@ -142,6 +155,14 @@ Parses the given construction costs html and returns an array ref of costs.
 Used by $construction-&gt;parse_construction().</pre>
 <p>
 </p>
+<h3><a name="parse_construction_times__"><code>parse_construction_times()</code></a></h3>
+<pre>
+  &amp;parse_construction_times($construction_times_html);
+  
+Parses the given construction times html and returns an array ref of times.
+Used by $construction-&gt;parse_construction().</pre>
+<p>
+</p>
 <hr />
 <h2><a name="functions">FUNCTIONS</a></h2>
 <p>
@@ -158,6 +179,13 @@ Returns the construction's name for the given gid.</pre>
   &amp;name2gid($name);
   
 Returns the construction's gid for the given name.</pre>
+<p>
+</p>
+<h3><a name="time2secs__"><code>time2secs()</code></a></h3>
+<pre>
+  &amp;time2secs($time);
+  
+Given a time in format h:m:s returns number of seconds.</pre>
 <p>
 </p>
 <hr />

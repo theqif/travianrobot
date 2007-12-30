@@ -11,17 +11,17 @@ my $USERAGENT = "Mozilla/5.0 (Macintosh; U; Intel Mac OS X; en-US; rv:1.8.1.11) 
 
 my $travian = Travian->new();
 
-my $woodcutter = $travian->construction($gid);
+my $construction = $travian->construction($gid);
 
 print "GID: ";
-print $woodcutter->gid();
+print $construction->gid();
 print "\n";
 print "Name: ";
-print $woodcutter->name();
+print $construction->name();
 print "\n";
 
 my $lvl = 1;
-foreach my $cost (@{$woodcutter->costs()})
+foreach my $cost (@{$construction->costs()})
 {
 	print "Level: $lvl\t";
 	print "Wood: " . $cost->wood() . "\t";
@@ -38,7 +38,7 @@ foreach my $cost (@{$woodcutter->costs()})
 print '-------------';
 print "\n";
 
-my $total_cost = $woodcutter->total_cost();
+my $total_cost = $construction->total_cost();
 print "Total Cost\t";
 print "Wood: " . $total_cost->wood() . "\t";
 print "Clay: " . $total_cost->clay() . "\t";
@@ -46,6 +46,17 @@ print "Iron: " . $total_cost->iron() . "\t";
 print "Wheat: " . $total_cost->wheat() . "\t";
 print "Wheat (Consumption): " . $total_cost->wheat_consumption() . "\t";
 print "CP: " . $total_cost->culture_points() . "\t";
-print "\n";
+print "\n\n";
 
+for ($lvl = 1; $lvl <= $construction->max_lvl(); $lvl++)
+{
+	print "Level: $lvl\t";
+	for (my $mb_lvl = 1; $mb_lvl <= 20; $mb_lvl++)
+	{
+		print "MB $mb_lvl: ";
+		print $construction->times($lvl, $mb_lvl);
+		print "\t";
+	}
+	print "\n";
+}
 
