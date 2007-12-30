@@ -16,7 +16,7 @@ print "Seconds: ";
 print $seconds;
 print "\n";
 print "Minutes: ";
-print $seconds / 60;
+print int($seconds / 60) . ':' . int((($seconds / 60) - int($seconds / 60)) * 60);
 print "\n";
 
 
