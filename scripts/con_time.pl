@@ -35,9 +35,20 @@ foreach my $tab (@tabs)
     next unless ($tr =~ /^(\d+)</);
     my $cl = $1;
 
+    #push @{$ct->{$gid}->{$cl}}, "";
     push @{$ct->{$gid}->{$cl}}, ($tr =~ m#<td>(.+?)</td>#msg);
   }
 }
 
 use Data::Dumper;
 print Dumper ($ct);
+
+foreach my $id (sort keys (%{$ct}))
+{
+  foreach my $lvl (sort {$a <=> $b} keys (%{$ct->{$id}}))
+  {
+    print "[$id]-[$lvl]-[";
+    print join ",", @{$ct->{$id}->{$lvl}};
+    print "]\n";
+  }
+}
