@@ -9,7 +9,7 @@ my $SERVER = 3;
 my $USERAGENT = 'Mozilla/5.0 (X11; U; Linux x86_64; en-GB; rv:1.8.1.11) Gecko/20071204 Ubuntu/7.10 (gutsy) Firefox/2.0.0.11';
 my $X = 92;
 my $Y = -5;
-my $TT = 36;
+my $TT = 25;
 
 my $user = shift;
 my $pass = shift;
@@ -37,13 +37,20 @@ while (1)
 			croak $travian->error_msg();
 		}
 
+		## Wave (1) - (95|-1) Chewitonia (15:47 mins)
+		#if (!$travian->send_troops(Travian::ATTACK_RAID, 95, -1, $gauls))
+		#{
+		#	croak $travian->error_msg();
+		#}
+		#print &log_msg(1, 95, -1, 'Chewitonia');
+		#print "\n";
 		## Wave (1) - (95|-10) Red_Dog Village (18:24 mins)
-		if (!$travian->send_troops(Travian::ATTACK_RAID, 95, -10, $gauls))
-		{
-			croak $travian->error_msg();
-		}
-		print &log_msg(1, 95, -10, 'Red_Dog Village');
-		print "\n";
+		#if (!$travian->send_troops(Travian::ATTACK_RAID, 95, -10, $gauls))
+		#{
+		#	croak $travian->error_msg();
+		#}
+		#print &log_msg(1, 95, -10, 'Red_Dog Village');
+		#print "\n";
 		## Wave (1) - (96|-10) gryphongod Village (20:13 mins)
 		if (!$travian->send_troops(Travian::ATTACK_RAID, 96, -10, $gauls))
 		{
@@ -51,7 +58,14 @@ while (1)
 		}
 		print &log_msg(1, 96, -10, 'gryphongod Village');
 		print "\n";
-		sleep int(&calc_traveltime($X, $Y, 96, -10, 19)) * 2 + 10;
+		## Wave (1) - (99|-4) thanh3 Village (22:19 mins)
+		if (!$travian->send_troops(Travian::ATTACK_RAID, 99, -4, $gauls))
+		{
+			croak $travian->error_msg();
+		}
+		print &log_msg(1, 99, -4, 'thanh3 Village');
+		print "\n";
+		sleep int(&calc_traveltime($X, $Y, 99, -4, 19)) * 2 + 10;		
 
 		$wave = 0;
 	}
@@ -67,14 +81,7 @@ while (1)
 		{
 			croak $travian->error_msg();
 		}
-
-		## Wave (2) - (99|-4) thanh3 Village (22:19 mins)
-		if (!$travian->send_troops(Travian::ATTACK_RAID, 99, -4, $gauls))
-		{
-			croak $travian->error_msg();
-		}
-		print &log_msg(2, 99, -4, 'thanh3 Village');
-		print "\n";
+		
 		## Wave (2) - (97|-11) toridog Village (24:39 mins)
 		if (!$travian->send_troops(Travian::ATTACK_RAID, 97, -11, $gauls))
 		{
@@ -82,7 +89,28 @@ while (1)
 		}
 		print &log_msg(2, 97, -11, 'toridog Village');
 		print "\n";
-		sleep int(&calc_traveltime($X, $Y, 97, -11, 19)) * 2 + 10;
+		## Wave (2) - (96|-13) pspeter1 Village (28:14 mins)
+		if (!$travian->send_troops(Travian::ATTACK_RAID, 96, -13, $gauls))
+		{
+			croak $travian->error_msg();
+		}
+		print &log_msg(2, 96, -13, 'pspeter1 Village');
+		print "\n";
+		## Wave (2) - (95|4) HumpdeBump Village (29:57 mins)
+		if (!$travian->send_troops(Travian::ATTACK_RAID, 95, 4, $gauls))
+		{
+			croak $travian->error_msg();
+		}
+		print &log_msg(2, 95, 4, 'HumpdeBump Village');
+		print "\n";
+		## Wave (2) - (102|-6) Tatooine (31:44 mins)
+		if (!$travian->send_troops(Travian::ATTACK_RAID, 102, -6, $gauls))
+		{
+			croak $travian->error_msg();
+		}
+		print &log_msg(2, 102, -6, 'Tatooine');
+		print "\n";
+		sleep int(&calc_traveltime($X, $Y, 102, -6, 19)) * 2 + 10;
 
 		$wave = 0;
 	}
@@ -99,107 +127,36 @@ while (1)
 			croak $travian->error_msg();
 		}
 
-		## Wave (3) - (96|-13) pspeter1 Village (28:14 mins)
-		if (!$travian->send_troops(Travian::ATTACK_RAID, 96, -13, $gauls))
+		## Wave (3) - (90|5) brighton Village (32:12 mins)
+		if (!$travian->send_troops(Travian::ATTACK_RAID, 90, 5, $gauls))
 		{
 			croak $travian->error_msg();
 		}
-		print &log_msg(3, 96, -13, 'pspeter1 Village');
+		print &log_msg(3, 90, 5, 'brighton Village');
 		print "\n";
-		## Wave (3) - (95|4) HumpdeBump Village (29:57 mins)
-		if (!$travian->send_troops(Travian::ATTACK_RAID, 95, 4, $gauls))
-		{
-			croak $travian->error_msg();
-		}
-		print &log_msg(3, 95, 4, 'HumpdeBump Village');
-		print "\n";
-		sleep int(&calc_traveltime($X, $Y, 95, 4, 19)) * 2 + 10;
-
-		$wave = 0;
-	}
-
-	if (!$wave || $wave == 4)
-	{
-		if (!$travian->login($user, $pass))
-		{
-			croak $travian->error_msg();
-		}
-
-		if ($village_id && !$travian->village($village_id))
-		{
-			croak $travian->error_msg();
-		}
-	
-		## Wave (4) - (102|-6) Tatooine (31:44 mins)
-		if (!$travian->send_troops(Travian::ATTACK_RAID, 102, -6, $gauls))
-		{
-			croak $travian->error_msg();
-		}
-		print &log_msg(4, 102, -6, 'Tatooine');
-		print "\n";
-		## Wave (4) - (94|-15) dan4sam Village (32:12 mins)
-		if (!$travian->send_troops(Travian::ATTACK_RAID, 94, -15, $gauls))
-		{
-			croak $travian->error_msg();
-		}
-		print &log_msg(4, 94, -15, 'dan4sam Village');
-		print "\n";
-		sleep int(&calc_traveltime($X, $Y, 94, -15, 19)) * 2 + 10;
-
-		$wave = 0;
-	}
-
-	if (!$wave || $wave == 5)
-	{
-		if (!$travian->login($user, $pass))
-		{
-			croak $travian->error_msg();
-		}
-
-		if ($village_id && !$travian->village($village_id))
-		{
-			croak $travian->error_msg();
-		}
-
-		## Wave (5) - (103|-6) Guinevere Village (34:52 mins)
+		## Wave (3) - (94|-15) dan4sam Village (32:12 mins)
+		#if (!$travian->send_troops(Travian::ATTACK_RAID, 94, -15, $gauls))
+		#{
+		#	croak $travian->error_msg();
+		#}
+		#print &log_msg(3, 94, -15, 'dan4sam Village');
+		#print "\n";
+		## Wave (3) - (103|-6) Guinevere Village (34:52 mins)
 		if (!$travian->send_troops(Travian::ATTACK_RAID, 103, -6, $gauls))
 		{
 			croak $travian->error_msg();
 		}
-		print &log_msg(5, 103, -6, 'Guinevere Village');
+		print &log_msg(3, 103, -6, 'Guinevere Village');
 		print "\n";
-		## Wave (5) - (105|-7) Gieger Village (41:32 mins)
-		if (!$travian->send_troops(Travian::ATTACK_RAID, 105, -7, $gauls))
-		{
-			croak $travian->error_msg();
-		}
-		print &log_msg(5, 105, -7, 'Gieger Village');
-		print "\n";
-		sleep int(&calc_traveltime($X, $Y, 105, -7, 19)) * 2 + 10;
-
-		$wave = 0;
-	}
-
-	if (!$wave || $wave == 6)
-	{
-		if (!$travian->login($user, $pass))
-		{
-			croak $travian->error_msg();
-		}
-
-		if ($village_id && !$travian->village($village_id))
-		{
-			croak $travian->error_msg();
-		}
-
-		## Wave (6) - (95|-1) Chewitonia (15:47 mins)
-		if (!$travian->send_troops(Travian::ATTACK_RAID, 95, -1, $gauls))
-		{
-			croak $travian->error_msg();
-		}
-		print &log_msg(6, 95, -1, 'Chewitonia');
-		print "\n";
-		sleep int(&calc_traveltime($X, $Y, 95, -1, 19)) * 2 + 10;
+		sleep int(&calc_traveltime($X, $Y, 103, -6, 19)) * 2 + 10;
+		## Wave (3) - (105|-7) Gieger Village (41:32 mins)
+		#if (!$travian->send_troops(Travian::ATTACK_RAID, 105, -7, $gauls))
+		#{
+		#	croak $travian->error_msg();
+		#}
+		#print &log_msg(3, 105, -7, 'Gieger Village');
+		#print "\n";
+		#sleep int(&calc_traveltime($X, $Y, 105, -7, 19)) * 2 + 10;
 
 		$wave = 0;
 	}
