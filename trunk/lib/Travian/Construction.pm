@@ -61,6 +61,8 @@ Travian::Construction - a package that defines a Travian construction.
     print $cost->wood();
   }
 
+  print $construction->times($level, $mb_level);
+
 =head1 DESCRIPTION
 
 This package is for a single construction in Travian.
