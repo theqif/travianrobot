@@ -20,6 +20,8 @@ Travian::Construction - a package that defines a Travian construction.
   {
     print $cost->wood();
   }
+
+  print $construction->times($level, $mb_level);
 }}}
 
 ----
@@ -68,6 +70,19 @@ Returns the name of this construction.
 Returns the construction costs for the given level. Return value is of type Travian::Construction::Cost. If no argument is given returns an array ref for all levels of construction.
 
 
+== times() ==
+
+{{{
+  $construction->times();
+  $construction->times($level);
+  $construction->times($level, $mb_level);
+}}}
+
+Returns the construction time for the given level and main building level.
+If no main building level is given returns an array ref of construction times for $level.
+If no argument is given returns an array ref for all levels of construction.
+
+
 == max_lvl() ==
 
 {{{
@@ -110,6 +125,14 @@ Parses the given construction html and populates this construction. Returns this
 Parses the given construction costs html and returns an array ref of costs. Used by $construction->parse_construction().
 
 
+== parse_construction_times() ==
+{{{
+  &parse_construction_times($construction_times_html);
+}}}
+Parses the given construction times html and returns an array ref of times.
+Used by $construction->parse_construction().
+
+
 ----
 = FUNCTIONS =
 
@@ -131,6 +154,12 @@ Returns the construction's name for the given gid.
 
 Returns the construction's gid for the given name.
 
+
+== time2secs() ==
+{{{
+  &time2secs($time);
+}}}
+Given a time in format h:m:s returns number of seconds.
 
 ----
 = AUTHOR =
