@@ -43,17 +43,17 @@ sub new
 
 	if (@_)
 	{
-		$self->{'_troops'}->[0] = shift;
-		$self->{'_troops'}->[1] = shift;
-		$self->{'_troops'}->[2] = shift;
-		$self->{'_troops'}->[3] = shift;
-		$self->{'_troops'}->[4] = shift;
-		$self->{'_troops'}->[5] = shift;
-		$self->{'_troops'}->[6] = shift;
-		$self->{'_troops'}->[7] = shift;
-		$self->{'_troops'}->[8] = shift;
-		$self->{'_troops'}->[9] = shift;
-		$self->{'_troops'}->[10] = shift;
+		$self->{'_troops'}->[0] = shift || 0;
+		$self->{'_troops'}->[1] = shift || 0;
+		$self->{'_troops'}->[2] = shift || 0;
+		$self->{'_troops'}->[3] = shift || 0;
+		$self->{'_troops'}->[4] = shift || 0;
+		$self->{'_troops'}->[5] = shift || 0;
+		$self->{'_troops'}->[6] = shift || 0;
+		$self->{'_troops'}->[7] = shift || 0;
+		$self->{'_troops'}->[8] = shift || 0;
+		$self->{'_troops'}->[9] = shift || 0;
+		$self->{'_troops'}->[10] = shift || 0;
 	}
 
 	return $self;
