@@ -48,6 +48,7 @@
 		<li><a href="#send_troops__"><code>send_troops()</code></a></li>
 		<li><a href="#post_send_troops_form__"><code>post_send_troops_form()</code></a></li>
 		<li><a href="#construction__"><code>construction()</code></a></li>
+		<li><a href="#report__"><code>report()</code></a></li>
 	</ul>
 
 	<li><a href="#parse_functions">PARSE FUNCTIONS</a></li>
@@ -101,6 +102,8 @@
   $travian-&gt;send_troops($type, $x, $y, Travian::Troops::Gauls-&gt;new(10), $scout_type);</pre>
 <pre>
   my $woodcutter = $travian-&gt;construction(1);</pre>
+<pre>
+  my $report = $travian-&gt;report(1234);</pre>
 <pre>
   $travian-&gt;logout();</pre>
 <p>
@@ -266,6 +269,13 @@ Used by $travian-&gt;send_troops().</p>
 Returns a Travian::Construction object.</p>
 <p>
 </p>
+<h3><a name="report__"><code>report()</code></a></h3>
+<pre>
+  $travian-&gt;report($report_id);</pre>
+<p>Return the report for the given report id.
+Returns a Travian::Report object.</p>
+<p>
+</p>
 <hr />
 <h2><a name="parse_functions">PARSE FUNCTIONS</a></h2>
 <p>
@@ -314,7 +324,7 @@ Martin Robertson, &lt;<a href="mailto:marley@wasters.com">marley@wasters.com</a>
 </p>
 <hr />
 <h2><a name="see_also">SEE ALSO</a></h2>
-<p>LWP::UserAgent, Travian::Village, Travian::Resources, Travian::Construction</p>
+<p>LWP::UserAgent, Travian::Village, Travian::Resources, Travian::Construction, Travian::Report</p>
 <p>
 </p>
 <hr />
