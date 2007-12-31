@@ -84,14 +84,6 @@ sub parse_report
 	if ($report_html && $report_html =~ m#<h1>Reports</h1>#)
 	{
 		$report_html =~ s#\n##g;
-=head2 parse_unit()
-
-  $unit->parse_construction($unit_html);
-  
-Parses the given unit html and populates this unit.
-Returns this unit.
-
-=cut
 
 		$report_html =~ m#<td class="s7">Subject:</td><td class="s7">(.+?)</td>#msg;
 		my $subject = $1;
