@@ -1,0 +1,96 @@
+<?xml version="1.0" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>Travian::Report - a package that defines a Travian report.</title>
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<link rev="made" href="mailto:root@localhost" />
+</head>
+
+<body style="background-color: white">
+
+<p><a name="__index__"></a></p>
+<!-- INDEX BEGIN -->
+
+<ul>
+
+	<li><a href="#name">NAME</a></li>
+	<li><a href="#synopsis">SYNOPSIS</a></li>
+	<li><a href="#description">DESCRIPTION</a></li>
+	<li><a href="#methods">METHODS</a></li>
+	<ul>
+
+		<li><a href="#new__"><code>new()</code></a></li>
+		<li><a href="#parse_report__"><code>parse_report()</code></a></li>
+	</ul>
+
+	<li><a href="#author">AUTHOR</a></li>
+	<li><a href="#see_also">SEE ALSO</a></li>
+	<li><a href="#copyright_and_license">COPYRIGHT AND LICENSE</a></li>
+</ul>
+<!-- INDEX END -->
+
+<hr />
+<p>
+</p>
+<h2><a name="name">NAME</a></h2>
+<p>Travian::Report - a package that defines a Travian report.</p>
+<p>
+</p>
+<hr />
+<h2><a name="synopsis">SYNOPSIS</a></h2>
+<pre>
+  use Travian::Report;
+  my $report = Travian::Report-&gt;new('A attacks B', '28/12/07 04:42 pm');
+  print $report-&gt;header()-&gt;subject();
+  print $report-&gt;header()-&gt;sent();</pre>
+<pre>
+  $report-&gt;attacker();
+  $report-&gt;defender();</pre>
+<p>
+</p>
+<hr />
+<h2><a name="description">DESCRIPTION</a></h2>
+<p>This package is for a single report in Travian.</p>
+<p>
+</p>
+<hr />
+<h2><a name="methods">METHODS</a></h2>
+<p>
+</p>
+<h3><a name="new__"><code>new()</code></a></h3>
+<pre>
+  use Travian::Report;</pre>
+<pre>
+  my $report = Travian::Report-&gt;new($subject, $sent);</pre>
+<p>
+</p>
+<h3><a name="parse_report__"><code>parse_report()</code></a></h3>
+<pre>
+  $report-&gt;parse_report($report_html);
+  
+Parses the given report html and populates this report.
+Returns this report.</pre>
+<p>
+</p>
+<hr />
+<h2><a name="author">AUTHOR</a></h2>
+<p>Adrian D. Elgar, &lt;<a href="mailto:ade@wasters.com">ade@wasters.com</a>&gt;
+Martin Robertson, &lt;<a href="mailto:marley@wasters.com">marley@wasters.com</a>&gt;</p>
+<p>
+</p>
+<hr />
+<h2><a name="see_also">SEE ALSO</a></h2>
+<p>Travian::Report::Header, Travian::Report::Unit</p>
+<p>
+</p>
+<hr />
+<h2><a name="copyright_and_license">COPYRIGHT AND LICENSE</a></h2>
+<p>Copyright (C) 2007 by Adrian Elgar, Martin Robertson</p>
+<p>This library is free software; you can redistribute it and/or modify
+it under the same terms as Perl itself, either Perl version 5.8.8 or,
+at your option, any later version of Perl 5 you may have available.</p>
+
+</body>
+
+</html>

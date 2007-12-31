@@ -44,13 +44,6 @@ while (1)
 		#}
 		#print &log_msg(1, 95, -1, 'Chewitonia');
 		#print "\n";
-		## Wave (1) - (95|-10) Red_Dog Village (18:24 mins)
-		#if (!$travian->send_troops(Travian::ATTACK_RAID, 95, -10, $gauls))
-		#{
-		#	croak $travian->error_msg();
-		#}
-		#print &log_msg(1, 95, -10, 'Red_Dog Village');
-		#print "\n";
 		## Wave (1) - (96|-10) gryphongod Village (20:13 mins)
 		if (!$travian->send_troops(Travian::ATTACK_RAID, 96, -10, $gauls))
 		{
@@ -127,20 +120,13 @@ while (1)
 			croak $travian->error_msg();
 		}
 
-		## Wave (3) - (90|5) brighton Village (32:12 mins)
-		if (!$travian->send_troops(Travian::ATTACK_RAID, 90, 5, $gauls))
+		## Wave (3) - (94|-15) dan4sam Village (32:12 mins)
+		if (!$travian->send_troops(Travian::ATTACK_RAID, 94, -15, $gauls))
 		{
 			croak $travian->error_msg();
 		}
-		print &log_msg(3, 90, 5, 'brighton Village');
+		print &log_msg(3, 94, -15, 'dan4sam Village');
 		print "\n";
-		## Wave (3) - (94|-15) dan4sam Village (32:12 mins)
-		#if (!$travian->send_troops(Travian::ATTACK_RAID, 94, -15, $gauls))
-		#{
-		#	croak $travian->error_msg();
-		#}
-		#print &log_msg(3, 94, -15, 'dan4sam Village');
-		#print "\n";
 		## Wave (3) - (103|-6) Guinevere Village (34:52 mins)
 		if (!$travian->send_troops(Travian::ATTACK_RAID, 103, -6, $gauls))
 		{

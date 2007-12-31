@@ -12,6 +12,7 @@ use HTTP::Request;
 use Travian::Village;
 use Travian::Resources;
 use Travian::Construction qw(gid2name name2gid);
+use Travian::Report;
 
 our @ISA = qw(LWP::UserAgent Exporter);
 our @EXPORT_OK = qw(&calc_traveltime);
@@ -85,6 +86,8 @@ Travian - a package for the web-based game Travian.
   $travian->send_troops($type, $x, $y, Travian::Troops::Gauls->new(10), $scout_type);
 
   my $woodcutter = $travian->construction(1);
+
+  my $report = $travian->report(1234);
 
   $travian->logout();
 
@@ -673,6 +676,34 @@ sub construction
 	return;
 }
 
+=head2 report()
+
+  $travian->report($report_id);
+
+Return the report for the given report id.
+Returns a Travian::Report object.
+
+=cut
+
+sub report
+{
+	my $self = shift;
+	my $report_id = shift;
+
+	if ($report_id && $report_id =~ /\d+/)
+	{
+		my $report_res = $self->get($self->base_url() . '/berichte.php?id=' . $report_id);
+
+		if ($report_res->is_success)
+		{
+			my $report = Travian::Report->new();
+			return $report->parse_report($report_res->content);
+		}
+	}
+
+	return;
+}
+
 =head1 PARSE FUNCTIONS
 
 =head2 parse_login_form()
@@ -829,7 +860,7 @@ Martin Robertson, E<lt>marley@wasters.comE<gt>
 
 =head1 SEE ALSO
 
-LWP::UserAgent, Travian::Village, Travian::Resources, Travian::Construction
+LWP::UserAgent, Travian::Village, Travian::Resources, Travian::Construction, Travian::Report
 
 =head1 COPYRIGHT AND LICENSE
 
