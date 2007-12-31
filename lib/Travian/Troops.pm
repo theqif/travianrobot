@@ -59,6 +59,19 @@ sub new
 	return $self;
 }
 
+=head2 as_arrayref()
+
+  $troops->as_arrayref();
+
+Returns an array ref of the troops.
+
+=cut
+
+sub as_arrayref
+{
+	return $_[0]->{'_troops'};
+}
+
 =head2 send_troops_args()
 
   $troops->send_troops_args();
