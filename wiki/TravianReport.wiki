@@ -1,4 +1,4 @@
-#summary a package that defines a Travian report.
+#summary Travian::Report - a package that defines a Travian report.
 
 ----
 = NAME =
