@@ -160,6 +160,7 @@ sub _init
 
 	$self->agent($DEFAULT_USER_AGENT) if ($self->agent() =~ /libwww/);
 	$self->cookie_jar({ }) if (!defined($self->cookie_jar()));
+	push @{$self->requests_redirectable}, 'POST';
 
 	$self->{'village'} = Travian::Village->new();
 	$self->{'villages'} = [];
@@ -605,7 +606,14 @@ sub send_troops
 			my $send_troops_confirm_args = &parse_send_troops_confirm_form($send_troops_confirm_form, $scout_type);
 			if ($send_troops_confirm_args)
 			{
-				return $self->post($self->base_url() . '/a2b.php', $send_troops_confirm_args);
+				my $send_troops_confirm_res = $self->post($self->base_url() . '/a2b.php', $send_troops_confirm_args);
+				if ($send_troops_confirm_res->is_success)
+				{
+					return $send_troops_confirm_res->content();
+				}
+
+				$self->{'error_msg'} = 'Cannot post send troops confirm form.';
+				return;
 			}
 
 			$self->{'error_msg'} = &parse_send_troops_error_msg($send_troops_confirm_form);
