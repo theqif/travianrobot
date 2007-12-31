@@ -84,7 +84,7 @@ sub bounty { $_[0]->resources(); }
 
 =head2 parse_unit()
 
-  $unit->parse_construction($unit_html);
+  $unit->parse_unit($unit_html);
   
 Parses the given unit html and populates this unit.
 Returns this unit.
