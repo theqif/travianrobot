@@ -28,7 +28,8 @@ my $TRAVIAN_CONSTRUCTION_URL = 'http://help.travian.co.uk/index.php?type=faq&gid
 
 my $re =
 {
-  logout       => "logout.php",
+  logout       => "(logout.php)",
+  login        => "\?login",
   newdid       => "(<a href=\"\\?newdid=.+?<\/tr>)",
   villageid    => "newdid=(\\d+?)\"",
   villageindex => qq~(class="active\_vl")~,
@@ -64,6 +65,8 @@ my $re =
 
 my $meta =
 {
+  logged_in =>{ get=>{url=>'/dorf1.php',re=>[{logged_in=>$re->{logout}}],},},
+
   login =>
   {
     get =>
@@ -401,14 +404,19 @@ sub logged_in
 {
         my $self = shift;
 
-        my $ov_p= $self->get($self->base_url() . '/dorf1.php');
+	my $res = $self->widget_get('logged_in');
+	$self->{'error_msg'} = "";
+	# ignore anything set here .. 
 
-        if ($ov_p->is_success)
-        {
-                return 1 if ($ov_p->content() =~ m#$re->{logout}#msg);
-        }
+	return 1 if ($res->{'logged_in'});
+ 	return 0;
 
-        return 0;
+#        my $ov_p= $self->get($self->base_url() . '/dorf1.php');
+#        if ($ov_p->is_success)
+#        {
+#                return 1 if ($ov_p->content() =~ m#$re->{logout}#msg);
+#        }
+#        return 0;
 }
 
 =head2 get_login_form()
@@ -993,6 +1001,33 @@ sub calc_traveltime
 	
 	return ($d/$v)*3600;
 }
+
+sub parse_user
+{
+  my $page   = shift;
+  my $player = ();
+
+  if ($page =~ m#<td class="rbg" colspan="3">Player (.+?)</td>#msg) { $player->{name} = $1; }
+  if ($page =~ m#<td class="s7">Rank:</td><td class="s7">(\d+?)</td>#msg) { $player->{rank} = $1; }
+  if ($page =~ m#<td>Tribe:</td><td>(.+?)</td>#msg) { $player->{tribe} = $1; }
+  if ($page =~ m#<a href="http://s3.travian.co.uk/allianz.php?aid=(\d+)">#msg) { $player->{aid} = $1; }
+  if ($page =~ m#<td>Villages:</td><td>(\d+?)</td>#msg) { $player->{villages} = $1; }
+  if ($page =~ m#<td>Population:</td><td>(\d+?)</td>#msg) { $player->{population} = $1; }
+
+my $kid_ar = [ $page =~ m#<a href="http://s3.travian.co.uk/karte.php\?d=(\d+&amp;c=..)">#msg ];
+
+  $player->{vill_kid} = join ",", @{$kid_ar};
+
+
+#  my $allies_id_ar = [ $p =~ m#http://s3.travian.co.uk/allianz\.php\?aid=(\d+?)"#mgs ];
+#  my $member_id_ar = [ $p =~ m#http://s3.travian.co.uk/spieler\.php\?uid=(\d+?)"#msg ];
+
+#  $hr->{allies}  = $allies_id_ar;
+#  $hr->{members} = $member_id_ar;
+
+  return $player;
+}
+
 
 =head1 AUTHOR
 
