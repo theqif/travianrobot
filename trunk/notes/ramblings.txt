@@ -1,5 +1,5 @@
 Ultimate goal of Travian : become biggest possible player,
-thrugh accumulation of most resources =>
+through accumulation of most resources, requiring us to
 'get as much res as poss thru ataks'
 
 atak management(AM) is therefore required to get the max per raid.
