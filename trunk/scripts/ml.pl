@@ -19,10 +19,10 @@ my $args = {};
 $args->{get}->{user} = $user;
 $args->{get}->{pass} = $pass;
 
-if (!$travian->mdr_login($args))
-{
-	croak $travian->error_msg();
-}
+  if (!$travian->mdr_login($args))
+  {
+  	croak $travian->error_msg();
+  }
 
 for (my $village_no = 1; $village_no <= $travian->no_of_villages(); $village_no++)
 {
