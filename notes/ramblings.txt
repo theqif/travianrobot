@@ -2,13 +2,17 @@ Ultimate goal of Travian : become biggest possible player,
 thrugh accumulation of most resources =>
 'get as much res as poss thru ataks'
 
-atak management is therefore required to get the max per raid.
+atak management(AM) is therefore required to get the max per raid.
 
 the bounty of a raid is a factor of :
  - number of TTs (known)
  - warehouse/granary capacity (divined over time / regular scouting)
  - cranny capacity (divined over time / regular scouting)
- - target production levels (divined over time / delta between reports)
+ - target production levels (divined over time / delta between reports)o
+
+Target production Levels (TPL) is gleaned by sending 2 scouts,
+15 mins apart, arriving after a successful raid.
+Report Parser does the delta per res & multiplies by 4 for a per hour rate.
 
 MAX_potential is defined as :
  - clay = warehouse-cranny; wood = warehouse-cranny; iron = warehouse-cranny;
@@ -21,14 +25,12 @@ so to glean the max for a given target :
 raid_frequency is defined as MAX_pot divided by target_prod_levels
 
 eg : Madeddy has 
-MAX_res (2300/2300/2300/2300)
+MAX_cap (2300/2300/2300/2300)
 crannies (2100/2100/2100/2100)
 MAX_pot is therefore (200/200/200/200) = 800 = 11TTs required.
-pot_lvl/hr (120/120/110/60)
+pot_lvl/hr (120/120/110/60) (2 scouts, 1 after raid, another 15mins later
 atak_time_delta is therefore 100mins
-
 
 So far, so good.  Need some sort of stateful mechanism to store this 'target meta info' - tie in with slurp of villages/alliance/users?
 
-
-Attack management becomes lots more tricky when optimising for multiple targets - have to consider available TTs & travel time
+Attack management becomes lots more tricky when optimising for multiple targets - have to consider available TTs & travel time.  Targets need to be arranged in to a priority list - a 'value quotient' based on MAX_pot & number of visits possible in 24hrs ..

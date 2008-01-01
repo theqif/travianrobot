@@ -39,6 +39,8 @@ my $re =
   login_text   => "\"fm fm110\" type=\"text\" name=\"(.+?)\"",
   login_pass   => "\"fm fm110\" type=\"password\" name=\"(.+?)\"",
   login_rand   => "<p align=\"center\"><input type=\"hidden\" name=\"(.+?)\" value=\"(.*?)\">",
+  login_rand_key   => "<p align=\"center\"><input type=\"hidden\" name=\"(.+?)\"",
+  login_rand_val   => "<p align=\"center\"><input type=\"hidden\" name=\".+?\" value=\"(.*?)\">",
   login_form   => "<form.+?>(.+?)</form>",
   login_error  => "<span class=\"e f7\">(.+?)</span>",
   st_error     => "<div class=\"f10 e b\">(.+?)</div>",
@@ -221,40 +223,176 @@ Returns 1 on success.
 Use $travian->error_msg() to retrieve error message on failure.
 
 =cut
-
-sub login
+#$e_args->{get}->{user} = 'theqif';
+#$e_args->{get}->{pass} = 'fish';
+sub mdr_login
 {
 	my $self = shift;
-	my $user = shift;
-	my $pass = shift;
+	my $e_args = shift;
+print "mdr_login!\n";
 
 	$self->{'error_msg'} = '';
 
-	if ($self->logged_in())
-	{
-		return $self->village();
-	}
+	return $self->village() if ($self->logged_in());
 
-	if ($user && $pass)
+print "\tbeginning\n";
+
+	my $w_name = "login";
+
+# if 'widget->set/get' external-required-params have been passed & are valid
+#  clever munging / formatting of @_ ?
+	return unless (&params_are_valid_get_ext($w_name, $e_args->{get}));
+	return unless (&params_are_valid_set_ext($w_name, $e_args->{set}));
+
+print "\targs passed in are valid\n";
+
+# call widget-get
+#  which bring back meta-info-defined parsed vars & vals
+
+	my $i_args = $self->widget_get($w_name, $e_args->{get});
+use Data::Dumper;
+print Dumper ($i_args);
+# return [w => '400:800', login => $login_id, $user_fn => $user, $pass_fn => $pass, $rand_hid => $rand_val, s1 => 'login'];
+
+my $ar = [w => '400:800', login => $i_args->{login}, $i_args->{user_fn} => $e_args->{get}->{user}, $i_args->{pass_fn} => $e_args->{get}->{pass}, $i_args->{rand_hid} => $i_args->{rand_val}, s1 => 'login'];
+
+print Dumper ($ar);
+
+        if (defined ($i_args->{'error'})) { $self->{'error_msg'} = $i_args->{'error'}; return; }
+
+print "No errors reported from widget GET\n";
+
+# if 'widget->set' internal-required-params have been retrieved & are valid
+	if (&params_are_valid_set_int($w_name, $i_args))
 	{
-		my $login_args = &parse_login_form($self->get_login_form(), $user, $pass);
-		if ($login_args)
-		{
-			my $login_form_res_html = $self->post_login_form($login_args);
-			if ($login_form_res_html)
-			{
-				$self->{'error_msg'} = &parse_login_error_msg($login_form_res_html);
-				if (!$self->{'error_msg'})
-				{
-					return $self->parse_villages($login_form_res_html);
-				}
-			}
-			else { $self->{'error_msg'} = 'Cannot post login form.'; }
-		}
-		else { $self->{'error_msg'} = 'Cannot retrieve login form.'; }
+#call widget-set
+
+print "VBalid params to do WIDGET SET\n" . $self->{'error_msg'};
+		my $res = $self->widget_set($w_name, $ar);
+print "BACK from WIDGET SET\n";
+		return if ($self->{'error_msg'});
+print "No Err msg from WIDGET SET\n";
+
+                return $self->parse_villages($res->content());
 	}
+	else { $self->{'error_msg'} = '';}
 
 	return;
+}
+
+sub widget_set
+{
+  my $s  = shift;
+  my $wn = shift;
+  my $ar = shift;
+
+my $widgets = {};
+$widgets->{login} = {};
+$widgets->{login}->{set} = {};
+$widgets->{login}->{set}->{url} = $s->base_url() . '/dorf1.php';
+$widgets->{login}->{set}->{re} = [];
+
+$widgets->{login}->{set}->{error_check} = $re->{login_error};
+#push @{$widgets->{login}->{set}->{error_check}}, {login    => $re->{login_login}};
+
+  my $w = $widgets->{$wn}->{set};
+
+  my $res = $s->post($w->{url}, $ar);
+
+  print "Failed to POST" && return $res unless ($res->is_success);
+
+  if (defined ($w->{error_check}))
+  {
+    if ($res->content() =~ m#$w->{error_check}#mgs) { print "MATCHED ERROR RE : [$w->{error_check}] within " .$res->content() ."]\n"; $s->{'error_msg'} = $1; }
+  }
+
+  return $res;
+}
+
+
+sub widget_get
+{
+  my $s  = shift;
+  my $wn = shift;
+  my $hr = shift;
+
+my $widgets = {};
+$widgets->{login} = {};
+$widgets->{login}->{get} = {};
+$widgets->{login}->{get}->{url} = $s->base_url() . '/login.php';
+$widgets->{login}->{get}->{re} = [];
+
+push @{$widgets->{login}->{get}->{re}}, {login    => $re->{login_login}};
+push @{$widgets->{login}->{get}->{re}}, {user_fn  => $re->{login_text}};
+push @{$widgets->{login}->{get}->{re}}, {pass_fn  => $re->{login_pass}};
+push @{$widgets->{login}->{get}->{re}}, {rand_hid => $re->{login_rand_key}};
+#push @{$widgets->{login}->{get}->{re}}, {rand_val => $re->{login_rand_val}};
+
+  my $w = $widgets->{$wn}->{get};
+
+  my $html = $s->get($w->{url})->content();
+
+#handle http error here
+
+# hr->{get}->{user} hr->{get}->{pass} are already validated
+
+my $ret = {};
+  foreach my $regs (@{$w->{re}})
+  {
+    my $key = [keys %{$regs}]->[0];
+    my $reg = $regs->{$key};
+    if ($html =~ m#$reg#msg)
+    {
+      $ret->{$key} = $1;
+    }
+    else
+    {
+      push @{$ret->{re_errors}}, "Cant match [$reg] in [$html]";
+    }
+
+  }
+
+  return $ret;
+}
+
+sub params_are_valid_get_ext { return 1; }
+sub params_are_valid_set_ext { return 1; }
+sub params_are_valid_set_int { return 1; }
+
+sub login
+{
+        my $self = shift;
+        my $user = shift;
+        my $pass = shift;
+
+        $self->{'error_msg'} = '';
+
+        if ($self->logged_in())
+        {
+                return $self->village();
+        }
+
+        if ($user && $pass)
+        {
+                my $login_args = &parse_login_form($self->get_login_form(), $user, $pass);
+
+                if ($login_args)
+                {
+                        my $login_form_res_html = $self->post_login_form($login_args);
+                        if ($login_form_res_html)
+                        {
+                                $self->{'error_msg'} = &parse_login_error_msg($login_form_res_html);
+                                if (!$self->{'error_msg'})
+                                {
+                                        return $self->parse_villages($login_form_res_html);
+                                }
+                        }
+                        else { $self->{'error_msg'} = 'Cannot post login form.'; }
+                }
+                else { $self->{'error_msg'} = 'Cannot retrieve login form.'; }
+        }
+
+        return;
 }
 
 =head2 logged_in()
