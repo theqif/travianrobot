@@ -1,4 +1,4 @@
-package Travian;
+#package Travian;
 
 use strict;
 use warnings;
@@ -61,6 +61,33 @@ my $re =
   st_t10       => "name=\"t10\" value=\"(.+?)\"",
   st_t11       => "name=\"t11\" value=\"(.+?)\"",
 };
+
+my $meta =
+{
+  login =>
+  {
+    get =>
+    {
+      url => '/login.php',
+      re  =>
+      [
+        login    => $re->{login_login},
+        user_fn  => $re->{login_text},
+        pass_fn  => $re->{login_pass},
+        rand_hid => $re->{login_rand_key},
+      ],
+    },
+    set =>
+    {
+      url         => '/dorf1.php',
+      error_check => $re->{login_error},
+    },
+  },
+};
+
+
+#rand_val => $re->{login_rand_val}
+
 
 =head1 NAME
 
@@ -172,6 +199,8 @@ sub _init
 	$self->{'max_resources'} = Travian::Resources->new();
 	$self->{'production_resources'} = Travian::Resources->new();
 
+	#$self->{'widgets'} = Travian::Widgets->new();
+
 	return $self;
 }
 
@@ -214,6 +243,8 @@ sub error_msg
 	return $_[0]->{'error_msg'};
 }
 
+sub Dump { use Data::Dumper; print Dumper (\@_); }
+
 =head2 login()
 
   $travian->login($user, $pass);
@@ -223,61 +254,41 @@ Returns 1 on success.
 Use $travian->error_msg() to retrieve error message on failure.
 
 =cut
-#$e_args->{get}->{user} = 'theqif';
-#$e_args->{get}->{pass} = 'fish';
 sub mdr_login
 {
 	my $self = shift;
 	my $e_args = shift;
-print "mdr_login!\n";
 
 	$self->{'error_msg'} = '';
 
 	return $self->village() if ($self->logged_in());
 
-print "\tbeginning\n";
-
 	my $w_name = "login";
 
-# if 'widget->set/get' external-required-params have been passed & are valid
-#  clever munging / formatting of @_ ?
-	return unless (&params_are_valid_get_ext($w_name, $e_args->{get}));
-	return unless (&params_are_valid_set_ext($w_name, $e_args->{set}));
+	# if 'widget->set/get' external-required-params have been passed & are valid
+	#  clever munging / formatting of @_ ?
+	$self->params_are_valid_get_ext($w_name, $e_args->{get});
+        return if ($self->{'error_msg'});
+	$self->params_are_valid_set_ext($w_name, $e_args->{set});
+        return if ($self->{'error_msg'});
 
-print "\targs passed in are valid\n";
-
-# call widget-get
-#  which bring back meta-info-defined parsed vars & vals
+	# call widget-get
+	#  which bring back meta-info-defined parsed vars & vals
 
 	my $i_args = $self->widget_get($w_name, $e_args->{get});
-use Data::Dumper;
-print Dumper ($i_args);
-# return [w => '400:800', login => $login_id, $user_fn => $user, $pass_fn => $pass, $rand_hid => $rand_val, s1 => 'login'];
+	return if ($self->{'error_msg'});
 
 my $ar = [w => '400:800', login => $i_args->{login}, $i_args->{user_fn} => $e_args->{get}->{user}, $i_args->{pass_fn} => $e_args->{get}->{pass}, $i_args->{rand_hid} => $i_args->{rand_val}, s1 => 'login'];
+#print Dump ($i_args); print Dump ($ar);
 
-print Dumper ($ar);
+	# if 'widget->set' internal-required-params have been retrieved & are valid
+	$self->params_are_valid_set_int($w_name, $ar);
+	return if ($self->{'error_msg'});
 
-        if (defined ($i_args->{'error'})) { $self->{'error_msg'} = $i_args->{'error'}; return; }
+	my $res = $self->widget_set($w_name, $ar);
+	return if ($self->{'error_msg'});
 
-print "No errors reported from widget GET\n";
-
-# if 'widget->set' internal-required-params have been retrieved & are valid
-	if (&params_are_valid_set_int($w_name, $i_args))
-	{
-#call widget-set
-
-print "VBalid params to do WIDGET SET\n" . $self->{'error_msg'};
-		my $res = $self->widget_set($w_name, $ar);
-print "BACK from WIDGET SET\n";
-		return if ($self->{'error_msg'});
-print "No Err msg from WIDGET SET\n";
-
-                return $self->parse_villages($res->content());
-	}
-	else { $self->{'error_msg'} = '';}
-
-	return;
+        return $self->parse_villages($res->content());
 }
 
 sub widget_set
@@ -286,24 +297,18 @@ sub widget_set
   my $wn = shift;
   my $ar = shift;
 
-my $widgets = {};
-$widgets->{login} = {};
-$widgets->{login}->{set} = {};
-$widgets->{login}->{set}->{url} = $s->base_url() . '/dorf1.php';
-$widgets->{login}->{set}->{re} = [];
+  my $w = $meta->{$wn}->{set};
 
-$widgets->{login}->{set}->{error_check} = $re->{login_error};
-#push @{$widgets->{login}->{set}->{error_check}}, {login    => $re->{login_login}};
-
-  my $w = $widgets->{$wn}->{set};
-
-  my $res = $s->post($w->{url}, $ar);
+  my $res = $s->post($s->base_url . $w->{url}, $ar);
 
   print "Failed to POST" && return $res unless ($res->is_success);
 
   if (defined ($w->{error_check}))
   {
-    if ($res->content() =~ m#$w->{error_check}#mgs) { print "MATCHED ERROR RE : [$w->{error_check}] within " .$res->content() ."]\n"; $s->{'error_msg'} = $1; }
+    if ($res->content() =~ m#$w->{error_check}#mgs)
+    {
+      $s->{'error_msg'} = $1; return;
+    }
   }
 
   return $res;
@@ -316,21 +321,10 @@ sub widget_get
   my $wn = shift;
   my $hr = shift;
 
-my $widgets = {};
-$widgets->{login} = {};
-$widgets->{login}->{get} = {};
-$widgets->{login}->{get}->{url} = $s->base_url() . '/login.php';
-$widgets->{login}->{get}->{re} = [];
 
-push @{$widgets->{login}->{get}->{re}}, {login    => $re->{login_login}};
-push @{$widgets->{login}->{get}->{re}}, {user_fn  => $re->{login_text}};
-push @{$widgets->{login}->{get}->{re}}, {pass_fn  => $re->{login_pass}};
-push @{$widgets->{login}->{get}->{re}}, {rand_hid => $re->{login_rand_key}};
-#push @{$widgets->{login}->{get}->{re}}, {rand_val => $re->{login_rand_val}};
+  my $w = $meta->{$wn}->{get};
 
-  my $w = $widgets->{$wn}->{get};
-
-  my $html = $s->get($w->{url})->content();
+  my $html = $s->get($s->base_url . $w->{url})->content();
 
 #handle http error here
 
@@ -347,7 +341,8 @@ my $ret = {};
     }
     else
     {
-      push @{$ret->{re_errors}}, "Cant match [$reg] in [$html]";
+      $s->{error_msg} = "Cant match [$reg] in [$html]";
+      return;
     }
 
   }
