@@ -1,0 +1,9 @@
+Step 1 - initial list of villages :
+
+ - Only players smaller than $self;
+ - Only villages not member of alliance;
+ - ordered by travel time ASC;
+
+Step 2 - Scouting of each village
+ - discard _any_ where PFs die
+ - parse reports

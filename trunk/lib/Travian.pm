@@ -1007,15 +1007,16 @@ sub parse_village
   my $page = shift;
   my $vill = ();
 
-  if ($page =~ m#<h1>(.+?) Village \(#msg)   { $vill->{name} = $1; }
-  if ($page =~ m#Village \((-*\d+?)\|#msg)   { $vill->{x} = $1; }
-  if ($page =~ m#|(0)\)</div>#msg)           { $vill->{y} = $1; }
+  if ($page =~ m#Village \((-*\d+?)\|(-*\d+?)\)</div>#mg)  { $vill->{x} = $1; $vill->{y} = $2; }
+  if ($page =~ m#<h1>(.+?) Village #mg)   { $vill->{name} = $1; }
   if ($page =~ m#<td> <b>(.+?)</b></td>#msg) { $vill->{tribe} = $1; }
   if ($page =~ m#Population:</td><td><b> (\d+?)</b></td>#msg) { $vill->{population} = $1; }
   if ($page =~ m#<a href="a2b.php\?z=(\d+?)">#msg) { $vill->{atak} = $1; }
 
   my $rid_ar = [ $page =~ m#berichte.php\?id=(\d+?)"#msg ];
   if ($page  =~ m#berichte.php\?id=#msg) { $vill->{reports} = join "|", @{$rid_ar}; }
+
+  $vill->{ttime} = &calc_traveltime($vill->{x}, $vill->{y}, 19, 40, 19);
 
   return $vill;
 }
