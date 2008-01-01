@@ -1014,9 +1014,8 @@ sub parse_user
   if ($page =~ m#<td>Villages:</td><td>(\d+?)</td>#msg) { $player->{villages} = $1; }
   if ($page =~ m#<td>Population:</td><td>(\d+?)</td>#msg) { $player->{population} = $1; }
 
-my $kid_ar = [ $page =~ m#<a href="http://s3.travian.co.uk/karte.php\?d=(\d+&amp;c=..)">#msg ];
-
-  $player->{vill_kid} = join ",", @{$kid_ar};
+  my $kid_ar = [ $page =~ m#karte.php\?d=(\d+&c=..)">#msg ];
+  if ($page =~ m#karte.php\?d=#msg) { $player->{vill_kid} = join "|", @{$kid_ar}; }
 
 
 #  my $allies_id_ar = [ $p =~ m#http://s3.travian.co.uk/allianz\.php\?aid=(\d+?)"#mgs ];
