@@ -71,11 +71,11 @@ my $meta =
       url => '/login.php',
       re  =>
       [
-        login    => $re->{login_login},
-        user_fn  => $re->{login_text},
-        pass_fn  => $re->{login_pass},
-        rand_hid => $re->{login_rand_key},
-        #rand_val => $re->{login_rand_val},
+        {login    => $re->{login_login}},
+        {user_fn  => $re->{login_text}},
+        {pass_fn  => $re->{login_pass}},
+        {rand_hid => $re->{login_rand_key}},
+        #{rand_val => $re->{login_rand_val}},
       ],
     },
     set =>
@@ -331,11 +331,10 @@ sub widget_get
 # hr->{get}->{user} hr->{get}->{pass} are already validated
 
 my $ret = {};
-print Dump ($w);
-  foreach my $regs (@{$w->{re}})
+  foreach my $re_hr (@{$w->{re}})
   {
-    my $key = keys %{$regs};
-    my $reg = $regs->{$key};
+    my $key = [keys %{$re_hr}]->[0];
+    my $reg = $re_hr->{$key};
     if ($html =~ m#$reg#msg)
     {
       $ret->{$key} = $1;
