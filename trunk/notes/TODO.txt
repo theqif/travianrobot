@@ -1,0 +1,3 @@
+ - finish widget code
+ - atak management script
+ - slurp travian player/village/alliance data .. into DB?

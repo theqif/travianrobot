@@ -1,0 +1,34 @@
+Ultimate goal of Travian : become biggest possible player,
+thrugh accumulation of most resources =>
+'get as much res as poss thru ataks'
+
+atak management is therefore required to get the max per raid.
+
+the bounty of a raid is a factor of :
+ - number of TTs (known)
+ - warehouse/granary capacity (divined over time / regular scouting)
+ - cranny capacity (divined over time / regular scouting)
+ - target production levels (divined over time / delta between reports)
+
+MAX_potential is defined as :
+ - clay = warehouse-cranny; wood = warehouse-cranny; iron = warehouse-cranny;
+ - wheat = granary-cranny;
+
+so to glean the max for a given target :
+ - send enuf TTs for the MAX_pot
+ - send them at a raid_frequency such that the target is at MAX_pot
+
+raid_frequency is defined as MAX_pot divided by target_prod_levels
+
+eg : Madeddy has 
+MAX_res (2300/2300/2300/2300)
+crannies (2100/2100/2100/2100)
+MAX_pot is therefore (200/200/200/200) = 800 = 11TTs required.
+pot_lvl/hr (120/120/110/60)
+atak_time_delta is therefore 100mins
+
+
+So far, so good.  Need some sort of stateful mechanism to store this 'target meta info' - tie in with slurp of villages/alliance/users?
+
+
+Attack management becomes lots more tricky when optimising for multiple targets - have to consider available TTs & travel time
