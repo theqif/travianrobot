@@ -22,18 +22,19 @@ if (!$travian->login($user, $pass))
         croak $travian->error_msg();
 }
 
-my $u_url = "http://s3.travian.co.uk/spieler.php?uid=";
+my $a_url = "http://s3.travian.co.uk/allianz.php?aid=";
 
-foreach my $uid ($from..$to)
+foreach my $aid ($from..$to)
 {
-  my $page = $travian->get($u_url . $uid)->content();
+  my $page = $travian->get($a_url . $aid)->content();
 
-  my $play = &Travian::parse_user($page);
+  my $alliance = &Travian::parse_alliance($page);
 
-  next unless (defined ($play->{name}));
+  next unless (defined ($alliance->{name}));
 
-  $play->{id} = $uid;
+  $alliance->{id} = $aid;
+print Dumper ($alliance);
 
-  print join ",", map { $play->{$_} || "" } qw/id name population rank villages tribe aid vill_kid/;
+  print join ",", map { $alliance->{$_} || "" } qw/id name nmembers rank tag allies members/;
   print "\n";
 }
