@@ -1002,29 +1002,50 @@ sub calc_traveltime
 	return ($d/$v)*3600;
 }
 
+sub parse_village
+{
+  my $page = shift;
+  my $vill = ();
+
+  return $vill;
+}
+
 sub parse_user
 {
   my $page   = shift;
   my $player = ();
 
-  if ($page =~ m#<td class="rbg" colspan="3">Player (.+?)</td>#msg) { $player->{name} = $1; }
-  if ($page =~ m#<td class="s7">Rank:</td><td class="s7">(\d+?)</td>#msg) { $player->{rank} = $1; }
-  if ($page =~ m#<td>Tribe:</td><td>(.+?)</td>#msg) { $player->{tribe} = $1; }
-  if ($page =~ m#<a href="http://s3.travian.co.uk/allianz.php?aid=(\d+)">#msg) { $player->{aid} = $1; }
-  if ($page =~ m#<td>Villages:</td><td>(\d+?)</td>#msg) { $player->{villages} = $1; }
-  if ($page =~ m#<td>Population:</td><td>(\d+?)</td>#msg) { $player->{population} = $1; }
+  if ($page  =~ m#<td class="rbg" colspan="3">Player (.+?)</td>#msg)       { $player->{name}       = $1; }
+  if ($page  =~ m#<td class="s7">Rank:</td><td class="s7">(\d+?)</td>#msg) { $player->{rank}       = $1; }
+  if ($page  =~ m#<td>Tribe:</td><td>(.+?)</td>#msg)                       { $player->{tribe}      = $1; }
+  if ($page  =~ m#allianz.php\?aid=(\d+?)">#msg)                           { $player->{aid}        = $1; }
+  if ($page  =~ m#<td>Villages:</td><td>(\d+?)</td>#msg)                   { $player->{villages}   = $1; }
+  if ($page  =~ m#<td>Population:</td><td>(\d+?)</td>#msg)                 { $player->{population} = $1; }
 
   my $kid_ar = [ $page =~ m#karte.php\?d=(\d+&c=..)">#msg ];
-  if ($page =~ m#karte.php\?d=#msg) { $player->{vill_kid} = join "|", @{$kid_ar}; }
-
-
-#  my $allies_id_ar = [ $p =~ m#http://s3.travian.co.uk/allianz\.php\?aid=(\d+?)"#mgs ];
-#  my $member_id_ar = [ $p =~ m#http://s3.travian.co.uk/spieler\.php\?uid=(\d+?)"#msg ];
-
-#  $hr->{allies}  = $allies_id_ar;
-#  $hr->{members} = $member_id_ar;
+  if ($page  =~ m#karte.php\?d=#msg) { $player->{vill_kid} = join "|", @{$kid_ar}; }
 
   return $player;
+}
+
+sub parse_alliance
+{
+  my $page = shift;
+  my $all = ();
+
+  if ($page =~ m#<td>Name:</td><td>(.+?)</td>#msg)                      { $all->{name}     = $1; }
+  if ($page =~ m#<td>Points:</td><td>(\d+?)</td>#msg)                   { $all->{points}   = $1; }
+  if ($page =~ m#<td>Members:</td><td>(\d+?)</td>#msg)                  { $all->{nmembers} = $1; }
+  if ($page =~ m#<td>Rank:</td><td width="25%">(\d+?)\.</td>#msg)       { $all->{rank}     = $1; }
+  if ($page =~ m#<td class="s7">Tag:</td><td class="s7">(.+?)</td>#msg) { $all->{tag}      = $1; }
+
+  my $allies_id_ar = [ $page =~ m#allianz\.php\?aid=(\d+?)"#mgs ];
+  if ($page  =~ m#allianz\.php\?aid=#msg) { $all->{allies} = join "|", @{$allies_id_ar}; }
+
+  my $member_id_ar = [ $page =~ m#spieler\.php\?uid=(\d+?)"#msg ];
+  if ($page  =~ m#spieler\.php\?uid=#msg) { $all->{members} = join "|", @{$member_id_ar}; }
+
+  return $all;
 }
 
 
