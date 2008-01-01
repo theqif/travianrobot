@@ -51,22 +51,20 @@ while (<A>)
 
 foreach my $uid (keys %{$u_v_hr})
 {
-print "[[$uid]]\n";
+#print "[[$uid]]\n";
   foreach my $param (@{$u_v_hr->{$uid}})
   {
     my $url  = "http://s3.travian.co.uk/karte.php?d=" . $param;
-print "\t[$url]\n";
+#print "\t[$url]\n";
 
     my $page = $travian->get($url)->content();
     my $vill = &Travian::parse_village($page);
 
-print Dumper ($vill);
+#print Dumper ($vill);
 
-    next unless (defined ($vill->{name}));
+    next unless (defined ($vill->{x}));
 
-    print join ",", map { $vill->{$_} || "" } qw//;
+    print join ",", map { $vill->{$_} || "" } qw/x y ttime/;
     print "\n";
   }
-
-last;
 }

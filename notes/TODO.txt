@@ -1,6 +1,11 @@
  - finish widget code
  - atak management script
- - slurp travian player/village/alliance data .. into DB?
  - CGI display all this
  - http://code.google.com/apis/chart/ integrate
  - Jabber App
+ - target finder script;
+
+
+DONE
+010108 : slurp travian player/village/alliance data .. into DB?
+ - still to be tidied, & back end/state added, not just CSV
