@@ -25,6 +25,7 @@ Travian - a package for the web-based game Travian.
   my $village = $travian->village($village_id);
   $village = $travian->next_village();
   $village = $travian->village_overview();
+  $village = $travian->village_centre();
   $travian->no_of_villages();
 
   $travian->send_troops($type, $x, $y, Travian::Troops::Gauls->new(10), $scout_type);
@@ -181,6 +182,11 @@ Parses the villages from the given village overview html and returns the current
 }}}
 Retrieve the village overview and return the current village.
 
+== village_centre() ==
+{{{
+  $travian->village_centre();
+}}}
+Retrieve the village centre and return the current village.
 
 == send_troops() ==
 {{{
