@@ -1002,19 +1002,53 @@ sub calc_traveltime
 	return ($d/$v)*3600;
 }
 
-sub parse_village
+sub get_current_build_levels
+{
+  my $s = shift;
+  my $hr1 = &parse_dorf($s->get_dorf1);
+  my $hr2 = &parse_dorf($s->get_dorf2);
+}
+sub get_dorf1 { my $s = shift; return $s->get($s->base_url . "/dorf1.php")->content(); }
+sub get_dorf2 { my $s = shift; return $s->get($s->base_url . "/dorf2.php")->content(); }
+
+sub parse_dorf
+{
+  my $p = shift;
+  my $hr = ();
+
+  my $ar = [ $p =~ m#<area (.+?)>#mgs ];
+  foreach (@{$ar})
+  {
+    next unless (/build.php\?id=(\d+?)"/);
+    my $id = $1;
+    if (/title="(.+?) level (\d+?)"/) { $hr->{$id}->{building} = $1; $hr->{$id}->{lvl} = $2; }
+  }
+
+  return $hr;
+}
+sub get_vill
+{
+  return &parse_village_html(&get_village_page(shift()));
+}
+sub get_village_page
+{
+  return shift()->get("http://s3.travian.co.uk/karte.php?d=".shift())->content();
+}
+sub parse_village_html
 {
   my $page = shift;
   my $vill = ();
 
   if ($page =~ m#Village \((-*\d+?)\|(-*\d+?)\)</div>#mg)  { $vill->{x} = $1; $vill->{y} = $2; }
-  if ($page =~ m#<h1>(.+?) Village #mg)   { $vill->{name} = $1; }
-  if ($page =~ m#<td> <b>(.+?)</b></td>#msg) { $vill->{tribe} = $1; }
-  if ($page =~ m#Population:</td><td><b> (\d+?)</b></td>#msg) { $vill->{population} = $1; }
-  if ($page =~ m#<a href="a2b.php\?z=(\d+?)">#msg) { $vill->{atak} = $1; }
+#  if ($page =~ m#<h1>(.+?) Village #mg)   { $vill->{name} = $1; }
+#  if ($page =~ m#<td> <b>(.+?)</b></td>#msg) { $vill->{tribe} = $1; }
+#  if ($page =~ m#Population:</td><td><b> (\d+?)</b></td>#msg) { $vill->{population} = $1; }
+#  if ($page =~ m#<a href="a2b.php\?z=(\d+?)">#msg) { $vill->{atak} = $1; }
 
-  my $rid_ar = [ $page =~ m#berichte.php\?id=(\d+?)"#msg ];
-  if ($page  =~ m#berichte.php\?id=#msg) { $vill->{reports} = join "|", @{$rid_ar}; }
+#  my $rid_ar = [ $page =~ m#berichte.php\?id=(\d+?)"#msg ];
+#  if ($page  =~ m#berichte.php\?id=#msg) { $vill->{reports} = join "|", @{$rid_ar}; }
+
+  return () unless ($vill->{x});
 
   $vill->{ttime} = &calc_traveltime($vill->{x}, $vill->{y}, 19, 40, 19);
 
