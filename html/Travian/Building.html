@@ -2,7 +2,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<title>Travian::Construction - a package that defines a Travian construction.</title>
+<title>Travian::Building - a package that defines a Travian building.</title>
 <meta http-equiv="content-type" content="text/html; charset=utf-8" />
 <link rev="made" href="mailto:root@localhost" />
 </head>
@@ -55,30 +55,30 @@
 <p>
 </p>
 <h2><a name="name">NAME</a></h2>
-<p>Travian::Construction - a package that defines a Travian construction.</p>
+<p>Travian::Building - a package that defines a Travian building.</p>
 <p>
 </p>
 <hr />
 <h2><a name="synopsis">SYNOPSIS</a></h2>
 <pre>
-  use Travian::Construction;
-  my $construction = Travian::Construction-&gt;new(35);
-  print $construction-&gt;gid();
-  print $construction-&gt;name();</pre>
+  use Travian::Building;
+  my $building = Travian::Building-&gt;new(35);
+  print $building-&gt;gid();
+  print $building-&gt;name();
+  print $building-&gt;level();</pre>
 <pre>
-  print $construction-&gt;costs($level)-&gt;wood();
-  foreach my $cost (@{$construction-&gt;costs()})
+  print $building-&gt;costs($level)-&gt;wood();
+  foreach my $cost (@{$building-&gt;costs()})
   {
     print $cost-&gt;wood();
-  }
-
-  print $construction-&gt;times($level, $mb_level);
-</pre>
+  }</pre>
+<pre>
+  print $building-&gt;times($level, $mb_level);</pre>
 <p>
 </p>
 <hr />
 <h2><a name="description">DESCRIPTION</a></h2>
-<p>This package is for a single construction in Travian.</p>
+<p>This package is for a single building in Travian.</p>
 <p>
 </p>
 <hr />
@@ -87,63 +87,63 @@
 </p>
 <h3><a name="new__"><code>new()</code></a></h3>
 <pre>
-  use Travian::Construction;</pre>
+  use Travian::Building;</pre>
 <pre>
-  my $construction = Travian::Construction-&gt;new($gid);</pre>
+  my $building = Travian::Building-&gt;new($gid);</pre>
 <p>
 </p>
 <h3><a name="gid__"><code>gid()</code></a></h3>
 <pre>
-  $construction-&gt;gid();</pre>
-<p>Returns the gid of this construction.</p>
+  $building-&gt;gid();</pre>
+<p>Returns the gid of this building.</p>
 <p>
 </p>
 <h3><a name="name__"><code>name()</code></a></h3>
 <pre>
-  $construction-&gt;name();</pre>
-<p>Returns the name of this construction.</p>
+  $building-&gt;name();</pre>
+<p>Returns the name of this building.</p>
 <p>
 </p>
 <h3><a name="costs__"><code>costs()</code></a></h3>
 <pre>
-  $construction-&gt;costs();
-  $construction-&gt;costs($level);</pre>
-<p>Returns the construction costs for the given level.
-Return value is of type Travian::Construction::Cost.
-If no argument is given returns an array ref for all levels of construction.</p>
+  $building-&gt;costs();
+  $building-&gt;costs($level);</pre>
+<p>Returns the building costs for the given level.
+Return value is of type Travian::Building::Cost.
+If no argument is given returns an array ref for all levels of build.</p>
 <p>
 </p>
 <h3><a name="times__"><code>times()</code></a></h3>
 <pre>
-  $construction-&gt;times();
-  $construction-&gt;times($level);
-  $construction-&gt;times($level, $mb_level);</pre>
-<p>Returns the construction time for the given level and main building level.
-If no main building level is given returns an array ref of construction times for $level.
-If no argument is given returns an array ref for all levels of construction.</p>
+  $building-&gt;times();
+  $building-&gt;times($level);
+  $building-&gt;times($level, $mb_level);</pre>
+<p>Returns the build time for the given level and main building level.
+If no main building level is given returns an array ref of build times for $level.
+If no argument is given returns an array ref for all levels of build.</p>
 <p>
 </p>
 <h3><a name="max_lvl__"><code>max_lvl()</code></a></h3>
 <pre>
-  $construction-&gt;max_lvl();</pre>
-<p>Returns the maximum construction level listed for this construction.</p>
+  $building-&gt;max_lvl();</pre>
+<p>Returns the maximum build level listed for this building.</p>
 <p>
 </p>
 <h3><a name="total_cost__"><code>total_cost()</code></a></h3>
 <pre>
-  $construction-&gt;total_cost();
-  $construction-&gt;total_cost(25);
-  $construction-&gt;total_cost(1, 25);</pre>
-<p>Returns the total construction costs for the given construction levels.
+  $building-&gt;total_cost();
+  $building-&gt;total_cost(25);
+  $building-&gt;total_cost(1, 25);</pre>
+<p>Returns the total build costs for the given build levels.
 The above examples are all interchangeable.</p>
 <p>
 </p>
 <h3><a name="parse_construction__"><code>parse_construction()</code></a></h3>
 <pre>
-  $construction-&gt;parse_construction($construction_html);
+  $building-&gt;parse_construction($construction_html);
   
-Parses the given construction html and populates this construction.
-Returns this construction.</pre>
+Parses the given construction html and populates this building with costs and times.
+Returns this building.</pre>
 <p>
 </p>
 <hr />
@@ -155,7 +155,7 @@ Returns this construction.</pre>
   &amp;parse_construction_costs($construction_costs_html);
   
 Parses the given construction costs html and returns an array ref of costs.
-Used by $construction-&gt;parse_construction().</pre>
+Used by $building-&gt;parse_construction().</pre>
 <p>
 </p>
 <h3><a name="parse_construction_times__"><code>parse_construction_times()</code></a></h3>
@@ -163,7 +163,7 @@ Used by $construction-&gt;parse_construction().</pre>
   &amp;parse_construction_times($construction_times_html);
   
 Parses the given construction times html and returns an array ref of times.
-Used by $construction-&gt;parse_construction().</pre>
+Used by $building-&gt;parse_construction().</pre>
 <p>
 </p>
 <hr />
@@ -174,14 +174,14 @@ Used by $construction-&gt;parse_construction().</pre>
 <pre>
   &amp;gid2name($gid);
   
-Returns the construction's name for the given gid.</pre>
+Returns the building's name for the given gid.</pre>
 <p>
 </p>
 <h3><a name="name2gid__"><code>name2gid()</code></a></h3>
 <pre>
   &amp;name2gid($name);
   
-Returns the construction's gid for the given name.</pre>
+Returns the building's gid for the given name.</pre>
 <p>
 </p>
 <h3><a name="time2secs__"><code>time2secs()</code></a></h3>
@@ -199,7 +199,7 @@ Martin Robertson, &lt;<a href="mailto:marley@wasters.com">marley@wasters.com</a>
 </p>
 <hr />
 <h2><a name="see_also">SEE ALSO</a></h2>
-<p>Travian::Construction::Cost</p>
+<p>Travian::Building::Cost</p>
 <p>
 </p>
 <hr />
