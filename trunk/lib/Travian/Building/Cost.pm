@@ -1,4 +1,4 @@
-package Travian::Construction::Cost;
+package Travian::Building::Cost;
 
 use strict;
 use warnings;
@@ -16,12 +16,12 @@ my %cost_fields = (
 
 =head1 NAME
 
-Travian::Construction::Cost - a package that defines Travian construction costs.
+Travian::Building::Cost - a package that defines Travian building costs.
 
 =head1 SYNOPSIS
 
-  use Travian::Construction::Cost;
-  my $cost = Travian::Construction::Cost->new();
+  use Travian::Building::Cost;
+  my $cost = Travian::Building::Cost->new();
   $cost->wood(100);
   $cost->clay(200);
   $cost->iron(300);
@@ -33,15 +33,15 @@ Travian::Construction::Cost - a package that defines Travian construction costs.
 
 =head1 DESCRIPTION
 
-This package is for a single level of construction costs in Travian.
+This package is for a single level of build costs in Travian.
 
 =head1 METHODS
 
 =head2 new()
 
-  use Travian::Construction::Cost;
+  use Travian::Building::Cost;
 
-  my $cost = Travian::Construction::Cost->new(100, 200, 300, 400, 50, 6);
+  my $cost = Travian::Building::Cost->new(100, 200, 300, 400, 50, 6);
 
 =cut
 
