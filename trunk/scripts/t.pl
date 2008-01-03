@@ -13,4 +13,4 @@ if (!$t->login(shift(), shift()))
         croak $t->error_msg();
 }
 
-$t->get_village_levels;
+print Dumper ($t->get_current_build_levels());
