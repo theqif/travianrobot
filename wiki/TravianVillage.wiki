@@ -103,7 +103,7 @@ If no argument is given returns an array ref of all buildings.
 
 Parse the village overview html and populate this village.
 
-= parse_village_centre() ==
+== parse_village_centre() ==
 {{{
   $village->parse_village_centre($village_centre_html);
 }}}
