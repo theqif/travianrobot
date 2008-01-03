@@ -20,6 +20,12 @@ Travian::Village - a package that defines a Travian village.
   $village->current_resources();
   $village->max_resources();
   $village->production_resources();
+
+  foreach my $building (@{$village->buildings()})
+  {
+    print $building->name();
+  }
+  $village->buildings($building_id);
 }}}
 
 ----
@@ -80,6 +86,14 @@ Returns the maximum values of resources.
 
 Returns the production rate of resources.
 
+== buildings() ==
+{{{
+  $village->buildings();
+  $village->buildings($building_id);
+}}}
+Returns the building for the given id.
+Return value is of type Travian::Building.
+If no argument is given returns an array ref of all buildings.
 
 == parse_village_overview() ==
 
@@ -89,6 +103,11 @@ Returns the production rate of resources.
 
 Parse the village overview html and populate this village.
 
+= parse_village_centre() ==
+{{{
+  $village->parse_village_centre($village_centre_html);
+}}}
+Parse the village centre html and populate this village.
 
 ----
 = AUTHOR =
