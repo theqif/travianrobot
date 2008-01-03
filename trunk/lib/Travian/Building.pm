@@ -15,7 +15,7 @@ our $VERSION = '0.01';
 our $AUTOLOAD;
 
 our @GID2NAME = (
-	'Woodcutter', 'Clay Pit', 'Iron Mine', 'Cropland',
+	'Building site', 'Woodcutter', 'Clay Pit', 'Iron Mine', 'Cropland',
 	'Sawmill', 'Brickyard', 'Iron Foundry', 'Grain Mill',
 	'Bakery', 'Warehouse', 'Granary', 'Blacksmith',
 	'Armoury', 'Tournament Square', 'Main Building', 'Rally Point',
@@ -28,7 +28,7 @@ our @GID2NAME = (
 );
 
 our %NAME2GID = (
-	'Woodcutter' => 1, 'Clay Pit' => 2, 'Iron Mine' => 3, 'Cropland' => 4,
+	'Building site' => 0, 'Woodcutter' => 1, 'Clay Pit' => 2, 'Iron Mine' => 3, 'Cropland' => 4, 'Wheat Field' => 4,
 	'Sawmill' => 5, 'Brickyard' => 6, 'Iron Foundry' => 7, 'Grain Mill' => 8,
 	'Bakery' => 9, 'Warehouse' => 10, 'Granary' => 11, 'Blacksmith' => 12,
 	'Armoury' => 13, 'Tournament Square' => 14, 'Main Building' => 15, 'Rally Point' => 16,
@@ -42,6 +42,7 @@ our %NAME2GID = (
 
 my %building_fields = (
 	gid => 0,
+	level => 0,
 );
 
 =head1 NAME
@@ -54,6 +55,7 @@ Travian::Building - a package that defines a Travian building.
   my $building = Travian::Building->new(35);
   print $building->gid();
   print $building->name();
+  print $building->level();
 
   print $building->costs($level)->wood();
   foreach my $cost (@{$building->costs()})
@@ -372,9 +374,9 @@ sub gid2name
 {
 	my $gid = shift;
 
-	if ($gid && $gid > 0 && $gid < 41)
+	if ($gid =~ /\d+/ && $gid >= 0 && $gid <= 41)
 	{
-		return $GID2NAME[$gid - 1];
+		return $GID2NAME[$gid];
 	}
 
 	return;

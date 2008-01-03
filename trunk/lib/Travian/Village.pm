@@ -5,6 +5,7 @@ use warnings;
 
 use Carp;
 use Travian::Resources;
+use Travian::Building qw(gid2name name2gid);
 
 our $VERSION = '0.01';
 our $AUTOLOAD;
@@ -17,6 +18,7 @@ my %village_fields = (
 	current_resources => undef,
 	max_resources => undef,
 	production_resources => undef,
+	buildings => undef,
 );
 
 =head1 NAME
@@ -69,6 +71,12 @@ sub new
 	$self->{'current_resources'} = Travian::Resources->new();
 	$self->{'max_resources'} = Travian::Resources->new();
 	$self->{'production_resources'} = Travian::Resources->new();
+
+	$self->{'buildings'} = [];
+	for (my $building_id = 1; $building_id <= 40; $building_id++)
+	{
+		push(@{$self->{'buildings'}}, Travian::Building->new());
+	}
 
 	return $self;
 }
@@ -128,6 +136,36 @@ sub production_clay { return $_[0]->production_resources()->clay(); }
 sub production_iron { return $_[0]->production_resources()->iron(); }
 sub production_wheat { return $_[0]->production_resources()->wheat(); }
 
+=head2 buildings()
+
+  $village->buildings();
+  $village->buildings($building_id);
+
+Returns the building for the given id.
+Return value is of type Travian::Building.
+If no argument is given returns an array ref of all buildings.
+
+=cut
+
+sub buildings
+{
+	my $self = shift;
+
+	if (@_)
+	{
+		my $building_id = shift;
+
+		if ($building_id > 0 && $building_id <= 40)
+		{
+			return $self->{'buildings'}->[$building_id - 1];
+		}
+
+		return;
+	}
+
+	return $self->{'buildings'};
+}
+
 =head2 parse_village_overview()
 
   $village->parse_village_overview($village_overview_html);
@@ -186,10 +224,65 @@ sub parse_village_overview
 			$self->max_resources()->wheat_consumption($max);
 		}
 
-		return $self;
+		## Buildings
+		return $self->parse_buildings($village_overview_html);
 	}
 
 	return;
+}
+
+=head2 parse_village_centre()
+
+  $village->parse_village_centre($village_centre_html);
+
+Parse the village centre html and populate this village.
+
+=cut
+
+sub parse_village_centre
+{
+	my $self = shift;
+	my $village_centre_html = shift;
+
+	if ($village_centre_html && $village_centre_html =~ /logout.php/msg)
+	{
+		## Buildings
+		return $self->parse_buildings($village_centre_html);
+	}
+
+	return;
+}
+
+=head2 parse_buildings()
+
+  $village->parse_buildings($village_buildings_html);
+
+Parse the buildings from either village overview or village centre and populate this village.
+
+=cut
+
+sub parse_buildings
+{
+	my $self = shift;
+	my $village_buildings_html = shift;
+
+	my $buildings = [ $village_buildings_html =~ m#<area (.+?)>#mgs ];
+	foreach (@{$buildings})
+	{
+		next unless (/build.php\?id=(\d+?)"/);
+		my $building_id = $1;
+		if (/title="(.+?) level (\d+?)"/)
+		{
+			my $name = $1; my $level = $2;
+
+			my $building = Travian::Building->new();
+			$building->gid(&name2gid($name));			
+			$building->level($level);
+			@{$self->{'buildings'}}[$building_id - 1] = $building;
+		}
+	}
+
+	return $self;
 }
 
 sub AUTOLOAD
