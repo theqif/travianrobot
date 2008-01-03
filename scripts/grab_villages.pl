@@ -3,7 +3,6 @@
 use lib '../lib';
 use Data::Dumper;
 use Travian;
-use strict;
 use Carp;
 
 my $server = shift;
@@ -23,48 +22,18 @@ if (!$travian->login($user, $pass))
         croak $travian->error_msg();
 }
 
+my $u_url = "http://s3.travian.co.uk/spieler.php?uid=";
 
-my $f = shift || "all.csv";
-open (A, $f) || die "Cant open [$f] : [$!]";
-
-my $u_v_hr = ();
-
-while (<A>)
+foreach my $uid ($from..$to)
 {
-  chomp;
-  my $v_params = [];
-  my $u_ar     = [split /,/,$_];
+  my $page = $travian->get($u_url . $uid)->content();
 
-  #$u_ar->[0] UID
-  #$u_ar->[1] name
-  #$u_ar->[2] population
-  #$u_ar->[3] rank
-  #$u_ar->[4] villages
-  #$u_ar->[5] tribe
-  #$u_ar->[6] kartes
+  my $play = &Travian::parse_user($page);
 
-  if ($u_ar->[6] =~ m#\|#) { $v_params = [ split /\|/, $u_ar->[6] ]; }
-  else                     { push @{$v_params}       , $u_ar->[6]; }
+  next unless (defined ($play->{name}));
 
-  $u_v_hr->{$u_ar->[0]} = $v_params;
-}
+  $play->{id} = $uid;
 
-foreach my $uid (keys %{$u_v_hr})
-{
-#print "[[$uid]]\n";
-  foreach my $param (@{$u_v_hr->{$uid}})
-  {
-    my $url  = "http://s3.travian.co.uk/karte.php?d=" . $param;
-#print "\t[$url]\n";
-
-    my $page = $travian->get($url)->content();
-    my $vill = &Travian::parse_village($page);
-
-#print Dumper ($vill);
-
-    next unless (defined ($vill->{x}));
-
-    print join ",", map { $vill->{$_} || "" } qw/x y ttime/;
-    print "\n";
-  }
+  print join ",", map { $play->{$_} || "" } qw/id name population rank villages tribe aid vill_kid/;
+  print "\n";
 }
