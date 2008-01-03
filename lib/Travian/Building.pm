@@ -1,4 +1,4 @@
-package Travian::Construction;
+package Travian::Building;
 
 use strict;
 use warnings;
@@ -9,7 +9,7 @@ our @ISA = qw(Exporter);
 our @EXPORT_OK = qw(&gid2name &name2gid &time2secs);
 
 use Carp;
-use Travian::Construction::Cost;
+use Travian::Building::Cost;
 
 our $VERSION = '0.01';
 our $AUTOLOAD;
@@ -40,40 +40,40 @@ our %NAME2GID = (
 	'Hero\'s Mansion' => 37, 'Great Warehouse' => 38, 'Great Granary' => 39, 'Wonder of the World' => 40,
 );
 
-my %construction_fields = (
+my %building_fields = (
 	gid => 0,
 );
 
 =head1 NAME
 
-Travian::Construction - a package that defines a Travian construction.
+Travian::Building - a package that defines a Travian building.
 
 =head1 SYNOPSIS
 
-  use Travian::Construction;
-  my $construction = Travian::Construction->new(35);
-  print $construction->gid();
-  print $construction->name();
+  use Travian::Building;
+  my $building = Travian::Building->new(35);
+  print $building->gid();
+  print $building->name();
 
-  print $construction->costs($level)->wood();
-  foreach my $cost (@{$construction->costs()})
+  print $building->costs($level)->wood();
+  foreach my $cost (@{$building->costs()})
   {
     print $cost->wood();
   }
 
-  print $construction->times($level, $mb_level);
+  print $building->times($level, $mb_level);
 
 =head1 DESCRIPTION
 
-This package is for a single construction in Travian.
+This package is for a single building in Travian.
 
 =head1 METHODS
 
 =head2 new()
 
-  use Travian::Construction;
+  use Travian::Building;
 
-  my $construction = Travian::Construction->new($gid);
+  my $building = Travian::Building->new($gid);
 
 =cut
 
@@ -81,8 +81,8 @@ sub new
 {
 	my $class = shift;
 	my $self = {
-		_permitted => \%construction_fields,
-		%construction_fields,
+		_permitted => \%building_fields,
+		%building_fields,
 	};
 
 	bless $self, $class;
@@ -100,15 +100,15 @@ sub new
 
 =head2 gid()
 
-  $construction->gid();
+  $building->gid();
 
-Returns the gid of this construction.
+Returns the gid of this building.
 
 =head2 name()
 
-  $construction->name();
+  $building->name();
 
-Returns the name of this construction.
+Returns the name of this building.
 
 =cut
 
@@ -121,12 +121,12 @@ sub name
 
 =head2 costs()
 
-  $construction->costs();
-  $construction->costs($level);
+  $building->costs();
+  $building->costs($level);
 
-Returns the construction costs for the given level.
-Return value is of type Travian::Construction::Cost.
-If no argument is given returns an array ref for all levels of construction.
+Returns the building costs for the given level.
+Return value is of type Travian::Building::Cost.
+If no argument is given returns an array ref for all levels of build.
 
 =cut
 
@@ -151,13 +151,13 @@ sub costs
 
 =head2 times()
 
-  $construction->times();
-  $construction->times($level);
-  $construction->times($level, $mb_level);
+  $building->times();
+  $building->times($level);
+  $building->times($level, $mb_level);
 
-Returns the construction time for the given level and main building level.
-If no main building level is given returns an array ref of construction times for $level.
-If no argument is given returns an array ref for all levels of construction.
+Returns the build time for the given level and main building level.
+If no main building level is given returns an array ref of build times for $level.
+If no argument is given returns an array ref for all levels of build.
 
 =cut
 
@@ -194,9 +194,9 @@ sub times
 
 =head2 max_lvl()
 
-  $construction->max_lvl();
+  $building->max_lvl();
 
-Returns the maximum construction level listed for this construction.
+Returns the maximum build level listed for this building.
 
 =cut
 
@@ -209,11 +209,11 @@ sub max_lvl
 
 =head2 total_cost()
 
-  $construction->total_cost();
-  $construction->total_cost(25);
-  $construction->total_cost(1, 25);
+  $building->total_cost();
+  $building->total_cost(25);
+  $building->total_cost(1, 25);
 
-Returns the total construction costs for the given construction levels.
+Returns the total build costs for the given build levels.
 The above examples are all interchangeable.
 
 =cut
@@ -239,7 +239,7 @@ sub total_cost
 				return $self->total_cost($max_lvl, $min_lvl);
 			}
 
-			my $total_cost = Travian::Construction::Cost->new();
+			my $total_cost = Travian::Building::Cost->new();
 			for (my $lvl = $min_lvl; $lvl <= $max_lvl; $lvl++)
 			{
 				my $cost = $self->costs($lvl);
@@ -262,10 +262,10 @@ sub total_cost
 
 =head2 parse_construction()
 
-  $construction->parse_construction($construction_html);
+  $building->parse_construction($construction_html);
   
-Parses the given construction html and populates this construction.
-Returns this construction.
+Parses the given construction html and populates this building with costs and times.
+Returns this building.
 
 =cut
 
@@ -308,7 +308,7 @@ sub parse_construction
   &parse_construction_costs($construction_costs_html);
   
 Parses the given construction costs html and returns an array ref of costs.
-Used by $construction->parse_construction().
+Used by $building->parse_construction().
 
 =cut
 
@@ -323,7 +323,7 @@ sub parse_construction_costs
 		my $cost = [ $costs_row =~ m#<td>(.+?)</td>#mgs ];
 		next if (!$cost->[0] || $cost->[0] !~ /^\d+$/o);
 
-		push @{$costs}, Travian::Construction::Cost->new($cost->[1], $cost->[2], $cost->[3], $cost->[4], $cost->[5], $cost->[6]);
+		push @{$costs}, Travian::Building::Cost->new($cost->[1], $cost->[2], $cost->[3], $cost->[4], $cost->[5], $cost->[6]);
 	}
 
 	return $costs;
@@ -334,7 +334,7 @@ sub parse_construction_costs
   &parse_construction_times($construction_times_html);
   
 Parses the given construction times html and returns an array ref of times.
-Used by $construction->parse_construction().
+Used by $building->parse_construction().
 
 =cut
 
@@ -364,7 +364,7 @@ sub parse_construction_times
 
   &gid2name($gid);
   
-Returns the construction's name for the given gid.
+Returns the building's name for the given gid.
 
 =cut
 
@@ -384,7 +384,7 @@ sub gid2name
 
   &name2gid($name);
   
-Returns the construction's gid for the given name.
+Returns the building's gid for the given name.
 
 =cut
 
@@ -456,7 +456,7 @@ Martin Robertson, E<lt>marley@wasters.comE<gt>
 
 =head1 SEE ALSO
 
-Travian::Construction::Cost
+Travian::Building::Cost
 
 =head1 COPYRIGHT AND LICENSE
 
