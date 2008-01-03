@@ -24,7 +24,10 @@
 		<li><a href="#current_resources__"><code>current_resources()</code></a></li>
 		<li><a href="#max_resources__"><code>max_resources()</code></a></li>
 		<li><a href="#production_resources__"><code>production_resources()</code></a></li>
+		<li><a href="#buildings__"><code>buildings()</code></a></li>
 		<li><a href="#parse_village_overview__"><code>parse_village_overview()</code></a></li>
+		<li><a href="#parse_village_centre__"><code>parse_village_centre()</code></a></li>
+		<li><a href="#parse_buildings__"><code>parse_buildings()</code></a></li>
 	</ul>
 
 	<li><a href="#author">AUTHOR</a></li>
@@ -48,12 +51,17 @@
   $village-&gt;village_name();
   $village-&gt;village_id();
   $village-&gt;x();
-  $village-&gt;y();
-</pre>
+  $village-&gt;y();</pre>
 <pre>
   $village-&gt;current_resources();
   $village-&gt;max_resources();
   $village-&gt;production_resources();</pre>
+<pre>
+  foreach my $building (@{$village-&gt;buildings()})
+  {
+        print $building-&gt;name();
+  }
+  $village-&gt;buildings($building_id);</pre>
 <p>
 </p>
 <hr />
@@ -104,10 +112,31 @@
 <p>Returns the production rate of resources.</p>
 <p>
 </p>
+<h3><a name="buildings__"><code>buildings()</code></a></h3>
+<pre>
+  $village-&gt;buildings();
+  $village-&gt;buildings($building_id);</pre>
+<p>Returns the building for the given id.
+Return value is of type Travian::Building.
+If no argument is given returns an array ref of all buildings.</p>
+<p>
+</p>
 <h3><a name="parse_village_overview__"><code>parse_village_overview()</code></a></h3>
 <pre>
   $village-&gt;parse_village_overview($village_overview_html);</pre>
 <p>Parse the village overview html and populate this village.</p>
+<p>
+</p>
+<h3><a name="parse_village_centre__"><code>parse_village_centre()</code></a></h3>
+<pre>
+  $village-&gt;parse_village_centre($village_centre_html);</pre>
+<p>Parse the village centre html and populate this village.</p>
+<p>
+</p>
+<h3><a name="parse_buildings__"><code>parse_buildings()</code></a></h3>
+<pre>
+  $village-&gt;parse_buildings($village_buildings_html);</pre>
+<p>Parse the buildings from either village overview or village centre and populate this village.</p>
 <p>
 </p>
 <hr />
