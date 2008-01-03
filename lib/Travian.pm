@@ -1007,6 +1007,8 @@ sub get_current_build_levels
   my $s = shift;
   my $hr1 = &parse_dorf($s->get_dorf1);
   my $hr2 = &parse_dorf($s->get_dorf2);
+
+  return ($hr1, $hr2);
 }
 sub get_dorf1 { my $s = shift; return $s->get($s->base_url . "/dorf1.php")->content(); }
 sub get_dorf2 { my $s = shift; return $s->get($s->base_url . "/dorf2.php")->content(); }
