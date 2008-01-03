@@ -38,6 +38,12 @@ Travian::Village - a package that defines a Travian village.
   $village->max_resources();
   $village->production_resources();
 
+  foreach my $building (@{$village->buildings()})
+  {
+	print $building->name();
+  }
+  $village->buildings($building_id);
+
 =head1 DESCRIPTION
 
 This package is for a single village in Travian.
