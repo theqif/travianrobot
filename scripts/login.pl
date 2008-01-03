@@ -28,6 +28,24 @@ for (my $village_no = 1; $village_no <= $travian->no_of_villages(); $village_no+
 	print "Iron: " . $travian->village()->current_iron() . '/' . $travian->village()->max_iron() . ' (' . $travian->village()->production_iron() . ")\n";
 	print "Wheat: " . $travian->village()->current_wheat() . '/' . $travian->village()->max_wheat() . ' (' . $travian->village()->production_wheat() . ")\n";
 	print "Wheat (Consumption): " . $travian->village()->current_wheat_consumption() . '/' . $travian->village()->max_wheat_consumption() . "\n";
+
+	my $building_id = 1;
+	foreach my $building (@{$travian->village()->buildings()})
+	{
+		print "ID: $building_id\t";
+		print "GID: ";
+		print $building->gid();
+		print "\t";
+		print "Name: ";
+		print $building->name();
+		print "\t";
+		print "Level: ";
+		print $building->level();
+		print "\n";
+
+		$building_id++;
+	}
+
 	print "\n";
 
 	$travian->next_village();

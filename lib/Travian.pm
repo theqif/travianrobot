@@ -11,7 +11,7 @@ use HTTP::Request;
 
 use Travian::Village;
 use Travian::Resources;
-use Travian::Construction qw(gid2name name2gid);
+use Travian::Building qw(gid2name name2gid);
 use Travian::Report;
 
 our @ISA = qw(LWP::UserAgent Exporter);
@@ -113,6 +113,7 @@ Travian - a package for the web-based game Travian.
   my $village = $travian->village($village_id);
   $village = $travian->next_village();
   $village = $travian->village_overview();
+  $village = $travian->village_centre();
   $travian->no_of_villages();
 
   $travian->send_troops($type, $x, $y, Travian::Troops::Gauls->new(10), $scout_type);
@@ -518,7 +519,8 @@ sub village
 
 			$self->{'village_index'} = $village_index;
 			
-			return $self->village_overview($village_id);
+			return unless $self->village_overview();
+			return $self->village_centre();
 		}
 	}
 
@@ -553,7 +555,10 @@ sub next_village
 
 		if ($self->village()->village_id())
 		{
-			return $self->village_overview($self->village()->village_id());
+			if ($self->village_overview())
+			{
+				return $self->village_centre();
+			}
 		}
 
 		return $self->village();
@@ -609,7 +614,7 @@ sub village_id2index
 
   $travian->parse_villages($village_overview_html);
 
-Parses the villages from the given village overview html and
+Parses the list of villages from the given village overview html and
 returns the current village.
 Used by $travian->login().
 
@@ -658,7 +663,10 @@ sub parse_villages
 			$self->{'village_index'} = 0;
 		}
 		
-		return $self->{'villages'}->[$self->{'village_index'}]->parse_village_overview($village_overview_html);
+		if ($self->village()->parse_village_overview($village_overview_html))
+		{
+			return $self->village_centre();
+		}
 	}
 
 	$self->{'error_msg'} = 'Cannot parse villages.';
@@ -683,19 +691,9 @@ sub village_overview
 
 	if ($self->village())
 	{
-		if (@_)
+		if (my $village_id = $self->village()->village_id())
 		{
-			my $village_id = shift;
-			if ($village_id =~ /\d+/ && $village_id == $self->village()->village_id())
-			{
-				$village_overview_url .= '?newdid=' . $village_id; 
-			}
-			else
-			{
-				$self->{'error_msg'} = 'Invalid village id.';
-
-				return;
-			}
+			$village_overview_url .= '?newdid=' . $village_id;
 		}
 
 		my $village_overview_res = $self->get($village_overview_url);
@@ -706,6 +704,45 @@ sub village_overview
 		}
 
 		$self->{'error_msg'} = 'Cannot retrieve village overview.';
+
+		return;		
+	}
+
+	$self->{'error_msg'} = 'No village found.';
+
+	return;
+}
+
+=head2 village_centre()
+
+  $travian->village_centre();
+
+Retrieve the village centre and return the current village.
+
+=cut
+
+sub village_centre
+{
+	my $self = shift;
+	my $village_centre_url = $self->base_url() . '/dorf2.php';
+
+	$self->{'error_msg'} = '';
+
+	if ($self->village())
+	{
+		if (my $village_id = $self->village()->village_id())
+		{
+			$village_centre_url .= '?newdid=' . $village_id;
+		}
+
+		my $village_centre_res = $self->get($village_centre_url);
+
+		if ($village_centre_res->is_success)
+		{
+			return $self->village()->parse_village_centre($village_centre_res->content);
+		}
+
+		$self->{'error_msg'} = 'Cannot retrieve village centre.';
 
 		return;		
 	}
@@ -802,7 +839,7 @@ sub post_send_troops_form
   $travian->construction($gid);
 
 Return the construction costs and times for the given gid.
-Returns a Travian::Construction object.
+Returns a Travian::Building object.
 
 =cut
 
@@ -817,7 +854,7 @@ sub construction
 
 		if ($construction_res->is_success)
 		{
-			my $construction = Travian::Construction->new($gid);
+			my $construction = Travian::Building->new($gid);
 			return $construction->parse_construction($construction_res->content);
 		}
 	}
@@ -1002,32 +1039,6 @@ sub calc_traveltime
 	return ($d/$v)*3600;
 }
 
-sub get_current_build_levels
-{
-  my $s = shift;
-  my $hr1 = &parse_dorf($s->get_dorf1);
-  my $hr2 = &parse_dorf($s->get_dorf2);
-
-  return ($hr1, $hr2);
-}
-sub get_dorf1 { my $s = shift; return $s->get($s->base_url . "/dorf1.php")->content(); }
-sub get_dorf2 { my $s = shift; return $s->get($s->base_url . "/dorf2.php")->content(); }
-
-sub parse_dorf
-{
-  my $p = shift;
-  my $hr = ();
-
-  my $ar = [ $p =~ m#<area (.+?)>#mgs ];
-  foreach (@{$ar})
-  {
-    next unless (/build.php\?id=(\d+?)"/);
-    my $id = $1;
-    if (/title="(.+?) level (\d+?)"/) { $hr->{$id}->{building} = $1; $hr->{$id}->{lvl} = $2; }
-  }
-
-  return $hr;
-}
 sub get_vill
 {
   return &parse_village_html(&get_village_page(shift()));

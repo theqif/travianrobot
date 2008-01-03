@@ -45,6 +45,7 @@
 		<li><a href="#village_id2index__"><code>village_id2index()</code></a></li>
 		<li><a href="#parse_villages__"><code>parse_villages()</code></a></li>
 		<li><a href="#village_overview__"><code>village_overview()</code></a></li>
+		<li><a href="#village_centre__"><code>village_centre()</code></a></li>
 		<li><a href="#send_troops__"><code>send_troops()</code></a></li>
 		<li><a href="#post_send_troops_form__"><code>post_send_troops_form()</code></a></li>
 		<li><a href="#construction__"><code>construction()</code></a></li>
@@ -97,6 +98,7 @@
   my $village = $travian-&gt;village($village_id);
   $village = $travian-&gt;next_village();
   $village = $travian-&gt;village_overview();
+  $village = $travian-&gt;village_centre();
   $travian-&gt;no_of_villages();</pre>
 <pre>
   $travian-&gt;send_troops($type, $x, $y, Travian::Troops::Gauls-&gt;new(10), $scout_type);</pre>
@@ -234,7 +236,7 @@ Used by $travian-&gt;village().</p>
 <h3><a name="parse_villages__"><code>parse_villages()</code></a></h3>
 <pre>
   $travian-&gt;parse_villages($village_overview_html);</pre>
-<p>Parses the villages from the given village overview html and
+<p>Parses the list of villages from the given village overview html and
 returns the current village.
 Used by $travian-&gt;login().</p>
 <p>
@@ -243,6 +245,12 @@ Used by $travian-&gt;login().</p>
 <pre>
   $travian-&gt;village_overview();</pre>
 <p>Retrieve the village overview and return the current village.</p>
+<p>
+</p>
+<h3><a name="village_centre__"><code>village_centre()</code></a></h3>
+<pre>
+  $travian-&gt;village_centre();</pre>
+<p>Retrieve the village centre and return the current village.</p>
 <p>
 </p>
 <h3><a name="send_troops__"><code>send_troops()</code></a></h3>
@@ -266,7 +274,7 @@ Used by $travian-&gt;send_troops().</p>
 <pre>
   $travian-&gt;construction($gid);</pre>
 <p>Return the construction costs and times for the given gid.
-Returns a Travian::Construction object.</p>
+Returns a Travian::Building object.</p>
 <p>
 </p>
 <h3><a name="report__"><code>report()</code></a></h3>
