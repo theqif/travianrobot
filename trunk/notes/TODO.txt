@@ -5,6 +5,9 @@
  - Jabber App
  - target finder script;
 
+ - slurp reports to local - by type & by cron
+ - marketplace analyser - possible & favorable
+
 
 DONE
 010108 : slurp travian player/village/alliance data .. into DB?
