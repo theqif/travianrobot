@@ -16,15 +16,11 @@ my $t   = Travian->new($server, agent => $UA);
 
 #print Dumper ($hr);
 
-#sort { $a->{tt} cmp $b->{tt} } keys %{$hr}
-
-#print Dumper (&available_map_data($server));
-
 my $data = ();
 
 foreach (@{&available_map_data($server)})
 {
-  $_ =~ m#_(\d\d\d\d\d\d).csv#;
+  $_ =~ m#_(\d\d\d\d\d\d\d\d).csv#;
   my $date = $1; print $1 . "\n";
   my $map = &slurp_file($_);
 

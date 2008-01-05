@@ -17,7 +17,7 @@ my $data = ();
 
 foreach (@{&available_map_data($server)})
 {
-  $_ =~ m#_(\d\d\d\d\d\d).csv#;
+  $_ =~ m#_(\d\d\d\d\d\d\d\d).csv#;
   my $date = $1;
   my $map = &slurp_file($_);
 
