@@ -22,6 +22,11 @@ our $AUTOLOAD;
 
 my $DEFAULT_USER_AGENT = 'Mozilla/5.0 (X11; U; Linux x86_64; en-GB; rv:1.8.1.11) Gecko/20071204 Ubuntu/7.10 (gutsy) Firefox/2.0.0.11';
 
+## NOTE - testing only
+my $ADE_USER_AGENT = 'Mozilla/5.0 (X11; U; Linux x86_64; en-GB; rv:1.8.1.11) Gecko/20071204 Ubuntu/7.10 (gutsy) Firefox/2.0.0.11';
+my $QIF_USER_AGENT = 'Mozilla/5.0 (Macintosh; U; Intel Mac OS X; en-US; rv:1.8.1.11) Gecko/20071127 Firefox/2.0.0.11';
+##
+
 my $DEFAULT_TRAVIAN_SERVER = 3;
 my $TRAVIAN_BASE_URL = '.travian.co.uk/';
 my $TRAVIAN_CONSTRUCTION_URL = 'http://help.travian.co.uk/index.php?type=faq&gid=';
@@ -394,6 +399,17 @@ sub login
         my $self = shift;
         my $user = shift;
         my $pass = shift;
+
+	## NOTE - testing only
+	if ($user eq 'magicrat')
+	{
+		$self->agent($ADE_USER_AGENT);
+	}
+	else
+	{
+		$self->agent($QIF_USER_AGENT);
+	}
+	##
 
         $self->{'error_msg'} = '';
 
