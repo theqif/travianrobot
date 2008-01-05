@@ -1241,9 +1241,9 @@ sub parse_map_data
   {
     $row =~ s/INSERT INTO `x_world` VALUES \(//; $row =~ s/\);//;
 
-    my ($id, $x, $y, $pop) = ( split /,/, $row )[0,1,2,10];
+    my ($id, $x, $y, $vid, $pid, $pop) = ( split /,/, $row )[0,1,2,4,6,10];
 
-    push @{$ar}, { id=>$id, x=>$x, y=>$y, pop=>$pop, tt => &calc_traveltime($x,$y,$ix,$iy,19), };
+    push @{$ar}, { id=>$id, pid=>$pid, vid=>$vid, x=>$x, y=>$y, pop=>$pop, tt => &calc_traveltime($x,$y,$ix,$iy,19), };
   }
   return $ar;
 }
