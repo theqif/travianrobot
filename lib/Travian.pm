@@ -905,7 +905,7 @@ sub report_headers
 	my $report_section = shift;
 
 	my $report_headers_url = $self->base_url() . '/berichte.php';
-	if ($report_section && $report_section =~ /\d+/ && $report_section > 1 && $report_section < 5)
+	if ($report_section && $report_section =~ /\d+/ && $report_section > 0 && $report_section < 6)
 	{
 		$report_headers_url .= '?t=' . $report_section;
 	}
