@@ -44,6 +44,10 @@ Travian::Village - a package that defines a Travian village.
   }
   $village->buildings($building_id);
 
+  $village->building_from_gid($gid);
+  $village->building_level_from_gid($gid);
+  $village->main_building_level();
+
 =head1 DESCRIPTION
 
 This package is for a single village in Travian.
