@@ -1180,6 +1180,16 @@ sub parse_alliance
   return $all;
 }
 
+sub get_report_ids
+{
+  my $s   = shift;
+  my $res = $s->get($s->base_url . "/berichte.php");
+
+  return [] unless ($res->is_success);
+
+  return [ $res->content() =~ m#berichte.php\?id=(\d+?)"#msg ];
+}
+
 
 =head1 AUTHOR
 
