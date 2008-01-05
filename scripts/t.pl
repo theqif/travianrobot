@@ -13,4 +13,6 @@ if (!$t->login(shift(), shift()))
         croak $t->error_msg();
 }
 
-print Dumper ($t->get_current_build_levels());
+print Dumper ($t->get_report_ids());
+$t->delete_reports($t->get_report_ids());
+print Dumper ($t->get_report_ids());
