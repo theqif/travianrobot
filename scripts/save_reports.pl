@@ -62,7 +62,7 @@ sub save_scout
   #my $max = ($bounty > ($capacity-75)) ? 1 : 0;
   my $target =  $r->defender->name ." (" . $r->defender->village . ")";
 
-  open (IN, ">>/Users/qif/travian/travianrobot/scouts.txt") || return 0;
+  open (IN, ">>/Users/qif/travian/travianrobot/reports/MR_s3_scouts.txt") || return 0;
   print IN "$dt : [$pfs]/[$cas] : [$bounty] : [$target]\n";
   close IN;
 
@@ -88,7 +88,7 @@ sub save_attack
   my $max = ($bounty > ($capacity-75)) ? 1 : 0;
   my $target =  $r->defender->name ." (" . $r->defender->village . ")"; 
 
-  open (IN, ">>/Users/qif/travian/travianrobot/attacks.txt") || return 0;
+  open (IN, ">>/Users/qif/travian/travianrobot/reports/MR_s3_attacks.txt") || return 0;
   print IN "$dt : [$tts] : [$bounty]/[$capacity] : [$cas] : [$max] : [$target]\n";
   close IN;
 
