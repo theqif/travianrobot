@@ -750,7 +750,7 @@ sub village_centre
 	$self->{'error_msg'} = 'No village found.';
 
 	return;
-}
+}2 420  	6 050  	3 025  	3 630
 
 =head2 send_troops()
 
@@ -811,7 +811,7 @@ sub send_troops
 
   $travian->post_send_troops_form($type, $x, $y, $troops);
 
-Posts the Travian send troops form.
+Posts the Travian send troops form.2 420  	6 050  	3 025  	3 630
 Used by $travian->send_troops().
 
 =cut
@@ -888,6 +888,22 @@ sub report
 	}
 
 	return;
+}
+
+=head2 report_headers()
+
+  $travian->report_headers($report_section);
+
+Returns an array ref of report headers for the given section.
+Returns an array ref of Travian::Report::Header objects.
+
+=cut
+
+sub report_headers
+{
+	my $self = shift;
+
+	return [];
 }
 
 =head1 PARSE FUNCTIONS
