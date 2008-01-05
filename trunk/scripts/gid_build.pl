@@ -6,8 +6,8 @@ use Travian;
 use strict;
 use Carp;
 
-my $UA = 'Mozilla/5.0 (X11; U; Linux x86_64; en-GB; rv:1.8.1.11) Gecko/20071204 Ubuntu/7.10 (gutsy) Firefox/2.0.0.11';
-#my $UA = "Mozilla/5.0 (Macintosh; U; Intel Mac OS X; en-US; rv:1.8.1.11) Gecko/20071127 Firefox/2.0.0.11";
+#my $UA = 'Mozilla/5.0 (X11; U; Linux x86_64; en-GB; rv:1.8.1.11) Gecko/20071204 Ubuntu/7.10 (gutsy) Firefox/2.0.0.11';
+my $UA = "Mozilla/5.0 (Macintosh; U; Intel Mac OS X; en-US; rv:1.8.1.11) Gecko/20071127 Firefox/2.0.0.11";
 
 my $server = shift;
 my $vid    = shift;
@@ -27,8 +27,6 @@ if (!$t->login($user, $pass))
 
 $t->village($vid);
 
-#my $mb           = &get_mb_level($t);
-#my $existing_lvl = &get_gid_lvl($t,$gid);
 my $mb           = $t->village()->main_building_level();
 my $existing_lvl = $t->village()->building_level_from_gid($gid);
 my $construction = $t->construction($gid);
@@ -59,29 +57,3 @@ print "Wheat needs " . $need->{wheat} . " at ". $t->village->production_wheat . 
 print "Total build time : " . $need->{time} . " seconds / " . int ($need->{time}/60) . " mins / " . int ($need->{time}/3600) . " hours\n";
 
 exit;
-
-sub get_mb_level
-{
-  my $t  = shift;
-  my $mb = 0;
-  foreach my $b (@{$t->village->buildings})
-  {
-    next unless ($b->gid eq 15);
-    $mb = $b->level;
-  }
-  return $mb;
-}
-
-sub get_gid_lvl
-{
-  my $t   = shift;
-  my $gid = shift || return 0;
-
-  my $lvl = 0;
-  foreach my $b (@{$t->village->buildings})
-  {
-    next unless ($b->gid eq $gid);
-    $lvl = $b->level;
-  }
-  return $lvl;
-}
