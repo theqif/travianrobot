@@ -750,7 +750,7 @@ sub village_centre
 	$self->{'error_msg'} = 'No village found.';
 
 	return;
-}2 420  	6 050  	3 025  	3 630
+}
 
 =head2 send_troops()
 
