@@ -9,6 +9,7 @@ our $AUTOLOAD;
 use Carp;
 
 my %header_fields = (
+	id => 0,
 	subject => '',
 	sent => '',
 );

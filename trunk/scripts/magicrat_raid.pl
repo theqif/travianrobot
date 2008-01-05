@@ -46,7 +46,23 @@ while (1)
 		}
 		print &log_msg('x', 93, -5, 'Hathor Village');
 		print "\n";
+		## Wave (x) - (87|-6) Beta™ (16:06 mins)
+		#my $beta = Travian::Troops::Gauls->new();
+		#$beta->theutates_thunder(9);
+		#if (!$travian->send_troops(Travian::ATTACK_RAID, 87, -6, $beta))
+		#{
+		#	croak $travian->error_msg();
+		#}
+		#print &log_msg('x', 87, -6, 'Beta™');
+		#print "\n";
 
+		## Wave (1) - (95|-1) Chewitonia (15:47 mins)
+		if (!$travian->send_troops(Travian::ATTACK_RAID, 95, -1, $gauls))
+		{
+			croak $travian->error_msg();
+		}
+		print &log_msg(1, 95, -1, 'Chewitonia');
+		print "\n";
 		## Wave (1) - (87|-2) Caen (18:24 mins)
 		if (!$travian->send_troops(Travian::ATTACK_RAID, 87, -2, $gauls))
 		{
@@ -87,6 +103,15 @@ while (1)
 		}
 		print &log_msg('x', 93, -5, 'Hathor Village');
 		print "\n";
+		## Wave (x) - (87|-6) Beta™ (16:06 mins)
+		#my $beta = Travian::Troops::Gauls->new();
+		#$beta->theutates_thunder(9);
+		#if (!$travian->send_troops(Travian::ATTACK_RAID, 87, -6, $beta))
+		#{
+		#	croak $travian->error_msg();
+		#}
+		#print &log_msg('x', 87, -6, 'Beta™');
+		#print "\n";
 
 		## Wave (2) - (99|-4) thanh3 Village (22:19 mins)
 		if (!$travian->send_troops(Travian::ATTACK_RAID, 99, -4, $gauls))
@@ -128,27 +153,35 @@ while (1)
 		}
 		print &log_msg('x', 93, -5, 'Hathor Village');
 		print "\n";
+		## Wave (x) - (87|-6) Beta™ (16:06 mins)
+		#my $beta = Travian::Troops::Gauls->new();
+		#$beta->theutates_thunder(9);
+		#if (!$travian->send_troops(Travian::ATTACK_RAID, 87, -6, $beta))
+		#{
+		#	croak $travian->error_msg();
+		#}
+		#print &log_msg('x', 87, -6, 'Beta™');
+		#print "\n";
 
-		## Wave (2) - (96|-13) pspeter1 Village (28:14 mins)
+		## Wave (3) - (97|-11) toridog Village (24:39 mins)
+		if (!$travian->send_troops(Travian::ATTACK_RAID, 97, -11, $gauls))
+		{
+			croak $travian->error_msg();
+		}
+		print &log_msg(3, 97, -11, 'toridog Village');
+		print "\n";
+		## Wave (3) - (96|-13) pspeter1 Village (28:14 mins)
 		if (!$travian->send_troops(Travian::ATTACK_RAID, 96, -13, $gauls))
 		{
 			croak $travian->error_msg();
 		}
 		print &log_msg(3, 96, -13, 'pspeter1 Village');
-		print "\n";
-		## Wave (2) - (95|4) HumpdeBump Village (29:57 mins)
-		if (!$travian->send_troops(Travian::ATTACK_RAID, 95, 4, $gauls))
-		{
-			croak $travian->error_msg();
-		}
-		print &log_msg(3, 95, 4, 'HumpdeBump Village');
-		print "\n";
-		sleep int(&calc_traveltime($X, $Y, 95, 4, 19)) * 2 + 10;
-		
+		print "\n";		
+		sleep int(&calc_traveltime($X, $Y, 96, -13, 19)) * 2 + 10;
+
 		$wave = 0;
 	}
 
-	
 	if (!$wave || $wave == 4)
 	{
 		if (!$travian->login($user, $pass))
@@ -170,54 +203,77 @@ while (1)
 		}
 		print &log_msg('x', 93, -5, 'Hathor Village');
 		print "\n";
+		## Wave (x) - (87|-6) Beta™ (16:06 mins)
+		#my $beta = Travian::Troops::Gauls->new();
+		#$beta->theutates_thunder(9);
+		#if (!$travian->send_troops(Travian::ATTACK_RAID, 87, -6, $beta))
+		#{
+		#	croak $travian->error_msg();
+		#}
+		#print &log_msg('x', 87, -6, 'Beta™');
+		#print "\n";
 
-		## Wave (4) - (102|-6) Tatooine (31:44 mins)
-		if (!$travian->send_troops(Travian::ATTACK_RAID, 102, -6, $gauls))
+		## Wave (4) - (95|4) HumpdeBump Village (29:57 mins)
+		if (!$travian->send_troops(Travian::ATTACK_RAID, 95, 4, $gauls))
 		{
 			croak $travian->error_msg();
 		}
-		print &log_msg(4, 102, -6, 'Tatooine');
+		print &log_msg(4, 95, 4, 'HumpdeBump Village');
 		print "\n";
-		## Wave (4) - (103|-6) Guinevere Village (34:52 mins)
-		if (!$travian->send_troops(Travian::ATTACK_RAID, 103, -6, $gauls))
+		## Wave (4) - (83|-1) what ever town (31:06 mins)
+		if (!$travian->send_troops(Travian::ATTACK_RAID, 83, -1, $gauls))
 		{
 			croak $travian->error_msg();
 		}
-		print &log_msg(4, 103, -6, 'Guinevere Village');
+		print &log_msg(4, 83, -1, 'what ever town');
 		print "\n";
-		sleep int(&calc_traveltime($X, $Y, 103, -6, 19)) * 2 + 10;
+		sleep int(&calc_traveltime($X, $Y, 83, -1, 19)) * 2 + 10;
 
 		$wave = 0;
 	}
 
 	if (!$wave || $wave == 5)
 	{
-		if (!$travian->login($user, $pass))
-		{
-			croak $travian->error_msg();
-		}
+		#if (!$travian->login($user, $pass))
+		#{
+		#	croak $travian->error_msg();
+		#}
 
-		if ($village_id && !$travian->village($village_id))
-		{
-			croak $travian->error_msg();
-		}
+		#if ($village_id && !$travian->village($village_id))
+		#{
+		#	croak $travian->error_msg();
+		#}
 
 		## Wave (x) - (93|-5) Hathor Village (03:09 mins)
-		my $hathor = Travian::Troops::Gauls->new();
-		$hathor->theutates_thunder(9);
-		if (!$travian->send_troops(Travian::ATTACK_RAID, 93, -5, $hathor))
-		{
-			croak $travian->error_msg();
-		}
+		#my $hathor = Travian::Troops::Gauls->new();
+		#$hathor->theutates_thunder(9);
+		#if (!$travian->send_troops(Travian::ATTACK_RAID, 93, -5, $hathor))
+		#{
+		#	croak $travian->error_msg();
+		#}
+		#print &log_msg('x', 93, -5, 'Hathor Village');
+		#print "\n";
+		## Wave (x) - (87|-6) Beta™ (16:06 mins)
+		#my $beta = Travian::Troops::Gauls->new();
+		#$beta->theutates_thunder(9);
+		#if (!$travian->send_troops(Travian::ATTACK_RAID, 87, -6, $beta))
+		#{
+		#	croak $travian->error_msg();
+		#}
+		#print &log_msg('x', 87, -6, 'Beta™');
+		#print "\n";
 
-		## Wave (5) - (97|-11) toridog Village (24:39 mins)
-		if (!$travian->send_troops(Travian::ATTACK_RAID, 97, -11, $gauls))
-		{
-			croak $travian->error_msg();
-		}
-		print &log_msg(5, 97, -11, 'toridog Village');
-		print "\n";
-		sleep int(&calc_traveltime($X, $Y, 97, -11, 19)) * 2 + 10;
+		## Wave (5) - (88|-6) Alpha ™ (13:01 mins)
+		#my $alpha = Travian::Troops::Gauls->new();
+		#$alpha->theutates_thunder(80);
+		#$alpha->hero(1);
+		#if (!$travian->send_troops(Travian::ATTACK_RAID, 88, -6, $alpha))
+		#{
+		#	croak $travian->error_msg();
+		#}
+		#print &log_msg(5, 88, -6, 'Alpha ™');
+		#print "\n";
+		#sleep int(&calc_traveltime($X, $Y, 87, -6, 19)) * 2 + 10;
 
 		$wave = 0;
 	}
