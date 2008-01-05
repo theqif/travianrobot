@@ -9,38 +9,45 @@ my $UA = "Mozilla/5.0 (Macintosh; U; Intel Mac OS X; en-US; rv:1.8.1.11) Gecko/2
 
 my $server = shift() || die "Usage : $0 [server]\n";
 
-my $t   = Travian->new(shift(), agent => $UA);
-my $url = $t->base_url . "map.sql";
-my $res = $t->get($url);
-my $p = $res->content();
+my $t   = Travian->new($server, agent => $UA);
 
-croak "Error downloading [$url]\n" unless ($res->is_success);
+#my $map = $t->get_latest_map;
+#my $hr = $t->parse_map_data($map,19,40);
 
-print Dumper (&parse_map_data($p));
+#print Dumper ($hr);
 
+#sort { $a->{tt} cmp $b->{tt} } keys %{$hr}
 
-sub parse_map_data
+#print Dumper (&available_map_data($server));
+
+my $data = ();
+
+foreach (@{&available_map_data($server)})
 {
-  my $hr = ();
-  foreach my $row (split /\n/, shift())
-  {
-    $row =~ s/INSERT INTO `x_world` VALUES \(//; $row =~ s/\);//;
+  $_ =~ m#_(\d\d\d\d\d\d).csv#;
+  my $date = $1; print $1 . "\n";
+  my $map = &slurp_file($_);
 
-    my ($id, $x, $y, $pop) = ( split /,/, $row )[0,1,2,10];
-
-    $hr->{$id} = { x=>$x, y=>$y, pop=>$pop, };
-  }
-  return $hr;
+  $data->{$date} = $t->parse_map_data($map,19,40);
 }
 
-#id 	Number of the field, starts in the top left corner at the coordinate (-400|400) and ends in the bottom right corner at (400|-400)
-#x 	X-Coordinate
-#y 	y-Coordinate
-#tid 	The tribe number. 1 = Roman, 2 = Teuton, 3 = Gaul, 4 = Nature and 5 = Natars
-#vid 	Village number
-#village 	Village name
-#uid 	Player number also known as User-ID
-#player 	Player name
-#aid 	Alliance number
-#alliance 	Alliance name
-#population 	The village's number of inhabitants
+print Dumper ($data);
+
+
+sub available_map_data
+{
+  my $s = shift || return [];
+
+  my $glob = "../data/s${s}_*.csv";
+
+  return [glob $glob];
+}
+
+sub slurp_file
+{
+  my $f = shift; my $map = "";
+  open (IN, $f) || croak "Cannot open [$f] : [$!]\n";
+  while (<IN>) { $map .= $_; }
+  close IN;
+  return $map;
+}

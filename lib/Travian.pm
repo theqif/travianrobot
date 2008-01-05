@@ -1190,6 +1190,49 @@ sub get_report_ids
   return [ $res->content() =~ m#berichte.php\?id=(\d+?)"#msg ];
 }
 
+sub get_latest_map
+{
+  my $s = shift;
+  my $url = $s->base_url . "map.sql";
+  my $res = $s->get($url);
+
+  croak "Error downloading [$url]\n" unless ($res->is_success);
+
+  return $res->content();
+}
+
+
+sub parse_map_data
+{
+  my $s  = shift; my $map = shift;
+  my $ix = shift; my $iy  = shift;
+
+  my $ar = [];
+
+  foreach my $row (split /\n/, $map)
+  {
+    $row =~ s/INSERT INTO `x_world` VALUES \(//; $row =~ s/\);//;
+
+    my ($id, $x, $y, $pop) = ( split /,/, $row )[0,1,2,10];
+
+    push @{$ar}, { id=>$id, x=>$x, y=>$y, pop=>$pop, tt => &calc_traveltime($x,$y,$ix,$iy,19), };
+  }
+  return $ar;
+}
+
+#id     Number of the field, starts in the top left corner at the coordinate (-400|400) and ends in the bottom right corner at (400|-400)
+#x      X-Coordinate
+#y      y-Coordinate
+#tid    The tribe number. 1 = Roman, 2 = Teuton, 3 = Gaul, 4 = Nature and 5 = Natars
+#vid    Village number
+#village        Village name
+#uid    Player number also known as User-ID
+#player         Player name
+#aid    Alliance number
+#alliance       Alliance name
+#population     The village's number of inhabitants
+
+
 
 =head1 AUTHOR
 
