@@ -120,7 +120,10 @@ Travian - a package for the web-based game Travian.
 
   my $woodcutter = $travian->construction(1);
 
-  my $report = $travian->report(1234);
+  foreach my $report_header (@{$travian->report_headers(Travian::REPORT_ATTACKS)})
+  {
+     my $report = $travian->report($report_header->id());
+  }
 
   $travian->logout();
 

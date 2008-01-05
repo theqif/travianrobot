@@ -172,6 +172,67 @@ sub buildings
 	return $self->{'buildings'};
 }
 
+=head2 building_from_gid()
+
+  $village->building_from_gid($gid);
+
+Returns the building for the given gid.
+
+=cut
+
+sub building_from_gid
+{
+	my $self = shift;
+	my $gid = shift;
+
+	if ($gid && $gid =~ /\d+/ && $gid > 0 && $gid < 41)
+	{
+		foreach my $building (@{$self->buildings()})
+		{
+			if ($building->gid() == $gid)
+			{
+				return $building;
+			}
+		}
+	}
+
+	return;
+}
+
+=head2 building_level_from_gid()
+
+  $village->building_level_from_gid($gid);
+
+Returns the building level for the given gid.
+
+=cut
+
+sub building_level_from_gid
+{
+	my $self = shift;
+	my $gid = shift;
+
+	if (my $building = $self->building_from_gid($gid))
+	{
+		return $building->level();
+	}
+
+	return;
+}
+
+=head2 main_building_level()
+
+  $village->main_building_level();
+
+Returns the main buildings level.
+
+=cut
+
+sub main_building_level
+{
+	return $_[0]->building_level_from_gid(15);
+}
+
 =head2 parse_village_overview()
 
   $village->parse_village_overview($village_overview_html);
