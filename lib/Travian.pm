@@ -902,8 +902,66 @@ Returns an array ref of Travian::Report::Header objects.
 sub report_headers
 {
 	my $self = shift;
+	my $report_section = shift;
 
-	return [];
+	my $report_headers_url = $self->base_url() . '/berichte.php';
+	if ($report_section && $report_section =~ /\d+/ && $report_section > 1 && $report_section < 5)
+	{
+		$report_headers_url .= '?t=' . $report_section;
+	}
+
+	my $report_headers = [];
+	my $report_headers_res = $self->get($report_headers_url);
+
+	if ($report_headers_res->is_success && $report_headers_res->content() =~ m#<h1>Reports</h1>#)
+	{
+		my $report_header_trs = [ $report_headers_res->content() =~ m#<tr>(.+?berichte.+?)</tr>#msg ];
+
+		foreach my $header_tr (@{$report_header_trs})
+		{
+			if ($header_tr =~ m#berichte\.php\?id\=(\d+?)">(.+?)</a>.+?nowrap>(.+?)</td>#msg)
+			{
+				my $id = $1;
+				my $subject = $2;
+				my $sent = $3;
+
+				my $header = Travian::Report::Header->new($subject, $sent);
+				$header->id($id);
+
+				push(@{$report_headers}, $header);
+			}
+		}
+	}
+
+	return $report_headers;
+}
+
+=head2 report_headers()
+
+  $travian->delete_reports(@report_ids);
+
+Delete reports with the given ids.
+
+=cut
+
+sub delete_reports
+{
+  my $s   = shift;
+  my $ar  = shift || [];
+
+  my $params = {del=>'Delete'};
+
+  my $i = 1;
+
+  foreach my $rid (@{$ar})
+  {
+    $params->{'n'.$i++} = $rid;
+    last if ($i > 10);
+  }
+
+  my $res = $s->post($s->base_url . "/berichte.php", $params);
+
+  return $res->is_success;
 }
 
 =head1 PARSE FUNCTIONS
@@ -1122,35 +1180,6 @@ sub parse_alliance
   return $all;
 }
 
-sub get_report_ids
-{
-  my $s   = shift;
-  my $res = $s->get($s->base_url . "/berichte.php");
-
-  return [] unless ($res->is_success);
-
-  return [ $res->content() =~ m#berichte.php\?id=(\d+?)"#msg ];
-}
-
-sub delete_reports
-{
-  my $s   = shift;
-  my $ar  = shift || [];
-
-  my $params = {del=>'Delete'};
-
-  my $i = 1;
-
-  foreach my $rid (@{$ar})
-  {
-    $params->{'n'.$i++} = $rid;
-    last if ($i > 10);
-  }
-
-  my $res = $s->post($s->base_url . "/berichte.php", $params);
-
-  return $res->is_success;
-}
 
 =head1 AUTHOR
 
