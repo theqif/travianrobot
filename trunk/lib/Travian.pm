@@ -159,6 +159,34 @@ use constant ATTACK_RAID => 4;
 use constant SCOUT_RESOURCES => 1;
 use constant SCOUT_DEFENCES => 2;
 
+=head2 REPORT_REINFORCEMENT
+
+Constant for report headers. Get reinforcement report headers.
+
+=head2 REPORT_TRADE
+
+Constant for report headers. Get trade report headers.
+
+=head2 REPORT_ATTACKS
+
+Constant for report headers. Get attack report headers.
+
+=head2 REPORT_MISC
+
+Constant for report headers. Get misc report headers.
+
+=head2 REPORT_ARCHIVE
+
+Constant for report headers. Get archive report headers.
+
+=cut
+
+use constant REPORT_REINFORCEMENT => 1;
+use constant REPORT_TRADE => 2;
+use constant REPORT_ATTACKS => 3;
+use constant REPORT_MISC => 4;
+use constant REPORT_ARCHIVE => 5;
+
 =head1 METHODS
 
 =head2 new()
@@ -936,7 +964,7 @@ sub report_headers
 	return $report_headers;
 }
 
-=head2 report_headers()
+=head2 delete_reports()
 
   $travian->delete_reports(@report_ids);
 
