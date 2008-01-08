@@ -30,6 +30,17 @@ Travian::Troops::Romans - a package that defines Travian Roman troops.
   $romans->settler(100);
   $romans->hero(1);
 
+  $romans->legionnaire_attributes();
+  $romans->praetorian_attributes();
+  $romans->imperian_attributes();
+  $romans->equites_legati_attributes();
+  $romans->equites_imperatoris_attributes();
+  $romans->equites_caesaris_attributes();
+  $romans->battering_ram_attributes();
+  $romans->fire_catapult_attributes();
+  $romans->senator_attributes();
+  $romans->settler_attributes();
+
 =head1 DESCRIPTION
 
 This package is for the Roman troops in Travian.
@@ -63,6 +74,17 @@ sub fire_catapult { my $self = shift; if (@_) { return ${$self->{'_troops'}}[7] 
 sub senator { my $self = shift; if (@_) { return ${$self->{'_troops'}}[8] = shift; } else { return $self->{'_troops'}->[8]; } }
 sub settler { my $self = shift; if (@_) { return ${$self->{'_troops'}}[9] = shift; } else { return $self->{'_troops'}->[9]; } }
 sub hero { my $self = shift; if (@_) { return ${$self->{'_troops'}}[10] = shift; } else { return $self->{'_troops'}->[10]; } }
+
+sub legionnaire_attributes { return $_[0]->{'_attributes'}->[0]; }
+sub praetorian_attributes { return $_[0]->{'_attributes'}->[1]; }
+sub imperian_attributes { return $_[0]->{'_attributes'}->[2]; }
+sub equites_legati_attributes { return $_[0]->{'_attributes'}->[3]; }
+sub equites_imperatoris_attributes { return $_[0]->{'_attributes'}->[4]; }
+sub equites_caesaris_attributes { return $_[0]->{'_attributes'}->[5]; }
+sub battering_ram_attributes { return $_[0]->{'_attributes'}->[6]; }
+sub fire_catapult_attributes { return $_[0]->{'_attributes'}->[7]; }
+sub senator_attributes { return $_[0]->{'_attributes'}->[8]; }
+sub settler_attributes { return $_[0]->{'_attributes'}->[9]; }
 
 =head1 AUTHOR
 

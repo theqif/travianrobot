@@ -18,6 +18,8 @@ Travian::Troops - a package that defines Travian troops.
   use Travian::Troops;
   my $troops = Travian::Troops->new(10, 20, 30, 40, 50, 60, 70, 80, 90, 100, 1);
   
+  $troops->attributes();
+
   $troops->send_troops_args();
 
 =head1 DESCRIPTION
@@ -108,8 +110,55 @@ sub send_troops_args
 	return $send_troops_args;
 }
 
+=head2 attributes()
+
+  $troops->attributes();
+  
+Returns the attributes for this troop object.
+
+=cut
+
+sub attributes
+{
+	return $_[0]->{'_attributes'};
+}
+
+=head2 parse_troop_attributes()
+
+  $troops->parse_troop_attributes($troop_attributes_html);
+  
+Parses the given troop attributes html and populates this troop object.
+Returns this troop object.
+
+=cut
+
 sub parse_troop_attributes
 {
+	my $self = shift;
+
+	if (@_)
+	{
+		my $troop_attributes_html = shift;
+
+		$self->{'_attributes'} = [];
+
+		$troop_attributes_html =~ m#<table.+?class="tbg".+?>(.+?)</table>#msg;
+		my $troop_attributes_table = $1;
+
+		my $troop_attributes_rows = [ $troop_attributes_table =~ m#<tr>(.+?)</tr>#mgs ];
+		foreach my $troop_attributes_row (@{$troop_attributes_rows})
+		{
+			my $troop_attributes = [ $troop_attributes_row =~ m#<td.*?>(.+?)</td>#msg ];
+		
+			push @{$self->{'_attributes'}}, Travian::Troops::Attributes->new($troop_attributes->[2], $troop_attributes->[3],
+				$troop_attributes->[4], $troop_attributes->[5], $troop_attributes->[6], $troop_attributes->[7],
+				$troop_attributes->[8], $troop_attributes->[9], $troop_attributes->[10]);
+		}
+
+		return $self;
+	}
+
+	return;
 }
 
 =head1 AUTHOR

@@ -64,7 +64,7 @@ sub new
 		$self->attack(shift);
 		$self->defence_cavalry(shift);
 		$self->defence_infantry(shift);
-		$self->{'cost'} = Travian::Resource->new(shift, shift, shift, shift, shift);
+		$self->{'cost'} = Travian::Resources->new(shift, shift, shift, shift, shift);
 		$self->velocity(shift);
 	}
 
