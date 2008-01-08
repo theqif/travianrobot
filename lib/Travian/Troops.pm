@@ -5,6 +5,8 @@ use warnings;
 
 use Carp;
 
+use Travian::Troops::Attributes;
+
 our $VERSION = '0.01';
 
 =head1 NAME
@@ -40,6 +42,8 @@ sub new
 	bless $self, $class;
 
 	$self->{'_troops'} = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+	$self->{'_attributes'} = [];	
+	$self->_init_attributes();
 
 	if (@_)
 	{
@@ -57,6 +61,16 @@ sub new
 	}
 
 	return $self;
+}
+
+sub _init_attributes
+{
+	my $self = shift;
+
+	for (my $a_index = 0; $a_index < 11; $a_index++)
+	{
+		$self->{'_attributes'}->[$a_index] = Travian::Troops::Attributes->new();
+	}	
 }
 
 =head2 as_arrayref()
@@ -92,6 +106,10 @@ sub send_troops_args
 	}
 
 	return $send_troops_args;
+}
+
+sub parse_troop_attributes
+{
 }
 
 =head1 AUTHOR

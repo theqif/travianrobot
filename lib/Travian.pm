@@ -13,6 +13,9 @@ use Travian::Village;
 use Travian::Resources;
 use Travian::Building qw(gid2name name2gid);
 use Travian::Report;
+use Travian::Troops;
+use Travian::Troops::Gauls;
+use Travian::Troops::Romans;
 
 our @ISA = qw(LWP::UserAgent Exporter);
 our @EXPORT_OK = qw(&calc_traveltime);
@@ -30,6 +33,7 @@ my $QIF_USER_AGENT = 'Mozilla/5.0 (Macintosh; U; Intel Mac OS X; en-US; rv:1.8.1
 my $DEFAULT_TRAVIAN_SERVER = 3;
 my $TRAVIAN_BASE_URL = '.travian.co.uk/';
 my $TRAVIAN_CONSTRUCTION_URL = 'http://help.travian.co.uk/index.php?type=faq&gid=';
+my $TRAVIAN_TROOPS_URL = 'http://help.travian.co.uk/index.php?type=faq&mod=';
 
 my $re =
 {
@@ -903,6 +907,25 @@ sub construction
 		{
 			my $construction = Travian::Building->new($gid);
 			return $construction->parse_construction($construction_res->content);
+		}
+	}
+
+	return;
+}
+
+sub troop_attributes
+{
+	my $self = shift;
+	my $troops_type = shift;
+
+	if ($troops_type)
+	{
+		my $troop_attributes_res = $self->get($TRAVIAN_TROOPS_URL . $troops_type);
+
+		if ($troop_attributes_res->is_success)
+		{
+			my $troop_attributes = Travian::Troops->new();
+			return $troop_attributes->parse_troop_attributes($troop_attributes_res->content);
 		}
 	}
 
