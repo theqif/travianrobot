@@ -1,0 +1,11 @@
+id 	Number of the field, starts in the top left corner at the coordinate (-400|400) and ends in the bottom right corner at (400|-400)
+x 	X-Coordinate
+y 	y-Coordinate
+tid 	The tribe number. 1 = Roman, 2 = Teuton, 3 = Gaul, 4 = Nature and 5 = Natars
+vid 	Village number
+village 	Village name
+uid 	Player number also known as User-ID
+player 	Player name
+aid 	Alliance number
+alliance 	Alliance name
+population 	The village's number of inhabitants
