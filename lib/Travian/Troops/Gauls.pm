@@ -30,6 +30,17 @@ Travian::Troops::Gauls - a package that defines Travian Gallic troops.
   $gauls->settler(100);
   $gauls->hero(1);
 
+  $gauls->phalanx_attributes();
+  $gauls->swordsman_attributes();
+  $gauls->pathfinder_attributes();
+  $gauls->theutates_thunder_attributes();
+  $gauls->druidrider_attributes();
+  $gauls->haeduan_attributes();
+  $gauls->battering_ram_attributes();
+  $gauls->trebuchet_atributes();
+  $gauls->chieftian_attributes();
+  $gauls->settler_attributes();
+
 =head1 DESCRIPTION
 
 This package is for the Gallic troops in Travian.
@@ -63,6 +74,17 @@ sub trebuchet { my $self = shift; if (@_) { return ${$self->{'_troops'}}[7] = sh
 sub chieftian { my $self = shift; if (@_) { return ${$self->{'_troops'}}[8] = shift; } else { return $self->{'_troops'}->[8]; } }
 sub settler { my $self = shift; if (@_) { return ${$self->{'_troops'}}[9] = shift; } else { return $self->{'_troops'}->[9]; } }
 sub hero { my $self = shift; if (@_) { return ${$self->{'_troops'}}[10] = shift; } else { return $self->{'_troops'}->[10]; } }
+
+sub phalanx_attributes { return $_[0]->{'_attributes'}->[0]; }
+sub swordsman_attributes { return $_[0]->{'_attributes'}->[1]; }
+sub pathfinder_attributes { return $_[0]->{'_attributes'}->[2]; }
+sub theutates_thunder_attributes { return $_[0]->{'_attributes'}->[3]; }
+sub druidrider_attributes { return $_[0]->{'_attributes'}->[4]; }
+sub haeduan_attributes { return $_[0]->{'_attributes'}->[5]; }
+sub battering_ram_attributes { return $_[0]->{'_attributes'}->[6]; }
+sub trebuchet_attributes { return $_[0]->{'_attributes'}->[7]; }
+sub chieftian_attributes { return $_[0]->{'_attributes'}->[8]; }
+sub settler_attributes { return $_[0]->{'_attributes'}->[9]; }
 
 =head1 AUTHOR
 

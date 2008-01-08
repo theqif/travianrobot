@@ -57,12 +57,12 @@ while (1)
 		#print "\n";
 
 		## Wave (1) - (95|-1) Chewitonia (15:47 mins)
-		if (!$travian->send_troops(Travian::ATTACK_RAID, 95, -1, $gauls))
-		{
-			croak $travian->error_msg();
-		}
-		print &log_msg(1, 95, -1, 'Chewitonia');
-		print "\n";
+		#if (!$travian->send_troops(Travian::ATTACK_RAID, 95, -1, $gauls))
+		#{
+		#	croak $travian->error_msg();
+		#}
+		#print &log_msg(1, 95, -1, 'Chewitonia');
+		#print "\n";
 		## Wave (1) - (87|-2) Caen (18:24 mins)
 		if (!$travian->send_troops(Travian::ATTACK_RAID, 87, -2, $gauls))
 		{
@@ -234,25 +234,25 @@ while (1)
 
 	if (!$wave || $wave == 5)
 	{
-		#if (!$travian->login($user, $pass))
-		#{
-		#	croak $travian->error_msg();
-		#}
+		if (!$travian->login($user, $pass))
+		{
+			croak $travian->error_msg();
+		}
 
-		#if ($village_id && !$travian->village($village_id))
-		#{
-		#	croak $travian->error_msg();
-		#}
+		if ($village_id && !$travian->village($village_id))
+		{
+			croak $travian->error_msg();
+		}
 
 		## Wave (x) - (93|-5) Hathor Village (03:09 mins)
-		#my $hathor = Travian::Troops::Gauls->new();
-		#$hathor->theutates_thunder(9);
-		#if (!$travian->send_troops(Travian::ATTACK_RAID, 93, -5, $hathor))
-		#{
-		#	croak $travian->error_msg();
-		#}
-		#print &log_msg('x', 93, -5, 'Hathor Village');
-		#print "\n";
+		my $hathor = Travian::Troops::Gauls->new();
+		$hathor->theutates_thunder(9);
+		if (!$travian->send_troops(Travian::ATTACK_RAID, 93, -5, $hathor))
+		{
+			croak $travian->error_msg();
+		}
+		print &log_msg('x', 93, -5, 'Hathor Village');
+		print "\n";
 		## Wave (x) - (87|-6) Beta™ (16:06 mins)
 		#my $beta = Travian::Troops::Gauls->new();
 		#$beta->theutates_thunder(9);
@@ -274,6 +274,60 @@ while (1)
 		#print &log_msg(5, 88, -6, 'Alpha ™');
 		#print "\n";
 		#sleep int(&calc_traveltime($X, $Y, 87, -6, 19)) * 2 + 10;
+
+		## Wave (5) - (87|-11) KINGLIONS (24:39 mins)
+		if (!$travian->send_troops(Travian::ATTACK_RAID, 87, -11, $gauls))
+		{
+			croak $travian->error_msg();
+		}
+		print &log_msg(5, 87, -11, 'KINGLIONS');
+		print "\n";
+		## Wave (5) - (86|-11) KINGKONGS (26:47 mins)
+		my $kingkongs = Travian::Troops::Gauls->new();
+		$kingkongs->theutates_thunder(70);
+		if (!$travian->send_troops(Travian::ATTACK_RAID, 86, -11, $kingkongs))
+		{
+			croak $travian->error_msg();
+		}
+		print &log_msg(5, 86, -11, 'KINGKONGS');
+		print "\n";
+		sleep int(&calc_traveltime($X, $Y, 86, -11, 19)) * 2 + 10;
+
+		$wave = 0;
+	}
+
+	if (!$wave || $wave == 6)
+	{
+		if (!$travian->login($user, $pass))
+		{
+			croak $travian->error_msg();
+		}
+
+		if ($village_id && !$travian->village($village_id))
+		{
+			croak $travian->error_msg();
+		}
+
+		## Wave (x) - (93|-5) Hathor Village (03:09 mins)
+		my $hathor = Travian::Troops::Gauls->new();
+		$hathor->theutates_thunder(9);
+		if (!$travian->send_troops(Travian::ATTACK_RAID, 93, -5, $hathor))
+		{
+			croak $travian->error_msg();
+		}
+		print &log_msg('x', 93, -5, 'Hathor Village');
+		print "\n";
+
+		## Wave (6) - (89|-1) CCFk! (15:47 mins)
+		my $ccfk = Travian::Troops::Gauls->new();
+		$ccfk->theutates_thunder(50);
+		if (!$travian->send_troops(Travian::ATTACK_RAID, 89, -1, $ccfk))
+		{
+			croak $travian->error_msg();
+		}
+		print &log_msg(6, 89, -1, 'CCFk!');
+		print "\n";
+		sleep int(&calc_traveltime($X, $Y, 89, -1, 19)) * 2 + 10;
 
 		$wave = 0;
 	}
