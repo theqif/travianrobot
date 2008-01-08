@@ -40,13 +40,13 @@ my $need = ();
 
 foreach (($existing_lvl+1)..$lvl)
 {
-  my $cost = $construction->costs($_);
-  foreach (qw/wood clay iron wheat/)
-  {
-    $need->{$_} += $cost->$_;
-  }
+  my ($wood, $clay, $iron, $wheat, $time) = &gid_lvl_build_costs($t,$gid,$mb,$_);
 
-  $need->{time} += $construction->times($_, $mb);
+  $need->{wood}  += $wood;
+  $need->{clay}  += $clay;
+  $need->{iron}  += $iron;
+  $need->{wheat} += $wheat;
+  $need->{time}  += $time;
 }
 
 print "Wood needs  " . $need->{wood}  . " at ". $t->village->production_wood  . " : " . int ($need->{wood} /$t->village->production_wood)  . " hours\n";
@@ -57,3 +57,15 @@ print "Wheat needs " . $need->{wheat} . " at ". $t->village->production_wheat . 
 print "Total build time : " . $need->{time} . " seconds / " . int ($need->{time}/60) . " mins / " . int ($need->{time}/3600) . " hours\n";
 
 exit;
+
+sub gid_lvl_build_costs
+{
+  my $s   = shift;
+  my $gid = shift;
+  my $mb  = shift;
+  my $lvl = shift;
+
+  my $con  = $s->construction($gid);
+  my $cost = $con->costs($lvl);
+  return ($cost->wood, $cost->clay, $cost->iron, $cost->wheat, $con->times($lvl,$mb));
+}
