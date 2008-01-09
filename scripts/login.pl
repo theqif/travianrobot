@@ -20,6 +20,14 @@ if (!$travian->login($user, $pass))
 	croak $travian->error_msg();
 }
 
+print "Player ID: " . $travian->player()->player_id() . "\n";
+print "Player Name: " . $travian->player()->player_name() . "\n";
+print "Rank: " . $travian->player()->rank() . "\n";
+print "Tribe: " . $travian->player()->tribe() . "\n";
+print "Alliance: " . $travian->player()->alliance() . "\n";
+print "Population: " . $travian->player()->population() . "\n";
+print "\n";
+
 for (my $village_no = 1; $village_no <= $travian->no_of_villages(); $village_no++)
 {
 	print "Village Name: " . $travian->village()->village_name() . "\n";

@@ -9,6 +9,7 @@ use Carp;
 use LWP::UserAgent;
 use HTTP::Request;
 
+use Travian::Player;
 use Travian::Village;
 use Travian::Resources;
 use Travian::Building qw(gid2name name2gid);
@@ -45,8 +46,8 @@ my $re =
   villageid    => "newdid=(\\d+?)\"",
   villageindex => qq~(class="active\_vl")~,
   villagename  => ">(.+?)</a>",
-  villagex     => "right dlist1\">\\((.+?)<",
-  villagey     => "left dlist3\">(.+?)\\)<",
+  villagex     => "right dlist1\">\\((-*\\d+?)<",
+  villagey     => "left dlist3\">(-*\\d+?)\\)<",
   login_login  => "hidden\" name=\"login\" value=\"(.+?)\"",
   login_text   => "\"fm fm110\" type=\"text\" name=\"(.+?)\"",
   login_pass   => "\"fm fm110\" type=\"password\" name=\"(.+?)\"",
@@ -261,6 +262,8 @@ sub _init
 	$self->cookie_jar({ }) if (!defined($self->cookie_jar()));
 	push @{$self->requests_redirectable}, 'POST';
 
+	$self->{'player'} = Travian::Player->new();
+
 	$self->{'villages'} = [];
 	$self->{'village_index'} = 0;
 
@@ -459,7 +462,16 @@ sub login
                                 $self->{'error_msg'} = &parse_login_error_msg($login_form_res_html);
                                 if (!$self->{'error_msg'})
                                 {
-                                        return $self->parse_villages($login_form_res_html);
+					if (my $player_id = &parse_player_id($login_form_res_html))
+					{
+						$self->player()->player_id($player_id);
+
+                                        	if ($self->parse_villages($login_form_res_html))
+						{
+							return $self->player();
+						}
+					}
+					else { $self->{'error_msg'} = 'Cannot retrieve player id.'; }
                                 }
                         }
                         else { $self->{'error_msg'} = 'Cannot post login form.'; }
@@ -564,6 +576,26 @@ sub logout
 	my $logout_res = $self->get($self->base_url() . '/logout.php');
 
 	return $logout_res->is_success;
+}
+
+=head2 player()
+
+  $travian->player();
+  
+Returns the Travian player.
+
+=cut
+
+sub player
+{
+	my $self = shift;
+
+	if ($self->{'player'}->player_id() && !$self->{'player'}->player_name())
+	{
+		$self->{'player'} = $self->profile($self->{'player'}->player_id());
+	}
+
+	return $self->{'player'};
 }
 
 =head2 village()
@@ -913,6 +945,48 @@ sub post_send_troops_form
 	return;
 }
 
+=head2 profile()
+
+  $travian->profile($uid);
+
+Return the player profile for the given uid.
+Returns a Travian::Player object.
+
+=cut
+
+sub profile
+{
+	my $self = shift;
+	my $uid = shift;
+
+	if ($uid && int($uid))
+	{
+		my $profile_res = $self->get($self->base_url() . '/spieler.php?uid=' . $uid);
+
+		if ($profile_res->is_success)
+		{
+			# set coords for single village
+			if ($self->no_of_villages() == 1 && $uid == $self->{'player'}->player_id())
+			{
+				if ($profile_res->content =~ m#<td>\((-*\d+?)\|(-*\d+?)\)</td>#msg)
+				{
+					my $x = $1; my $y = $2;
+
+					$self->village()->x($x);
+					$self->village()->y($y);
+				}
+			}
+
+			my $profile = Travian::Player->new();
+			$profile->player_id($uid);
+
+			return $profile->parse_profile($profile_res->content);
+		}
+	}
+
+	return;
+}
+
 =head2 construction()
 
   $travian->construction($gid);
@@ -1214,6 +1288,24 @@ sub parse_send_troops_error_msg
 	$error_msg =~ s#</span>##;
 
 	return $error_msg;
+}
+
+=head2 parse_player_id()
+
+  &parse_player_id($html);
+
+Parse and return the player id in the given html page.
+
+=cut
+
+sub parse_player_id
+{
+	my $html = shift;
+
+	$html =~ m#spieler.php\?uid=(\d+?)">Profile<#msg;
+	my $player_id = $1;
+
+	return $player_id;
 }
 
 =head1 FUNCTIONS
