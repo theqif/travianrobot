@@ -203,28 +203,28 @@ use constant REPORT_ATTACKS => 3;
 use constant REPORT_MISC => 4;
 use constant REPORT_ARCHIVE => 5;
 
-=head2 TROOP_TYPE_ROMANS
+=head2 TRIBE_TYPE_ROMANS
 
 Constant for troop attributes. Get Roman troop attributes.
 
-=head2 TROOP_TYPE_GAULS
+=head2 TRIBE_TYPE_GAULS
 
 Constant for troop attributes. Get Gaul troop attributes.
 
-=head2 TROOP_TYPE_TEUTONS
+=head2 TRIBE_TYPE_TEUTONS
 
 Constant for troop attributes. Get Teuton troop attributes.
 
-=head2 TROOP_TYPE_NATURE
+=head2 TRIBE_TYPE_NATURE
 
 Constant for troop attributes. Get Natures troop attributes.
 
 =cut
 
-use constant TROOP_TYPE_ROMANS => 410;
-use constant TROOP_TYPE_GAULS => 420;
-use constant TROOP_TYPE_TEUTONS => 430;
-use constant TROOP_TYPE_NATURE => 440;
+use constant TRIBE_TYPE_ROMANS => 410;
+use constant TRIBE_TYPE_GAULS => 420;
+use constant TRIBE_TYPE_TEUTONS => 430;
+use constant TRIBE_TYPE_NATURE => 440;
 
 =head1 METHODS
 
@@ -1027,24 +1027,24 @@ Returns a Travian::Troop object.
 sub troop_attributes
 {
 	my $self = shift;
-	my $troops_type = shift;
+	my $tribe_type = shift;
 	my $troop_attributes;
 
-	if ($troops_type)
+	if ($tribe_type)
 	{
-		if ($troops_type == TROOP_TYPE_ROMANS)
+		if ($tribe_type == TRIBE_TYPE_ROMANS)
 		{
 			$troop_attributes = Travian::Troops::Romans->new();
 		}
-		elsif ($troops_type == TROOP_TYPE_GAULS)
+		elsif ($tribe_type == TRIBE_TYPE_GAULS)
 		{
 			$troop_attributes = Travian::Troops::Gauls->new();
 		}
-		elsif ($troops_type == TROOP_TYPE_TEUTONS)
+		elsif ($tribe_type == TRIBE_TYPE_TEUTONS)
 		{
 			$troop_attributes = Travian::Troops::Teutons->new();
 		}
-		elsif ($troops_type == TROOP_TYPE_NATURE)
+		elsif ($tribe_type == TRIBE_TYPE_NATURE)
 		{
 			$troop_attributes = Travian::Troops::Nature->new();
 		}
@@ -1053,7 +1053,7 @@ sub troop_attributes
 			return;
 		}
 
-		my $troop_attributes_res = $self->get($TRAVIAN_TROOPS_URL . $troops_type);
+		my $troop_attributes_res = $self->get($TRAVIAN_TROOPS_URL . $tribe_type);
 
 		if ($troop_attributes_res->is_success)
 		{
