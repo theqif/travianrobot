@@ -23,6 +23,8 @@ if (!$travian->login($user, $pass))
 for (my $village_no = 1; $village_no <= $travian->no_of_villages(); $village_no++)
 {
 	print "Village Name: " . $travian->village()->village_name() . "\n";
+	print "X: " . $travian->village()->x() . "\n";
+	print "Y: " . $travian->village()->y() . "\n";	
 	print "Wood: " . $travian->village()->current_wood() . '/' . $travian->village()->max_wood() . ' (' . $travian->village()->production_wood() . ")\n";
 	print "Clay: " . $travian->village()->current_clay() . '/' . $travian->village()->max_clay() . ' (' . $travian->village()->production_clay() . ")\n";
 	print "Iron: " . $travian->village()->current_iron() . '/' . $travian->village()->max_iron() . ' (' . $travian->village()->production_iron() . ")\n";
