@@ -22,6 +22,11 @@ my $WAVE = shift;
 die "usage: $0 [user] [pass] [wave]\n" unless $USER && $PASS;
 
 my $travian = Travian->new($SERVER, agent => $USERAGENT);
+if (!$travian->login($USER, $PASS))
+{
+	croak $travian->error_msg();
+}
+
 my $raid = &load_xml($travian, $TARGETS_XML);
 my $sleeptime;
 
@@ -39,6 +44,7 @@ while (1)
 
 	foreach my $village (@{$raid->{'village'}})
 	{
+		# this should still work for single village (undef).
 		if (!$travian->village($village->{'id'}))
 		{
 			croak $travian->error_msg();
@@ -159,8 +165,7 @@ sub load_xml
 	#print "\n";
 
 	## Troop Attributes
-	$raid->{'troop_type'} = 'Romans' unless ($raid->{'troop_type'});
-	$raid->{'troop_attributes'} = &get_troop_attributes($travian, $raid->{'troop_type'});
+	$raid->{'troop_attributes'} = &get_troop_attributes($travian);
 
 	## Villages
 	croak 'No village found.' unless ($raid->{'village'});
@@ -168,12 +173,12 @@ sub load_xml
 
 	foreach my $village (@{$raid->{'village'}})
 	{
-		croak 'No village id or coords found.' unless ($village->{'id'} || ($village->{'x'} && $village->{'y'}));
+		#croak 'No village id or coords found.' unless ($village->{'id'} || ($village->{'x'} && $village->{'y'}));
 		
 		## Default Troops
 		if (defined($village->{'default_troops'}))
 		{
-			$village->{'default_troops'} = &get_troops($village->{'default_troops'}, $raid->{'troop_type'});
+			$village->{'default_troops'} = &get_troops($village->{'default_troops'}, $travian->player()->tribe());
 		}
 
 		## Default Wave
@@ -183,7 +188,7 @@ sub load_xml
 			$village->{'default_wave'}->{'target'} = [ $village->{'default_wave'}->{'target'} ]
 				if (ref($village->{'default_wave'}->{'target'}) eq 'HASH');
 
-			$village->{'default_wave'}->{'target'} = &get_targets($village->{'default_wave'}->{'target'}, $raid->{'troop_type'}, 
+			$village->{'default_wave'}->{'target'} = &get_targets($village->{'default_wave'}->{'target'}, $travian->player()->tribe(), 
 									$village->{'default_troops'});
 		}
 
@@ -196,7 +201,7 @@ sub load_xml
 
 			## Targets
 			$wave->{'target'} = [ $wave->{'target'} ] if (ref($wave->{'target'}) eq 'HASH');
-			$wave->{'target'} = &get_targets($wave->{'target'}, $raid->{'troop_type'}, $village->{'default_troops'});
+			$wave->{'target'} = &get_targets($wave->{'target'}, $travian->player()->tribe(), $village->{'default_troops'});
 		}
 	}
 
@@ -205,23 +210,23 @@ sub load_xml
 
 sub get_troop_attributes
 {
-	my ($travian, $troop_type) = @_;
-	my $troop_type_id = 0;
+	my ($travian) = @_;
+	my $tribe_type_id = 0;
 
-	$troop_type_id = Travian::TROOP_TYPE_ROMANS if (uc($troop_type) eq 'ROMANS');
-	$troop_type_id = Travian::TROOP_TYPE_GAULS if (uc($troop_type) eq 'GAULS');
-	$troop_type_id = Travian::TROOP_TYPE_TEUTONS if (uc($troop_type) eq 'TEUTONS');
+	$tribe_type_id = Travian::TRIBE_TYPE_ROMANS if (uc($travian->player()->tribe()) eq 'ROMANS');
+	$tribe_type_id = Travian::TRIBE_TYPE_GAULS if (uc($travian->player()->tribe()) eq 'GAULS');
+	$tribe_type_id = Travian::TRIBE_TYPE_TEUTONS if (uc($travian->player()->tribe()) eq 'TEUTONS');
 	
-	croak 'Invalid troop type.' unless ($troop_type_id);
+	croak 'Invalid troop type.' unless ($tribe_type_id);
 
-	return $travian->troop_attributes($troop_type_id);
+	return $travian->troop_attributes($tribe_type_id);
 }
 
 sub get_troops
 {
-	my ($troops_ref, $troop_type) = @_;
+	my ($troops_ref, $tribe_type) = @_;
 
-	my $troop_class = 'Travian::Troops::' . ucfirst(lc($troop_type));
+	my $troop_class = 'Travian::Troops::' . ucfirst(lc($tribe_type));
 	my $troops = $troop_class->new();
 
 	foreach my $troop (keys %{$troops_ref})
@@ -234,7 +239,7 @@ sub get_troops
 
 sub get_targets
 {
-	my ($targets, $troop_type, $default_troops) = @_;
+	my ($targets, $tribe_type, $default_troops) = @_;
 
 	foreach my $target (@{$targets})
 	{
@@ -243,7 +248,7 @@ sub get_targets
 				
 		if ($target->{'troops'})
 		{
-			$target->{'troops'} = &get_troops($target->{'troops'}, $troop_type);	
+			$target->{'troops'} = &get_troops($target->{'troops'}, $tribe_type);	
 		}
 		else
 		{
