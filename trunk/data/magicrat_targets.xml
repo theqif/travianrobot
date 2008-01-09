@@ -1,0 +1,82 @@
+<raid>
+	<troop_type>Gauls</troop_type>
+	<village id="76033">
+		<default_troops>
+			<theutates_thunder>30</theutates_thunder>
+		</default_troops>
+		<default_wave>
+			<target x="93" y="-5" village="Hathor Village">
+				<troops>
+					<theutates_thunder>9</theutates_thunder>
+				</troops>
+			</target>
+		</default_wave>
+		<wave>
+			<target x="87" y="-2" village="Caen">
+				<troops>
+					<theutates_thunder>30</theutates_thunder>
+				</troops>
+			</target>
+			<target x="96" y="-10" village="gryphongod Village">
+				<troops>
+					<theutates_thunder>30</theutates_thunder>
+				</troops>
+			</target>
+		</wave>
+		<wave>
+			<target x="99" y="-4" village="thanh3 Village">
+				<troops>		
+					<theutates_thunder>30</theutates_thunder>
+				</troops>
+			</target>
+			<target x="96" y="1" village="Barnfield">
+				<troops>
+					<theutates_thunder>30</theutates_thunder>
+				</troops>
+			</target>
+		</wave>
+		<wave>
+			<target x="97" y="-11" village="toridog Village">
+				<troops>			
+					<theutates_thunder>30</theutates_thunder>
+				</troops>
+			</target>
+			<target x="96" y="-13" village="pspeter1 Village">
+				<troops>
+					<theutates_thunder>30</theutates_thunder>
+				</troops>
+			</target>
+		</wave>
+		<wave>
+			<target x="95" y="4" village="HumpdeBump Village">
+				<troops>			
+					<theutates_thunder>30</theutates_thunder>
+				</troops>
+			</target>
+			<target x="83" y="-1" village="what ever town">
+				<troops>
+					<theutates_thunder>30</theutates_thunder>
+				</troops>
+			</target>
+		</wave>
+		<wave>
+			<target x="87" y="-11" village="KINGLIONS">
+				<troops>			
+					<theutates_thunder>30</theutates_thunder>
+				</troops>
+			</target>
+			<target x="86" y="-11" village="KINGKONGS">
+				<troops>
+					<theutates_thunder>70</theutates_thunder>
+				</troops>
+			</target>
+		</wave>
+		<wave>
+			<target x="89" y="-1" village="CCFk!">
+				<troops>
+					<theutates_thunder>50</theutates_thunder>
+				</troops>
+			</target>
+		</wave>
+	</village>
+</raid>
