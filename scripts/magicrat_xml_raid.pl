@@ -44,7 +44,7 @@ while (1)
 
 	foreach my $village (@{$raid->{'village'}})
 	{
-		# this should still work for single village (undef).
+		# this should still work for single village - no village id set in xml.
 		if (!$travian->village($village->{'id'}))
 		{
 			croak $travian->error_msg();
