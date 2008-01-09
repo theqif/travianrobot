@@ -128,6 +128,7 @@ Travian - a package for the web-based game Travian.
   $travian->no_of_villages();
 
   $travian->send_troops($type, $x, $y, Travian::Troops::Gauls->new(10), $scout_type);
+  my $attributes = $travian->troop_attributes(Travian::TROOP_TYPE_GAULS);
 
   my $woodcutter = $travian->construction(1);
 
@@ -260,7 +261,6 @@ sub _init
 	$self->cookie_jar({ }) if (!defined($self->cookie_jar()));
 	push @{$self->requests_redirectable}, 'POST';
 
-	$self->{'village'} = Travian::Village->new();
 	$self->{'villages'} = [];
 	$self->{'village_index'} = 0;
 
@@ -626,14 +626,17 @@ sub next_village
 
 	if ($self->no_of_villages())
 	{
-		$self->{'village_index'}++;
-		$self->{'village_index'} = 0 unless $self->{'village_index'} < $self->no_of_villages();
-
-		if ($self->village()->village_id())
+		if ($self->no_of_villages() > 1)
 		{
-			if ($self->village_overview())
+			$self->{'village_index'}++;
+			$self->{'village_index'} = 0 unless $self->{'village_index'} < $self->no_of_villages();
+
+			if ($self->village()->village_id())
 			{
-				return $self->village_centre();
+				if ($self->village_overview())
+				{
+					return $self->village_centre();
+				}
 			}
 		}
 
