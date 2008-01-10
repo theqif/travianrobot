@@ -42,7 +42,7 @@ foreach my $rid (@{$rid_ar})
 
 }
 
-print "\nDeleting : " . Dumper ($del_ar); $t->delete_reports($del_ar);
+print "\nDeleting : " . Dumper ($del_ar); $t->delete_reports(@{$del_ar});
 
 sub save_scout
 {
