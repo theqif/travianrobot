@@ -1148,22 +1148,22 @@ Delete reports with the given ids.
 
 sub delete_reports
 {
-  my $s   = shift;
-  my $ar  = shift || [];
+	my $self = shift;
+	my @report_ids = @_;
 
-  my $params = {del=>'Delete'};
+	my $params = {del => 'Delete'};
 
-  my $i = 1;
+	my $i = 1;
 
-  foreach my $rid (@{$ar})
-  {
-    $params->{'n'.$i++} = $rid;
-    last if ($i > 10);
-  }
+	foreach my $rid (@report_ids)
+	{
+		$params->{'n'.$i++} = $rid;
+		last if ($i > 10);
+	}
 
-  my $res = $s->post($s->base_url . "/berichte.php", $params);
+	my $res = $s->post($s->base_url . "/berichte.php", $params);
 
-  return $res->is_success;
+	return $res->is_success;
 }
 
 =head1 PARSE FUNCTIONS
