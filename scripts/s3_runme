@@ -1,41 +1,29 @@
 while (1)
   date
 
-echo " Raiding Da Ghetto - back in 78m"
-  perl raid.pl 3 theqif fish 10 48 50 74134
-# Da Ghetto : 39mins : pop270 - 15/hr
 
-sleep 2500
+echo " Raiding Bomster - back in 54m - pop 178"
+  perl raid.pl 3 theqif fish 13 46 25 74134
 
-echo " Raiding Scarmace - back in 82m"
-  perl raid.pl 3 theqif fish  7 57 50 74134
-# Scarmace : 41mins : pop274 - 15/hr
+echo " Raiding Aimee - back in 64mins"
+  perl raid.pl 3 theqif fish 22 30 25 74134
 
-sleep 2500
+echo " Raiding Da Ghetto - back in 78m - pop 270"
+  perl raid.pl 3 theqif fish 10 48 35 74134
 
+echo " Raiding Death - back in 78m - pop 95"
+  perl raid.pl 3 theqif fish  7 41 10 74134
 
+echo " Raiding Scarmace - back in 82m - pop 274"
+  perl raid.pl 3 theqif fish 28 49 40 74134
 
-#echo " Raiding Bomster - back in 54m"
-#  perl raid.pl 3 theqif fish 13 46 18 74134
-# Bomster : 27mins : pop178
+echo " Raiding pipjrob - back in 92m - pop 137"
+  perl raid.pl 3 theqif fish 33 43 30 74134
 
-#echo " Raiding Death - back in 78m"
-#  perl raid.pl 3 theqif fish  7 41  4 74134
-# Death : 39 mins : pop95
+echo " Raiding JJ - back in 108m"
+  perl raid.pl 3 theqif fish  3 34 35 74134
 
-#echo " Raiding pipjrob - back in 92m"
-#  perl raid.pl 3 theqif fish 33 43  5 74134
-# pipjrob : 46mins : pop137 - 5/hr
-
-#echo " Raiding JJ - back in 108m"
-#  perl raid.pl 3 theqif fish 28 49 15 74134
-# JungleJazza : 54mins 3240s
-
-#  sleep 6600
-
-
-#  perl raid.pl 3 theqif fish  3 34 10 74134
-# 1) Krondor : 66mins
+sleep 6600
 
 #  perl raid.pl 3 theqif fish 14 37 11 74134
 # madeddy
