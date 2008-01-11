@@ -84,7 +84,8 @@ sub parse_report
 	if ($report_html && $report_html =~ m#<h1>Reports</h1>#)
 	{
 		$report_html =~ s#\n##g;
-
+		$report_html =~ s#\r##g;
+		
 		$report_html =~ m#<td class="s7">Subject:</td><td class="s7">(.+?)</td>#msg;
 		my $subject = $1;
 		$report_html =~ m#<td class="s7 b">Sent:</td><td class="s7">(.+?)</td>#msg;
