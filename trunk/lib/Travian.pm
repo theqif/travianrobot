@@ -1161,7 +1161,7 @@ sub delete_reports
 		last if ($i > 10);
 	}
 
-	my $res = $s->post($s->base_url . "/berichte.php", $params);
+	my $res = $self->post($self->base_url . "/berichte.php", $params);
 
 	return $res->is_success;
 }
