@@ -1103,13 +1103,18 @@ Returns an array ref of Travian::Report::Header objects.
 
 sub report_headers
 {
-	my $self = shift;
+	my $self           = shift;
 	my $report_section = shift;
+	my $page_start     = shift || 0;
 
 	my $report_headers_url = $self->base_url() . '/berichte.php';
 	if ($report_section && $report_section =~ /\d+/ && $report_section > 0 && $report_section < 6)
 	{
 		$report_headers_url .= '?t=' . $report_section;
+	}
+	if ($page_start && $page_start =~ /\d+/)
+	{
+		$report_headers_url .= '&s=' . $page_start;
 	}
 
 	my $report_headers = [];
