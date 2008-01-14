@@ -108,6 +108,18 @@ sub parse_report
 	return;
 }
 
+sub is_max
+{
+  my $s   = shift;
+  my $tts = $s->attacker->troops->{_troops}->[3];
+  my $cap = $tts * 75;
+  my $bty = 0;
+
+  foreach (qw/wood clay iron wheat/) { $bty += $s->attacker->resources->$_; }
+
+  return ($bty > ($cap-75)) ? 1 : 0;
+}
+
 sub AUTOLOAD
 {
 	my $self = shift;
@@ -145,7 +157,7 @@ Travian::Report::Header, Travian::Report::Unit
 
 =head1 COPYRIGHT AND LICENSE
 
-Copyright (C) 2007 by Adrian Elgar, Martin Robertson
+Copyright (C) 2008 by Adrian Elgar, Martin Robertson
 
 This library is free software; you can redistribute it and/or modify
 it under the same terms as Perl itself, either Perl version 5.8.8 or,

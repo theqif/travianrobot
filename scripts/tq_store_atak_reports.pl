@@ -55,9 +55,9 @@ sub save_attack
 
   my $tts = $report->attacker->troops    ->{_troops}->[3];
   my $cas = $report->attacker->casualties->{_troops}->[3];
-  my $capacity = $tts * 75;
-  my $bounty   = 0; foreach (qw/wood clay iron wheat/) { $bounty += $report->attacker->resources->$_(); }
-  my $max = ($bounty > ($capacity-75)) ? 1 : 0;
+  my $cap = $tts * 75;
+  my $bty = 0; foreach (qw/wood clay iron wheat/) { $bty += $report->attacker->resources->$_(); }
+  my $max = ($bty > ($cap-75)) ? 1 : 0;
 
 
 	my $new_report_line = &convert_date($report->header()->sent()) . "\t" .
@@ -66,7 +66,7 @@ sub save_attack
 				$report->attacker->resources()->iron() . "\t" .
 				$report->attacker->resources()->wheat(). "\t" .
 				"sent : $tts\tcasualties : $cas\t [$max]  \t" .
-				"total bounty : [$bounty]"             . "\n" ;
+				"total bounty : [$bty]"             . "\n" ;
 
 	push(@report_lines, $new_report_line);
 	@report_lines = sort(@report_lines);
