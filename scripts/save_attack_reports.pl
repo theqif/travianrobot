@@ -86,7 +86,7 @@ sub convert_date
 
 	#print "$day $month $year $hour $min $sec $ampm\n";
 
-	if ($ampm eq 'pm') { $hour += 12; }
+	if ($ampm eq 'pm' && $hour != 12) { $hour += 12; }
 	if ($ampm eq 'am' && $hour == 12) { $hour = '00'; }
 
 	return "$day/$month/$year $hour:$min:$sec";	
