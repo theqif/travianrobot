@@ -11,19 +11,7 @@
 			</target>
 		</default_wave>
 		<wave>
-			<target x="87" y="-2" village="Caen">
-				<troops>
-					<theutates_thunder>30</theutates_thunder>
-				</troops>
-			</target>
 			<target x="96" y="-10" village="gryphongod Village">
-				<troops>
-					<theutates_thunder>30</theutates_thunder>
-				</troops>
-			</target>
-		</wave>
-		<wave>
-			<target x="96" y="1" village="Barnfield">
 				<troops>
 					<theutates_thunder>30</theutates_thunder>
 				</troops>
