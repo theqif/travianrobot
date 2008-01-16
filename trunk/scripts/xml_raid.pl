@@ -10,15 +10,15 @@ use Travian::Troops::Gauls;
 use Travian::Troops::Romans;
 use Travian::Troops::Teutons;
 
-my $TARGETS_XML = '../data/magicrat_targets2.xml';
+my $TARGETS_XML = '../data/magicrat_targets.xml';
 
-my $SERVER = 3;
 my $USERAGENT = 'Mozilla/5.0 (X11; U; Linux x86_64; en-GB; rv:1.8.1.11) Gecko/20071204 Ubuntu/7.10 (gutsy) Firefox/2.0.0.11';
 
+my $SERVER = shift;
 my $USER = shift;
 my $PASS = shift;
 
-die "usage: $0 [user] [pass]\n" unless $USER && $PASS;
+die "usage: $0 [server] [user] [pass]\n" unless $SERVER && $USER && $PASS;
 
 my $travian = Travian->new($SERVER, agent => $USERAGENT);
 if (!$travian->login($USER, $PASS))
@@ -49,22 +49,24 @@ while (1)
 
 			if (!$target->{'return_time'} || $target->{'return_time'} < $current_time)
 			{
-				#if (!$travian->send_troops(Travian::ATTACK_RAID, $target->{'x'}, $target->{'y'}, $target->{'troops'}))
-				#{
-				#	croak $travian->error_msg();
-				#}
+				if (!$travian->send_troops(Travian::ATTACK_RAID, $target->{'x'}, $target->{'y'}, $target->{'troops'}))
+				{
+					croak $travian->error_msg();
+				}
 				my $velocity = &get_velocity($target->{'troops'}, $raid->{'troop_attributes'});
 				my $traveltime = &calc_traveltime($travian->village()->x(), $travian->village()->y(), $target->{'x'}, $target->{'y'},
 									$velocity);
-				$target->{'return_time'} = $current_time + $traveltime*2 + 10;				
-				print &log_msg($village->{'id'}, $target->{'x'}, $target->{'y'}, $target->{'village'}, $traveltime*2);
+				$traveltime = $traveltime * 2;
+				$traveltime += $target->{'delay'} if ($target->{'delay'});
+				$target->{'return_time'} = $current_time + $traveltime + 10;				
+				print &log_msg($village->{'id'}, $target->{'x'}, $target->{'y'}, $target->{'village'}, $traveltime);
 				print "\n";
 			}
 		}
 	}
 
 	&save_xml($raid, $TARGETS_XML);
-	sleep 60;
+	&wait_until_return($raid);
 }
 
 sub log_msg
@@ -72,6 +74,30 @@ sub log_msg
 	my ($village_id, $x, $y, $village, $traveltime) = @_;
 
 	return '[' . scalar(localtime()) . "] ($village_id) ($x|$y) $village (" . &traveltime($traveltime) . ' mins)';
+}
+
+sub wait_until_return
+{
+	my ($raid) = @_;
+
+	my $return_time = &get_first_returntime($raid);
+	my $sleeptime = $return_time - time;
+
+	sleep $sleeptime;
+}
+
+sub get_first_returntime
+{
+	my ($raid) = @_;
+
+	my $return_time = -1;
+	foreach my $village (@{$raid->{'village'}})
+	{
+		my @targets = sort { $a->{'return_time'} <=> $b->{'return_time'} } @{$village->{'target'}};
+		$return_time = $targets[0]->{'return_time'} if ($targets[0]->{'return_time'} < $return_time || $return_time == -1);
+	}
+
+	return $return_time;
 }
 
 sub traveltime
