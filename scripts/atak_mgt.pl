@@ -17,14 +17,14 @@ my $attacks =
 {
  '1200326970' => { tid=> 1, x=> 3, y=>34, tt=>20, name=>'junglejazza', },
  '2' => { tid=> 2, x=>33, y=>43, tt=>15, name=>'pipjrob',     },
- '3' => { tid=> 3, x=>22, y=>30, tt=>15, name=>'Aimee',       },
+ '3' => { tid=> 3, x=>22, y=>30, tt=>25, name=>'Aimee',       },
  '4' => { tid=> 4, x=>13, y=>46, tt=>15, name=>'Bomster',     },
  '5' => { tid=> 5, x=>10, y=>48, tt=>10, name=>'garner',      },
  '6' => { tid=> 6, x=> 7, y=>41, tt=> 5, name=>'Death',       },
  '7' => { tid=> 7, x=>14, y=>37, tt=>10, name=>'madeddy',     },
  '8' => { tid=> 8, x=>38, y=>49, tt=>15, name=>'naynay123',   },
- '9' => { tid=> 9, x=>28, y=>49, tt=>35, name=>'scarmace',    },
 };
+#'9' => { tid=> 9, x=>28, y=>49, tt=>35, name=>'scarmace',    },
 
 while (1)
 {
@@ -41,8 +41,6 @@ print "$0 : [$dt]\n";
         warn "***loggin in again";
         croak $t->error_msg() unless ($t->login($user, $pass));
       }
-
-
 
       my $rep = &find_atak_report($t, $user, $attacks->{$rt}->{name});
       warn "***Can't find report of previous attack" unless ($rep);
