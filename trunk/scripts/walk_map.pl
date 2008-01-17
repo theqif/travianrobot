@@ -27,6 +27,46 @@ my $villages =
   6 => '1 wood, 1 clay, 1 iron, 15 crop',
 };
 
+my $field_types =
+{
+  1 =>
+  {
+     1 => 'crop',  2 => 'crop',  3 => 'wood',  4 => 'crop',  5 => 'crop',  6 => 'clay',
+     7 => 'iron',  8 => 'crop',  9 => 'crop', 10 => 'iron', 11 => 'iron', 12 => 'crop',
+    13 => 'crop', 14 => 'wood', 15 => 'crop', 16 => 'clay', 17 => 'wood', 18 => 'clay',
+  },
+  2 =>
+  {
+     1 => 'iron',  2 => 'crop',  3 => 'wood',  4 => 'iron',  5 => 'clay',  6 => 'clay',
+     7 => 'iron',  8 => 'crop',  9 => 'crop', 10 => 'iron', 11 => 'iron', 12 => 'crop',
+    13 => 'crop', 14 => 'wood', 15 => 'crop', 16 => 'clay', 17 => 'wood', 18 => 'clay',
+  },
+  3 =>
+  {
+     1 => 'wood',  2 => 'crop',  3 => 'wood',  4 => 'iron',  5 => 'clay',  6 => 'clay',
+     7 => 'iron',  8 => 'crop',  9 => 'crop', 10 => 'iron', 11 => 'iron', 12 => 'crop',
+    13 => 'crop', 14 => 'wood', 15 => 'crop', 16 => 'clay', 17 => 'wood', 18 => 'clay',
+  },
+  4 =>
+  {
+     1 => 'wood',  2 => 'crop',  3 => 'wood',  4 => 'clay',  5 => 'clay',  6 => 'clay',
+     7 => 'iron',  8 => 'crop',  9 => 'crop', 10 => 'iron', 11 => 'iron', 12 => 'crop',
+    13 => 'crop', 14 => 'wood', 15 => 'crop', 16 => 'clay', 17 => 'wood', 18 => 'clay',
+  },
+  5 =>
+  {
+     1 => 'wood',  2 => 'crop',  3 => 'wood',  4 => 'iron',  5 => 'wood',  6 => 'clay',
+     7 => 'iron',  8 => 'crop',  9 => 'crop', 10 => 'iron', 11 => 'iron', 12 => 'crop',
+    13 => 'crop', 14 => 'wood', 15 => 'crop', 16 => 'clay', 17 => 'wood', 18 => 'clay',
+  },
+  6 =>
+  {
+     1 => 'crop',  2 => 'crop',  3 => 'wood',  4 => 'iron',  5 => 'crop',  6 => 'crop',
+     7 => 'crop',  8 => 'crop',  9 => 'crop', 10 => 'crop', 11 => 'crop', 12 => 'crop',
+    13 => 'crop', 14 => 'crop', 15 => 'crop', 16 => 'clay', 17 => 'crop', 18 => 'crop',
+  },
+};
+
 my $oases =
 {
    3 => 'wood, crop',  6 => 'clay, crop',
@@ -41,12 +81,40 @@ foreach my $p (@{$params})
 {
   my $url = "http://s3.travian.co.uk/karte.php?" . $p;
   my $con = $t->get($url)->content;
-
   print "[$url]\n";
-     if ($con =~ m#<div id="f(\d+?)">#mgs  ) { print "\tVillage - $villages->{$1}\n"; }
-  elsif ($con =~ m#img/un/m/w(\d+?).jpg#mgs) { print "\tOasis   - $oases->{$1}\n";    }
-  else  { warn "*** dont know what todo with [$url]"; next; }
 
+  my $uid = undef;
+  my $xy  = undef;
+
+  if ($con =~ m#<h1>.+? \((-*\d+?\|-*\d+?)\)<\/h1>#mgs)
+  {
+    $xy = $1;
+  }
+
+  if ($con =~ m#<div id="f(\d+?)">#mgs  )
+  {
+    print "\tVillage - $villages->{$1}\n";
+    if    ($con =~ m#Unoccupied valley#mgs) {}
+    else
+    {
+      if ($con =~ m#"spieler.php\?uid=(\d+?)"#mgs) { $uid = $1; }
+    }
+  }
+  elsif ($con =~ m#img/un/m/w(\d+?).jpg#mgs)
+  {
+    print "\tOasis   - $oases->{$1}\n";
+    if    ($con =~ m#Unoccupied valley#mgs) {}
+    else 
+    { 
+      if ($con =~ m#"spieler.php\?uid=(\d+?)"#mgs) { $uid = $1; }
+    }
+  }
+  else
+  {
+    warn "*** dont know what todo with [$url]";
+    next;
+  }
+  print "\t\t[$xy],[$uid]\n";
 }
 
 
