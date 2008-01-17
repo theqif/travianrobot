@@ -27,8 +27,9 @@ while ($z < 641601)
   foreach (@{$urls}) { $params->{$_} = 1; }
 
   $z += 12;
-
-  last;
 }
 
-print Dumper ($params);
+foreach my $k (keys %{$params})
+{
+  print $k . "\n";
+}
