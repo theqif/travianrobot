@@ -1,0 +1,36 @@
+Here's a wee list of builds foreach village
+Thanks for doing this :)
+
+Country Get Away : CGA
+Downtown Apt     : DTA
+Hilltop Spot     : HTS
+
+CGA
+    : All clay -> lvl 10
+    : granary & w/house -> to hold 24hrs capacity
+    : Academy -> lvl 15
+    : Town Hall -> lvl 10
+    : All fields -> lvl 10
+
+DTA
+    : All fields -> lvl 10
+    : granary & w/house -> to hold 24hrs capacity
+    : Merchants -> up to lvl 20
+    : demolish 1 cranny
+    : build trade office -> lvl 20
+
+HTS
+    : All wood -> lvl 10
+    : granary & w/house -> to hold 24hrs capacity
+    : All fields -> lvl 10
+
+
+On s4 : theqif/fish  - you're a sitter there too -
+can you just upgrade the fields please -
+and warehouse/granary accordingly -
+at the mo, it'll MAX every 24hrs.
+
+Also, back on s3 ... I'll run my atak script from obelisk -
+could you check in now and again that raids are happening ...
+and that there's nothing spurious in the logfile :
+ - /tmp/travian_ataks.log
