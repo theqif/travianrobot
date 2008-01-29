@@ -58,7 +58,7 @@ while (1)
 									$velocity);
 				$traveltime = $traveltime * 2;
 				$traveltime += $target->{'delay'} if ($target->{'delay'});
-				$target->{'return_time'} = $current_time + $traveltime + 10;				
+				$target->{'return_time'} = $current_time + $traveltime + 15;				
 				print &log_msg($village->{'id'}, $target->{'x'}, $target->{'y'}, $target->{'village'}, $traveltime);
 				print "\n";
 			}
@@ -241,7 +241,7 @@ sub get_targets
 
 	foreach my $target (@{$targets})
 	{
-		croak 'Target coords or village not defined.' unless ($target->{'x'} && $target->{'y'} && $target->{'village'});
+		croak 'Target coords or village not defined.' unless (defined($target->{'x'}) && defined($target->{'y'}) && $target->{'village'});
 		croak 'Troops not defined.' unless $target->{'troops'};
 				
 		if ($target->{'troops'})
