@@ -1,49 +1,37 @@
 <raid>
   <village id="76033">
-    <target delay="240" return_time="1201544245.94737" village="Hathor Village" x="93" y="-5">
+    <target delay="240" return_time="1201934234.94737" village="Hathor Village" x="93" y="-5">
       <troops theutates_thunder="2" />
     </target>
-    <target return_time="1201544372.73684" village="CCFk!" x="89" y="-1">
+    <target return_time="1201935544.73684" village="CCFk!" x="89" y="-1">
       <troops theutates_thunder="20" />
     </target>
-    <target return_time="1201543900.67356" village="KINGLIONS" x="87" y="-11">
+    <target return_time="1201936098.67356" village="KINGLIONS" x="87" y="-11">
       <troops theutates_thunder="3" />
     </target>
-    <target return_time="1201543901.67356" village="toridog Village" x="97" y="-11">
+    <target return_time="1201936103.67356" village="toridog Village" x="97" y="-11">
       <troops theutates_thunder="5" />
     </target>
-    <target return_time="1201544001.47505" village="KINGKONGS" x="86" y="-11">
+    <target return_time="1201936295.47505" village="KINGKONGS" x="86" y="-11">
       <troops theutates_thunder="25" />
     </target>
-    <target return_time="1201545566.72211" village="dagin2 Village" x="86" y="2">
+    <target return_time="1201935947.72211" village="dagin2 Village" x="86" y="2">
       <troops theutates_thunder="80" />
     </target>
-    <target return_time="1201546093.01039" village="HumpdeBump Village" x="95" y="4">
+    <target return_time="1201934582.01039" village="HumpdeBump Village" x="95" y="4">
       <troops theutates_thunder="4" />
     </target>
-    <target return_time="1201545070.19875" village="Nathanos Village" x="88" y="4">
+    <target return_time="1201937459.19875" village="Nathanos Village" x="88" y="4">
       <troops theutates_thunder="3" />
     </target>
-    <target return_time="1201546729.37392" village="Tatooine" x="102" y="-6">
-      <troops theutates_thunder="5" />
-    </target>
-    <target return_time="1201546943.76038" village="Organic Village" x="102" y="0">
-      <troops theutates_thunder="30" />
-    </target>
-    <target return_time="1201544466.13058" village="emy3060 Village" x="84" y="4">
+    <target return_time="1201936597.13058" village="emy3060 Village" x="84" y="4">
       <troops theutates_thunder="4" />
     </target>
-    <target return_time="1201547193.09371" village="leairc village" x="104" y="-3">
+    <target return_time="1201937396.09371" village="leairc village" x="104" y="-3">
       <troops theutates_thunder="15" />
     </target>
-    <target return_time="1201546605.21543" village="Hard Village" x="83" y="-15">
+    <target return_time="1201935462.21543" village="Hard Village" x="83" y="-15">
       <troops theutates_thunder="75" />
-    </target>
-    <target return_time="1201546099.77977" village="Ba3tosz Village" x="106" y="-6">
-      <troops theutates_thunder="90" />
-    </target>
-    <target return_time="1201547633.03127" village="monkeyman255 Village" x="99" y="11">
-      <troops theutates_thunder="12" />
     </target>
   </village>
 </raid>

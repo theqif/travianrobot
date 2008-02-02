@@ -175,6 +175,38 @@ use constant ATTACK_RAID => 4;
 use constant SCOUT_RESOURCES => 1;
 use constant SCOUT_DEFENCES => 2;
 
+use constant CATA_RANDOM => 99;
+use constant CATA_WOODCUTTER => 1;
+use constant CATA_CLAYPIT => 2;
+use constant CATA_IRONMINE => 3;
+use constant CATA_WHEATFIELD => 4;
+use constant CATA_SAWMILL => 5;
+use constant CATA_BRICKWORKS => 6;
+use constant CATA_IRONFOUNDRY => 7;
+use constant CATA_FLOURMILL => 8;
+use constant CATA_BAKERY => 9;
+use constant CATA_WAREHOUSE => 10;
+use constant CATA_GRANARY => 11;
+use constant CATA_BLACKSMITH => 12;
+use constant CATA_ARMOURY => 13;
+use constant CATA_TOURNAMENTSQUARE => 14;
+use constant CATA_MAINBUILDING => 15;
+use constant CATA_RALLYPOINT => 16;
+use constant CATA_MARKETPLACE => 17;
+use constant CATA_EMBASSY => 18;
+use constant CATA_BARRACKS => 19;
+use constant CATA_STABLE => 20;
+use constant CATA_SIEGEWORKSHOP => 21;
+use constant CATA_ACADEMY => 22;
+use constant CATA_TOWNHALL => 24;
+use constant CATA_RESIDENCE => 25;
+use constant CATA_PALACE => 26;
+use constant CATA_TREASURECHAMBER => 27;
+use constant CATA_TRADEOFFICE => 28;
+use constant CATA_GREATBARRACKS => 29;
+use constant CATA_GREATSTABLE => 30;
+use constant CATA_HEROSMANSION => 37;
+
 =head2 REPORT_REINFORCEMENT
 
 Constant for report headers. Get reinforcement report headers.
@@ -878,21 +910,31 @@ troop is sent. Defaults to resources.
 sub send_troops
 {
 	my $self = shift;
-	my ($type, $x, $y, $troops, $scout_type) = @_;
+	my ($type, $x, $y, $troops, $scout_cata_type) = @_;
 
 	$self->{'error_msg'} = '';
 
 	$type = 2 unless $type > 1;
 	$type = 4 unless $type < 5;
 
-	$scout_type = 1 unless $scout_type && $scout_type == 2;
+	# normal attack - set cata target.
+	if ($type == 3)
+	{
+		$scout_cata_type = 99 unless $scout_cata_type && $scout_cata_type > 0 && $scout_cata_type < 38;
+	}
+
+	# raid attack - set scout type.
+	if ($type == 4)
+	{
+		$scout_cata_type = 1 unless $scout_cata_type && $scout_cata_type == 2;
+	}
 
 	if ($troops && ref($troops) =~ /Travian::Troops/)
 	{
 		my $send_troops_confirm_form = $self->post_send_troops_form($type, $x, $y, $troops);
 		if ($send_troops_confirm_form)
 		{
-			my $send_troops_confirm_args = &parse_send_troops_confirm_form($send_troops_confirm_form, $scout_type);
+			my $send_troops_confirm_args = &parse_send_troops_confirm_form($send_troops_confirm_form, $scout_cata_type);
 			if ($send_troops_confirm_args)
 			{
 				my $send_troops_confirm_res = $self->post($self->base_url() . '/a2b.php', $send_troops_confirm_args);
@@ -1235,7 +1277,7 @@ Parse the send troops confirm form html and return an array ref of the form inpu
 sub parse_send_troops_confirm_form
 {
 	my $send_troops_confirm_form = shift;
-	my $scout_type = shift;
+	my $scout_cata_type = shift;
 
 	if ($send_troops_confirm_form && $send_troops_confirm_form =~ m#$re->{st_dest}#msg)
 	{
@@ -1266,7 +1308,12 @@ sub parse_send_troops_confirm_form
 
 		if ($send_troops_confirm_form =~ /input type="Radio" name="spy"/)
 		{
-			push @{$send_troops_confirm_args}, spy => $scout_type;
+			push @{$send_troops_confirm_args}, spy => $scout_cata_type;
+		}
+
+		if ($send_troops_confirm_form =~ /select name="kata"/)
+		{
+			push @{$send_troops_confirm_args}, kata => $scout_cata_type;
 		}
 
 		return $send_troops_confirm_args;
