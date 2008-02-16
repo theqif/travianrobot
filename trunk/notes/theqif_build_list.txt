@@ -1,9 +1,9 @@
 Here's a wee list of builds foreach village
 Thanks for doing this :)
 
-Country Get Away : CGA
-Downtown Apt     : DTA
-Hilltop Spot     : HTS
+Country Get Away : CGA - makes an excess of Clay,
+Downtown Apt     : DTA - makes extra iron/crop
+Hilltop Spot     : HTS - makes too much wood.
 
 CGA
     : All clay -> lvl 10
@@ -15,9 +15,11 @@ CGA
 DTA
     : All fields -> lvl 10
     : granary & w/house -> to hold 24hrs capacity
-    : Merchants -> up to lvl 20
+    : Merchants +4 -> up to lvl 20
     : demolish 1 cranny
-    : build trade office -> lvl 20
+    : build trade office +20 -> lvl 20
+    : main building +4 -> lvl 20
+    : hero's mansion +5 -> lvl 15
 
 HTS
     : All wood -> lvl 10
