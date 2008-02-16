@@ -382,7 +382,7 @@ sub mdr_login
 	my $i_args = $self->widget_get($w_name, $e_args->{get});
 	return if ($self->{'error_msg'});
 
-my $ar = [w => '400:800', login => $i_args->{login}, $i_args->{user_fn} => $e_args->{get}->{user}, $i_args->{pass_fn} => $e_args->{get}->{pass}, $i_args->{rand_hid} => $i_args->{rand_val}, s1 => 'login'];
+my $ar = [w => '1280:800', login => $i_args->{login}, $i_args->{user_fn} => $e_args->{get}->{user}, $i_args->{pass_fn} => $e_args->{get}->{pass}, $i_args->{rand_hid} => $i_args->{rand_val}, s1 => 'login'];
 #print Dump ($i_args); print Dump ($ar);
 
 	# if 'widget->set' internal-required-params have been retrieved & are valid
